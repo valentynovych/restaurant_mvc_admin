@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html
+        lang="en"
+        class="light-style layout-navbar-fixed layout-menu-fixed"
+        dir="ltr"
+        data-theme="theme-default"
+        data-assets-path="../../assets/"
+        data-template="vertical-menu-template-starter"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="utf-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Статистика</title>
+
+    <meta name="description" content=""/>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/img/favicon/favicon.ico}"/>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet"
+    />
+
+    <!-- Icons -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/fontawesome.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/tabler-icons.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/flag-icons.css}"/>
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/core.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/theme-default.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/demo.css}"/>
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script th:src="@{/assets/vendor/js/helpers.js}"></script>
+
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script th:src="@{/assets/js/config.js}"></script>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js}"></script>
+</head>
+
+<body>
+<!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <!-- Menu -->
+
+        <th:block th:insert="~{fragments/admin-sidebar.html :: sidebar}"></th:block>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+            <!-- Navbar -->
+            <th:block th:insert="~{fragments/admin-navbar.html :: navbar}"></th:block>
+            <!-- / Navbar -->
+
+            <!-- Content wrapper -->
+            <div class="content-wrapper">
+                <!-- Content -->
+
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <div class="d-flex flex-row justify-content-between align-items-center">
+                        <h4 class="fw-bold py-3">Категорія</h4>
+                    </div>
+                    <form class="form-category" th:object="${mainCategoryDTO}">
+                        <div class="row">
+                            <div class="col-xl">
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex justify-content-end align-items-center">
+                                        <label class="switch switch-success">
+                                            <input type="checkbox" class="switch-input" id="category-status"
+                                                   name="isActive">
+                                            <span class="switch-toggle-slider">
+                                        <span class="switch-on">
+                                            <i class="ti ti-check"></i>
+                                        </span>
+                                            <span class="switch-off">
+                                                <i class="ti ti-x"></i>
+                                            </span>
+                                        </span>
+                                            <span class="switch-label">Статус</span>
+                                        </label>
+                                    </div>
+                                    <div class="card-body d-flex flex-row">
+                                        <div class="col-md-3 d-flex flex-column align-items-center">
+                                            <label>Зображення:</label>
+                                            <figure class="border-secondary"
+                                                    style="width: 90px; height: 90px; border-width: 1px; border-style: solid">
+                                                <img src="" id="previewIcon">
+                                                <input type="hidden" name="previewIcon" id="previewIconName">
+                                                <input type="file" accept=".png, .jpg, .jpeg" class="input-upload"
+                                                       id="previewIconFile" name="previewIconFile">
+                                            </figure>
+                                            <div class="actions d-flex justify-content-center gap-2">
+                                                <label class="btn btn-outline-secondary p-1" for="previewIconFile">
+                                                    <i class="ti ti-pencil"></i>
+                                                </label>
+                                                <label class="btn btn-outline-secondary p-1 delete-image-button">
+                                                    <i class="ti ti-trash-x"></i>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="mb-2 btn-secondary px-3 py-2 rounded-2">
+                                                Головна категорія</label>
+                                            <div class="mb-3">
+                                                <label class="form-label-sm" for="categoryName">Назва</label>
+                                                <input type="text" class="form-control" id="categoryName"
+                                                       name="categoryName"
+                                                       placeholder="Піца / Бургер / Шаурма"/>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label-sm" for="topPosition">Позиція</label>
+                                                <input type="number" class="form-control" id="topPosition"
+                                                       name="topPosition"/>
+                                            </div>
+
+                                            <div>
+                                                <label class="mb-2 btn-secondary px-3 py-2 rounded-2 me-2">Підкатегорії</label>
+                                                <button type="button"
+                                                        class="btn rounded-pill btn-icon btn-outline-secondary"
+                                                        id="add-subcategory">
+                                                    <i class="ti ti-plus"></i></button>
+                                            </div>
+                                            <div class="subcategory-items">
+                                                <div class="mb-2 subcategory-item" style="position: relative">
+                                                    <label class="form-label">Назва підкатегорії</label>
+                                                    <input type="text" class="form-control "
+                                                           name="subcategories[0].subcategoryName"
+                                                           placeholder="Назва підкатегорії"/>
+
+                                                    <input type="hidden" class="subcategory-id"
+                                                           name="subcategories[0].subcategoryId" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center mb-4">
+                                        <button type="button" class="btn btn-primary" id="post-form">Зберегти</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hidden">
+                            <input type="hidden" name="id" id="id" value="">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- / Content -->
+            <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+    </div>
+    <!-- / Layout page -->
+</div>
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+
+<!-- Drag Target Area To SlideIn Menu On Small Screens -->
+<div class="drag-target"></div>
+<!-- / Layout wrapper -->
+<script th:inline="javascript">
+    let src = /*[[@{/assets/img/placeholder-image.png}]]*/;
+    window.onload = function () {
+        var images = document.querySelectorAll("img");
+        for (var i = 0; i < images.length; i++) {
+            if (!images[i].complete || images[i].naturalWidth === 0) {
+                images[i].src = src;
+            }
+        }
+    };
+</script>
+<script th:inline="javascript">
+
+    $('#add-subcategory').on("click", function () {
+        const lastSubcategory = $(".subcategory-item").last();
+        const item = lastSubcategory.find(".subcategory-id")
+            .attr('name').match(/\d+|\d{2}/)[0];
+        const id = Number(item) + 1;
+
+        $('<div class="mb-2 subcategory-item" style="position: relative">\n' +
+            '<label class="form-label">Назва підкатегорії</label>\n' +
+            '<input type="text" class="form-control" name="subcategories[' + id + '].subcategoryName"\n' +
+            'placeholder="Назва підкатегорії"/>\n' +
+            '<input type="hidden" class="subcategory-id" name="subcategories[' + id + '].subcategoryId" value="">\n' +
+            '<button type="button" class="btn btn-close delete-subcategory" onclick="removeSubcategory(this)" style="position: absolute; top: 0.5rem; left: 33rem"></button>' +
+            '</div>').appendTo(".subcategory-items");
+    })
+
+    $(document).ready(getMainCategory);
+
+    function getMainCategory() {
+        const path = window.location.pathname;
+        const mainCategoryId = Number(path.substring(path.lastIndexOf('/') + 1, path.length));
+        if (mainCategoryId) {
+            console.log(mainCategoryId);
+            $.ajax({
+                type: "GET",
+                url: '../category/' + mainCategoryId,
+                dataType: 'JSON',
+                success: function (result) {
+
+                    $("#id").attr("value", result.id);
+                    $("#category-status").prop("checked", result.isActive);
+                    if (result.previewIcon) $("#previewIcon").attr("src", '../../../uploads/' + result.previewIcon);
+                    $("#previewIconFile");
+                    $("#categoryName").attr("value", result.categoryName);
+                    $("#topPosition").attr("value", result.topPosition);
+                    $("#previewIconName").attr("value", result.previewIcon);
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+
+            $.ajax({
+                type: 'GET',
+                url: '../getSubcategoriesByMain/' + mainCategoryId,
+                dataType: 'JSON',
+                success: function (listSubcategories) {
+                    console.log(listSubcategories);
+
+                    if (listSubcategories.length > 0) {
+                        $(".subcategory-items").children().remove();
+                    }
+                    for (let i = 0; i < listSubcategories.length; i++) {
+                        const closeButton = i === 0 ? '' : '<button type="button" class="btn btn-close delete-subcategory" onclick="removeSubcategory(this)" style="position: absolute; top: 0.5rem; right: -1rem"></button>';
+                        $('<div class="mb-2 subcategory-item" style="position: relative">\n' +
+                            '<label class="form-label">Назва підкатегорії</label>\n' +
+                            '<input type="text" class="form-control" name="subcategories[' + i + '].subcategoryName"\n' +
+                            'placeholder="Назва підкатегорії" value="' + listSubcategories[i].subcategoryName + '"/>\n' +
+                            '<input type="hidden" class="subcategory-id" name="subcategories[' + i + '].subcategoryId" value="' + listSubcategories[i].subcategoryId + '">\n' +
+                            closeButton + '</div>').appendTo(".subcategory-items");
+                    }
+                }
+            })
+        }
+    }
+
+    function removeSubcategory(el) {
+        $(el).parent().remove();
+    }
+
+    $("#post-form").on("click", function () {
+        $(".error-message").remove();
+
+        var formData = new FormData();
+        $(".form-category").find("input").each(function () {
+            formData.append(this.name, this.value);
+            $(this).removeClass("is-invalid");
+        });
+        formData.set("previewIconFile", $('#previewIconFile')[0].files[0]);
+        if (!$("#category-status").is(":checked")) {
+            formData.set("isActive", 'false');
+        }
+
+        $.ajax({
+            type: 'POST',
+            data: formData,
+            url: window.location.href,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log(response)
+                const responseStatus = response.status;
+                if (responseStatus === "OK") {
+                    $('<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                        'Категорія успішно оновленна !' +
+                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                        '</div>').appendTo(".content-wrapper");
+                } else {
+                    const errors = new Map(Object.entries(response.fieldsErrorsMap));
+
+                    for (const error of errors.keys()) {
+                        console.log(error)
+                        $(document).find("#" + error).addClass("is-invalid").after($(
+                            '<p class="error-message text-danger m-0">' + errors.get(error) + '</p>'
+                        ))
+                    }
+                }
+
+                console.log(response);
+            },
+            error: function (error) {
+                $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Категорія успішно не оновленна :)' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper");
+                console.log("Ups: ->" + error);
+            }
+        })
+    });
+
+    $("label.delete-image-button").on("click", function () {
+
+        const filename = $("#previewIconName").attr("value");
+
+        if (filename) {
+            $.ajax({
+                method: 'DELETE',
+                url: '../delete-image/' + filename,
+                success: function (response) {
+                    console.log(response);
+                    $("#previewIconName").removeAttr("value");
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            })
+        }
+    })
+</script>
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
+
+<script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
+
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+
+<!-- Main JS -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/preview-image.js}"></script>
+
+<!-- Page JS -->
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<aside th:fragment="sidebar"
+       id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a th:href="@{/admin/statistic}" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                <i class="menu-icon tf-icons ti ti-soup"></i>
+              </span>
+            <span class="app-brand-text demo menu-text fw-bold text-center" style="margin-left: 0 !important;">
+        Restaurant<br/>NomNom Now</span>
+        </a>
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+            <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+            <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+        </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1">
+        <li class="menu-item">
+            <a th:href="@{/admin/statistic}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-device-analytics"></i>
+                <div>Статистика</div>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a th:href="@{/admin/categories}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-category-2"></i>
+                <div>Категорії</div>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a th:href="@{/admin/products}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-pizza"></i>
+                <div>Товари</div>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a th:href="@{/admin/promotions}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-discount-2"></i>
+                <div>Акції</div>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a th:href="@{/admin/orders}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-receipt-2"></i>
+                <div>Замовлення</div>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a th:href="@{/admin/staff}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-user-exclamation"></i>
+                <div>Адміністрація</div>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a th:href="@{/admin/users}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-users"></i>
+                <div>Користувачі</div>
+            </a>
+        </li>
+    </ul>
+    <script>
+        $(".menu-link").each(function () {
+            if (this.href === window.location.href || window.location.href.slice(0, this.href.length) === this.href) {
+                $(this).parent().addClass('active');
+            }
+        });
+
+        $(".menu-item").click(function () {
+            $(".menu-item").removeClass("active");
+            $(this).addClass("active");
+        });
+    </script>
+</aside>
+</body>
+</html>
