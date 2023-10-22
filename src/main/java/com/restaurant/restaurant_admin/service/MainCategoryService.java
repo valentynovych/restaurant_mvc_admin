@@ -5,6 +5,8 @@ import com.restaurant.restaurant_admin.mapper.MainCategoryMapper;
 import com.restaurant.restaurant_admin.model.MainCategoryDTO;
 import com.restaurant.restaurant_admin.model.MainCategoryTablesResponse;
 import com.restaurant.restaurant_admin.repository.MainCategoryRepo;
+import com.restaurant.restaurant_admin.repository.specification.MainCategorySpecification;
+import com.restaurant.restaurant_admin.repository.specification.SearchCriteria;
 import com.restaurant.restaurant_admin.utils.UploadFileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -120,6 +122,20 @@ public class MainCategoryService {
         Page<MainCategoryDTO> mainCategoriesDTOPage =
                 new PageImpl<>(mainCategoryDTOS, pageable, mainCategories.getTotalElements());
         log.info("method getMainCategoriesByPage -> exit, return page with categories");
+        return mainCategoriesDTOPage;
+    }
+
+    public Page<MainCategoryDTO> getMainCategoriesBySearch(String search, int page, int pageSize) {
+        log.info("method getMainCategoriesBySearch -> start getting categories by page");
+        Pageable pageable = PageRequest.of(page, pageSize);
+        MainCategorySpecification spec =
+                new MainCategorySpecification(
+                        new SearchCriteria("categoryName", ":", search));
+        Page<MainCategory> mainCategoryPage = mainCategoryRepo.findAll(spec, pageable);
+        List<MainCategoryDTO> mainCategoryDTOS = mapper.listMainCategoryToDtoList(mainCategoryPage.getContent());
+        Page<MainCategoryDTO> mainCategoriesDTOPage =
+                new PageImpl<>(mainCategoryDTOS, pageable, mainCategoryPage.getTotalElements());
+        log.info("method getMainCategoriesBySearch -> exit, return page with categories");
         return mainCategoriesDTOPage;
     }
 }

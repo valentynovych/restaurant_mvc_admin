@@ -16,7 +16,7 @@
             content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Статистика</title>
+    <title>Редагування категорії</title>
 
     <meta name="description" content=""/>
 
@@ -141,12 +141,13 @@
                                             <div class="subcategory-items">
                                                 <div class="mb-2 subcategory-item" style="position: relative">
                                                     <label class="form-label">Назва підкатегорії</label>
-                                                    <input type="text" class="form-control "
+                                                    <input type="text" class="form-control"
                                                            name="subcategories[0].subcategoryName"
+                                                           id="subcategories[0].subcategoryName"
                                                            placeholder="Назва підкатегорії"/>
-
                                                     <input type="hidden" class="subcategory-id"
-                                                           name="subcategories[0].subcategoryId" value="">
+                                                           name="subcategories[0].subcategoryId"
+                                                           value="">
                                                 </div>
                                             </div>
                                         </div>
@@ -198,8 +199,9 @@
         $('<div class="mb-2 subcategory-item" style="position: relative">\n' +
             '<label class="form-label">Назва підкатегорії</label>\n' +
             '<input type="text" class="form-control" name="subcategories[' + id + '].subcategoryName"\n' +
-            'placeholder="Назва підкатегорії"/>\n' +
-            '<input type="hidden" class="subcategory-id" name="subcategories[' + id + '].subcategoryId" value="">\n' +
+            'id="subcategories[' + id + '].subcategoryName" placeholder="Назва підкатегорії"/>\n' +
+            '<input type="hidden" class="subcategory-id" name="subcategories[' + id + '].subcategoryId" ' +
+            ' value="">\n' +
             '<button type="button" class="btn btn-close delete-subcategory" onclick="removeSubcategory(this)" style="position: absolute; top: 0.5rem; left: 33rem"></button>' +
             '</div>').appendTo(".subcategory-items");
     })
@@ -240,6 +242,7 @@
                     if (listSubcategories.length > 0) {
                         $(".subcategory-items").children().remove();
                     }
+
                     for (let i = 0; i < listSubcategories.length; i++) {
                         const closeButton = i === 0 ? '' : '<button type="button" class="btn btn-close delete-subcategory" onclick="removeSubcategory(this)" style="position: absolute; top: 0.5rem; right: -1rem"></button>';
                         $('<div class="mb-2 subcategory-item" style="position: relative">\n' +
@@ -278,27 +281,21 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                console.log(response)
-                const responseStatus = response.status;
-                if (responseStatus === "OK") {
-                    $('<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                        'Категорія успішно оновленна !' +
-                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                        '</div>').appendTo(".content-wrapper");
-                } else {
-                    const errors = new Map(Object.entries(response.fieldsErrorsMap));
 
-                    for (const error of errors.keys()) {
-                        console.log(error)
-                        $(document).find("#" + error).addClass("is-invalid").after($(
-                            '<p class="error-message text-danger m-0">' + errors.get(error) + '</p>'
-                        ))
-                    }
-                }
-
+                $('<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Категорія успішно оновленна !' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper");
                 console.log(response);
             },
             error: function (error) {
+                console.log(error)
+                const errors = error.responseJSON;
+                for (let error of errors) {
+                    $("input[name='"+ error.field +"']").addClass("is-invalid").after($(
+                        '<p class="error-message text-danger m-0">' + error.defaultMessage + '</p>'
+                    ));
+                }
                 $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
                     'Категорія успішно не оновленна :)' +
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +

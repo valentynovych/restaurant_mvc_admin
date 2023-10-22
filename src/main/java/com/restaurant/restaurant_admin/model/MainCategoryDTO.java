@@ -1,6 +1,7 @@
 package com.restaurant.restaurant_admin.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,6 +29,7 @@ public class MainCategoryDTO {
     @Max(value = 9999, message = "Не більше 4-х значного числа")
     private Integer countChildProduct;
     @JsonIgnore
+    @Valid
     private List<SubcategoryDTO> subcategories;
 
     public MainCategoryDTO() {
