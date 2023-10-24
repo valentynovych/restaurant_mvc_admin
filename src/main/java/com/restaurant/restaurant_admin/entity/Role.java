@@ -2,10 +2,11 @@ package com.restaurant.restaurant_admin.entity;
 
 public enum Role {
 
-    ADMIN("Головни адмін"),
-    MANAGER("Адміністратор"),
-    COURIER("Курьєр"),
-    ACCOUNTANT("Бухгалтер");
+    ROLE_ADMIN("Головний адмін"),
+    ROLE_MANAGER("Адміністратор"),
+    ROLE_COURIER("Курьєр"),
+    ROLE_ACCOUNTANT("Бухгалтер");
+
     public final String label;
 
     Role(String label) {

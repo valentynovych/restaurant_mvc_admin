@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html
+        lang="en"
+        class="light-style layout-navbar-fixed layout-menu-fixed"
+        dir="ltr"
+        data-theme="theme-default"
+        data-assets-path="../../assets/"
+        data-template="vertical-menu-template-starter"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="utf-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Статистика</title>
+
+    <meta name="description" content=""/>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/img/favicon/favicon.ico}"/>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet"
+    />
+
+    <!-- Icons -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/fontawesome.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/tabler-icons.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/flag-icons.css}"/>
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/core.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/theme-default.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/demo.css}"/>
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/flatpickr/flatpickr.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script th:src="@{/assets/vendor/js/helpers.js}"></script>
+
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script th:src="@{/assets/js/config.js}"></script>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js}"></script>
+
+</head>
+
+<body>
+<!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <!-- Menu -->
+
+        <th:block th:insert="~{fragments/admin-sidebar.html :: sidebar}"></th:block>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+            <!-- Navbar -->
+            <th:block th:insert="~{fragments/admin-navbar.html :: navbar}"></th:block>
+            <!-- / Navbar -->
+
+            <!-- Content wrapper -->
+            <div class="content-wrapper">
+                <!-- Content -->
+
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <div class="d-flex flex-row justify-content-between align-items-center">
+                        <h4 class="fw-bold py-3">Редагування:</h4>
+                    </div>
+                    <form id="form-staff">
+                        <div class="row" style="position: relative">
+                            <div class="col-xl">
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex justify-content-end align-items-center"
+                                         style="position: absolute; top: 0; right: 1rem">
+                                        <label class="switch switch-success">
+                                            <input type="checkbox" class="switch-input" id="status"
+                                                   name="status">
+                                            <span class="switch-toggle-slider">
+                                        <span class="switch-on">
+                                            <i class="ti ti-check"></i>
+                                        </span>
+                                            <span class="switch-off">
+                                                <i class="ti ti-x"></i>
+                                            </span>
+                                        </span>
+                                            <span class="switch-label">Статус</span>
+                                        </label>
+                                    </div>
+                                    <div class="card-body d-flex flex-row mt-3">
+                                        <div class="col-md-4">
+                                            <div class="mb-1">
+                                                <label class="form-label-sm" for="firstName">Прізвище</label>
+                                                <input type="text" class="form-control" id="firstName"
+                                                       name="firstName" placeholder="Прізвище"/>
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label-sm" for="lastName">Ім'я</label>
+                                                <input type="text" class="form-control" id="lastName"
+                                                       name="lastName" placeholder="Ім'я"/>
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label-sm" for="phone">Телефон</label>
+                                                <input type="text" class="form-control" id="phone"
+                                                       name="phone" placeholder="Телефон"/>
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label-sm" for="email">E-Mail</label>
+                                                <input type="text" class="form-control" id="email"
+                                                       name="email" placeholder="E-Mail"/>
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label-sm" for="dateOfBirth">Дата народження</label>
+                                                <input type="text" class="form-control" id="dateOfBirth"
+                                                       name="dateOfBirth" placeholder="Виберіть дату"/>
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label-sm" for="staffRole">Роль</label>
+                                                <select class="form-select" id="staffRole"
+                                                        name="staffRole">
+                                                </select>
+                                            </div>
+                                            <div class="mb-1 password-block d-flex justify-content-center">
+                                                <label class="form-label-sm" for="password">Пароль</label>
+                                                <input type="text" class="form-control" id="password"
+                                                       name="password" placeholder="Пароль"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 d-flex flex-row" style="margin-left: 8rem">
+                                            <div>
+                                                <label class="text-center">Фото:</label>
+                                                <figure class="border-secondary"
+                                                        style="width: 180px; height: 180px; border-width: 1px; border-style: solid">
+                                                    <img src="" id="photo">
+                                                    <input type="hidden" name="photoName" id="photoName">
+                                                    <input type="file" accept=".png, .jpg, .jpeg" class="input-upload"
+                                                           id="photoFile" name="photoFile">
+                                                </figure>
+                                            </div>
+                                            <div class="actions d-flex flex-column gap-2 ms-3" style="margin-top: 5rem">
+                                                <label class="btn btn-outline-secondary p-1" for="photoFile">
+                                                    <i class="ti ti-pencil"></i>
+                                                </label>
+                                                <label class="btn btn-outline-danger p-1 delete-image-button">
+                                                    <i class="ti ti-trash-x"></i>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center mb-4">
+                                        <button type="button" class="btn btn-primary" id="post-form">Зберегти</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hidden">
+                            <input type="hidden" name="staffId" id="staffId" value="">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- / Content -->
+            <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+    </div>
+    <!-- / Layout page -->
+</div>
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+
+<!-- Drag Target Area To SlideIn Menu On Small Screens -->
+<div class="drag-target"></div>
+<!-- / Layout wrapper -->
+
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
+
+<script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
+
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+<script th:src="@{/assets/vendor/libs/flatpickr/flatpickr.js}"></script>
+<script th:src="@{https://npmcdn.com/flatpickr/dist/l10n/uk.js}"></script>
+<script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
+
+
+<!-- Main JS -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/preview-image.js}"></script>
+
+<!-- Page JS -->
+<script th:inline="javascript">
+    let src = /*[[@{/assets/img/placeholder-image.png}]]*/;
+    window.onload = function () {
+        var images = document.querySelectorAll("img");
+        for (var i = 0; i < images.length; i++) {
+            if (!images[i].complete || images[i].naturalWidth === 0) {
+                images[i].src = src;
+            }
+        }
+    };
+
+    var datapikr = document.querySelector("#dateOfBirth");
+    flatpickr.localize(flatpickr.l10ns.uk);
+
+    flatpickr(datapikr, {
+        dateFormat: 'd-m-Y',
+        monthSelectorType: "static",
+    });
+    $("#staffRole").select2({
+        placeholder: 'Виберіть роль',
+        minimumResultsForSearch: -1
+    })
+
+</script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        const path = window.location.pathname;
+        const staffId = Number(path.substring(path.lastIndexOf('/') + 1, path.length));
+        if (staffId) {
+            var password = $(".password-block");
+            password.children().remove();
+            password.addClass("mt-4").addClass("")
+            password.append($(
+                '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePassworModal">\n' +
+                '  Змінити пароль\n' +
+                '</button>\n' +
+                '\n' +
+                '<!-- Modal -->\n' +
+                '<div class="modal fade" id="changePassworModal" tabindex="-1" aria-hidden="true">\n' +
+                '  <div class="modal-dialog modal-dialog-centered" role="document">\n' +
+                '    <div class="modal-content">\n' +
+                '      <div class="modal-header">\n' +
+                '        <h5 class="modal-title">Змінити пароль</h5>\n' +
+                '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити"></button>\n' +
+                '      </div>\n' +
+                '      <div class="modal-body">\n' +
+                '        <div class="row">\n' +
+                '          <div class="col mb-3">\n' +
+                '            <label for="nameBasic" class="form-label">Пароль</label>\n' +
+                '            <input type="password" id="password" name="password" class="form-control" placeholder="">\n' +
+                '          </div>\n' +
+                '        </div>\n' +
+                '        <div class="row g-2">\n' +
+                '          <div class="col mb-0">\n' +
+                '            <label for="emailBasic" class="form-label">Підтвердіть пароль</label>\n' +
+                '            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Підтвердіть пароль">\n' +
+                '          </div>\n' +
+                '        </div>\n' +
+                '      </div>\n' +
+                '      <div class="modal-footer">\n' +
+                '        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>\n' +
+                '        <button type="button" class="btn btn-primary" onclick="checkPassword()">Зберегти</button>\n' +
+                '      </div>\n' +
+                '    </div>\n' +
+                '  </div>\n' +
+                '</div>'))
+        }
+    });
+
+</script>
+
+<script th:inline="javascript">
+
+    function checkPassword() {
+        $(".is-invalid").removeClass("is-invalid");
+        $(".invalid-feedback").remove();
+        const passIn = $('#password');
+        const passInConfirm = $('#confirmPassword');
+
+        const pass = passIn.val();
+        const confirmPass = passInConfirm.val();
+
+        if (!pass || pass !== confirmPass || !confirmPass) {
+            passInConfirm.addClass("is-invalid").after($(
+                '<p class="error-message invalid-feedback m-0">Паролі не співпадають</p>'
+            ));
+        } else if (pass && confirmPass && pass === confirmPass) {
+            $(".btn-close").click();
+            postForm();
+        }
+
+
+    }
+
+    $(document).ready(getStaff);
+    /*<![CDATA[*/
+    function getStaff() {
+
+        $.ajax({
+            type: "GET",
+            url: /*[[@{/admin/staff/getAllStaffRole}]]*/ 'default',
+            dataType: 'JSON',
+            success: function (response) {
+                const select = $("#staffRole");
+
+                for (const role of response) {
+                    select.append(
+                        $('<option value="' + role + '">' + roleLabel(role) + '</option>'));
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+
+        function roleLabel(role) {
+            switch (role) {
+                case 'ROLE_ADMIN':
+                    return 'Головний адмін';
+                case 'ROLE_MANAGER':
+                    return 'Адміністратор';
+                case 'ROLE_COURIER':
+                    return 'Курьєр';
+                case 'ROLE_ACCOUNTANT':
+                    return 'Бухгалтер';
+                default:
+                    return 'Без доступу'
+            }
+        }
+
+        const path = window.location.pathname;
+        const staffId = Number(path.substring(path.lastIndexOf('/') + 1, path.length));
+        if (staffId) {
+            $.ajax({
+                type: "GET",
+                url: '../get-staff/' + staffId,
+                dataType: 'JSON',
+                success: function (result) {
+
+                    $("#staffId").attr("value", result.staffId);
+                    $("#status").prop("checked", result.status);
+                    if (result.photoName) $("#photo").attr("src", '../../../uploads/' + result.photoName);
+                    $("#photoName").attr("value", result.photoName);
+                    $("#photoFile");
+                    $("#firstName").attr("value", result.firstName);
+                    $("#lastName").attr("value", result.lastName);
+                    $("#phone").attr("value", result.phone);
+                    $("#email").attr("value", result.email);
+                    flatpickr("#dateOfBirth", {
+                        dateFormat: 'd-m-Y',
+                        defaultDate: new Date(result.dateOfBirth)
+                    });
+
+                    $("#staffRole").val(result.staffRole).trigger('change');
+
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        }
+    }
+
+    /*]]>*/
+
+    $("#post-form").on("click", postForm)
+        function postForm() {
+        $(".error-message").remove();
+        $("input, select").removeClass("is-invalid");
+
+        var formData = new FormData($("#form-staff")[0]);
+
+        const file = $("#photoFile")[0].files[0];
+        if (file) {
+            formData.set("photoFile", file);
+        }
+        if (!$("#status").is(":checked")) {
+            formData.set("status", 'false');
+        }
+
+        $.ajax({
+            type: 'POST',
+            data: formData,
+            url: window.location.href,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Оновлення успішне !' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper");
+                autoCloseAlert();
+            },
+            error: function (error) {
+                const errors = error.responseJSON;
+                for (let error of errors) {
+                    $(document).find("#" + error.field).addClass("is-invalid").after($(
+                        '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
+                    ))
+                }
+                $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Ой.. Щось пішло не так :)' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper");
+                autoCloseAlert();
+            }
+        })
+    }
+
+    $("#photoFile").on("change", previewImage);
+
+    function previewImage() {
+        if (this.files && this.files[0]) {
+            const type = this.files[0].type;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                if (type === "image/jpeg" || type === "image/jpg" || type === "image/png") {
+                    $("#photo").attr("src", e.target.result);
+                } else {
+                    $("#photo").addClass("is-invalid")
+                        .after($('<p class="error-message text-center text-danger m-0">' +
+                            'Вибраний файл не є зображенням у форматі jpeg, jpg або png.</p>'
+                        ))
+                }
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+    }
+
+    $("label.delete-image-button").on("click", function () {
+
+        const filename = $("#photoName").attr("value");
+        if (filename) {
+            $.ajax({
+                method: 'DELETE',
+                url: '../delete-image/' + filename,
+                success: function (response) {
+
+                    $("#photo").removeAttr("value");
+                    $("#photoName").removeAttr("value");
+                    $("#photoFile").val('');
+                    $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                        'Фото видалено !' +
+                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                        '</div>').appendTo(".content-wrapper");
+                    autoCloseAlert();
+                },
+                error: function (error) {
+                    console.log(error)
+                    $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                        'Ой.. Щось пішло не так :)' +
+                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                        '</div>').appendTo(".content-wrapper");
+                    autoCloseAlert();
+                }
+            })
+        }
+    });
+
+    function autoCloseAlert() {
+        $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+            $("#success-alert").slideUp(500);
+        });
+    }
+</script>
+
+</body>
+</html>
