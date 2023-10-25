@@ -19,5 +19,6 @@ public class UserDetails {
     private String photo;
     private Integer activeBonuses;
     private Integer usedBonuses;
+    private Date registrationDate;
 
 }

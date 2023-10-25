@@ -17,7 +17,9 @@ public class User {
     private Instant dateTimeOfLastLogin;
     private Integer bonuses;
     private Double totalAmount;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Integer totalOrders;
+    private Boolean isActive;
+    @OneToOne(cascade = CascadeType.ALL)
     private UserDetails userDetails;
     @JoinTable(name = "users_product_wishlist",
             joinColumns = @JoinColumn(name = "user_id"),
