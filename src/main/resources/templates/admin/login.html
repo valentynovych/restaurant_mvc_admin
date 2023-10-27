@@ -216,7 +216,7 @@
                     return xhr;
                 },
                 success: function () {
-                    window.open(xhr.responseURL);
+                    window.location = xhr.responseURL;
                 },
                 error: function (error) {
                     console.log(error)

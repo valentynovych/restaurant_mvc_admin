@@ -13,11 +13,13 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, length = 100, nullable = false)
     private String email;
     private Instant dateTimeOfLastLogin;
     private Integer bonuses;
     private Double totalAmount;
     private Integer totalOrders;
+    @Column(nullable = false)
     private Boolean isActive;
     @OneToOne(cascade = CascadeType.ALL)
     private UserDetails userDetails;

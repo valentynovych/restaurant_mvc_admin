@@ -134,10 +134,12 @@
                                                         name="staffRole">
                                                 </select>
                                             </div>
-                                            <div class="mb-1 password-block d-flex justify-content-center">
-                                                <label class="form-label-sm" for="password">Пароль</label>
-                                                <input type="text" class="form-control" id="password"
-                                                       name="password" placeholder="Пароль"/>
+                                            <div class="mb-1 password-block ">
+                                                <div>
+                                                    <label class="form-label-sm" for="password">Пароль</label>
+                                                    <input type="text" class="form-control" id="password"
+                                                           name="password" placeholder="Пароль"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-3 d-flex flex-row" style="margin-left: 8rem">
@@ -242,7 +244,7 @@
         if (staffId) {
             var password = $(".password-block");
             password.children().remove();
-            password.addClass("mt-4").addClass("")
+            password.addClass("mt-4").addClass("d-flex").addClass("justify-content-center")
             password.append($(
                 '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePassworModal">\n' +
                 '  Змінити пароль\n' +
@@ -306,6 +308,7 @@
     }
 
     $(document).ready(getStaff);
+
     /*<![CDATA[*/
     function getStaff() {
 
@@ -377,7 +380,8 @@
     /*]]>*/
 
     $("#post-form").on("click", postForm)
-        function postForm() {
+
+    function postForm() {
         $(".error-message").remove();
         $("input, select").removeClass("is-invalid");
 

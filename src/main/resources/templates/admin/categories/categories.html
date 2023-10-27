@@ -164,7 +164,7 @@
     let currentPage;
     let searchText;
     let timer;
-    $("input[type='search']").keyup(function () {
+    $("input[type='search']").on("input", function () {
         searchText = this.value;
         clearTimeout(timer);
         timer = setTimeout(getCategories(0), 300);
