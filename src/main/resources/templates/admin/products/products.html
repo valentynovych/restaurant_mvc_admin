@@ -10,90 +10,305 @@
         xmlns:th="http://www.thymeleaf.org"
 >
 <head>
-  <meta charset="utf-8"/>
-  <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-  />
+    <meta charset="utf-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
 
-  <title>Статистика</title>
+    <title>Користувачі</title>
 
-  <meta name="description" content=""/>
+    <meta name="description" content=""/>
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" th:href="@{/assets/img/favicon/favicon.ico}"/>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/img/favicon/favicon.ico}"/>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link
-          href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-          rel="stylesheet"
-  />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet"
+    />
 
-  <!-- Icons -->
-  <link rel="stylesheet" th:href="@{/assets/vendor/fonts/fontawesome.css}"/>
-  <link rel="stylesheet" th:href="@{/assets/vendor/fonts/tabler-icons.css}"/>
-  <link rel="stylesheet" th:href="@{/assets/vendor/fonts/flag-icons.css}"/>
+    <!-- Icons -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/fontawesome.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/tabler-icons.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/flag-icons.css}"/>
 
-  <!-- Core CSS -->
-  <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/core.css}"/>
-  <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/theme-default.css}"/>
-  <link rel="stylesheet" th:href="@{/assets/css/demo.css}"/>
+    <!-- Core CSS -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/core.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/theme-default.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/demo.css}"/>
 
-  <!-- Vendors CSS -->
-  <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"/>
-  <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/typeahead-js/typeahead.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/animate-css/animate.css}"/>
 
-  <!-- Page CSS -->
+    <!-- Page CSS -->
 
-  <!-- Helpers -->
-  <script th:src="@{/assets/vendor/js/helpers.js}"></script>
+    <!-- Helpers -->
+    <script th:src="@{/assets/vendor/js/helpers.js}"></script>
 
-  <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-  <script th:src="@{/assets/js/config.js}"></script>
-  <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js}"></script>
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script th:src="@{/assets/js/config.js}"></script>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js}"></script>
 </head>
 
 <body>
 <!-- Layout wrapper -->
 <div class="layout-wrapper layout-content-navbar">
-  <div class="layout-container">
-    <!-- Menu -->
+    <div class="layout-container">
+        <!-- Menu -->
 
-    <th:block th:insert="~{fragments/admin-sidebar.html :: sidebar}"></th:block>
-    <!-- / Menu -->
+        <th:block th:insert="~{fragments/admin-sidebar.html :: sidebar}"></th:block>
+        <!-- / Menu -->
 
-    <!-- Layout container -->
-    <div class="layout-page">
-      <!-- Navbar -->
-      <th:block th:insert="~{fragments/admin-navbar.html :: navbar}"></th:block>
-      <!-- / Navbar -->
+        <!-- Layout container -->
+        <div class="layout-page">
+            <!-- Navbar -->
+            <th:block th:insert="~{fragments/admin-navbar.html :: navbar}"></th:block>
+            <!-- / Navbar -->
 
-      <!-- Content wrapper -->
-      <div class="content-wrapper">
-        <!-- Content -->
+            <!-- Content wrapper -->
+            <div class="content-wrapper">
+                <!-- Content -->
 
-        <div class="container-xxl flex-grow-1 container-p-y">
-          <h4 class="fw-bold py-3 mb-4">Page 1</h4>
-          <p>
-            Sample page.<br/>For more layout options refer
-          </p>
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <div class="d-flex flex-row justify-content-between align-items-center">
+                        <h4 class="fw-bold pt-3">Всі товари</h4>
+                    </div>
+                    <div class="card">
+                        <div class="card-header py-2 d-flex justify-content-between">
+                            <div class="search-input-wrapper col-md-4">
+                                <label class="d-flex align-items-center gap-1 w-100">
+                                    Пошук:
+                                    <input type="search" class="form-control" placeholder="Назва товару">
+                                </label>
+                            </div>
+                            <div>
+                                <a href="products/add" class="btn btn-primary"><i class="ti ti-plus me-1"></i>Додати товар</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row-cols-md-4 row-cols-lg-6 product-items d-flex gap-5 py-3 flex-wrap">
+                                <a href="" class="product-link">
+                                    <div class="product-item d-flex justify-content-center flex-column">
+                                        <figure class="mb-1 rounded-2" style="border: 1px solid #4e5264; ">
+                                            <img src="" class="product-image" style="aspect-ratio: 1" alt="">
+                                        </figure>
+                                        <span class="text-center product-name">name</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between pb-0"></div>
+                    </div>
+
+                </div>
+                <!-- / Content -->
+                <div class="content-backdrop fade"></div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title " id="modalCenterTitle">Видалити категорію ?</h5>
+                            <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                            ></button>
+                        </div>
+                        <div class="modal-body">
+                            <span>Видалити категорію без можливості відновлення ?</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                                Скасувати
+                            </button>
+                            <button type="button" class="btn btn-danger" id="delete-staff">Видалити</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Content wrapper -->
         </div>
-        <!-- / Content -->
-        <div class="content-backdrop fade"></div>
-      </div>
-      <!-- Content wrapper -->
+        <!-- / Layout page -->
     </div>
-    <!-- / Layout page -->
-  </div>
-  <!-- Overlay -->
-  <div class="layout-overlay layout-menu-toggle"></div>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
 
-  <!-- Drag Target Area To SlideIn Menu On Small Screens -->
-  <div class="drag-target"></div>
+    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+    <div class="drag-target"></div>
 </div>
 <!-- / Layout wrapper -->
+<script th:inline="javascript">
+    let src = /*[[@{/assets/img/placeholder-image.png}]]*/ 'default';
+    $(window).on('load', function () {
+        var images = document.querySelectorAll("img");
+        for (var i = 0; i < images.length; i++) {
+            if (!images[i].complete || images[i].naturalWidth === 0) {
+                images[i].src = src;
+            }
+        }
+    });
+</script>
+<!--AJAX requests-->
+<script th:inline="javascript">
+    $(document).ready(function () {
+        getUsers(0)
+    });
+
+    let currentPage;
+    let searchText;
+    let timer;
+    $("input[type='search']").on("input", function () {
+        searchText = this.value;
+        clearTimeout(timer);
+        timer = setTimeout(getUsers(0), 300);
+    });
+
+    function getUsers(page) {
+        getUsersPage(page);
+    }
+
+    function getUsersPage(page) {
+        var getUrl = 'products/getAllProducts?page=' + page;
+        if (searchText) getUrl += '&search=' + searchText;
+
+        $.ajax({
+            type: 'GET',
+            url: getUrl,
+            dataType: 'JSON',
+            success: function (result) {
+                console.log(result)
+                clearTableLine();
+                drawCards(result, page)
+            }
+        });
+
+    }
+
+    function drawCards(result, page) {
+
+        for (const data of result.content) {
+            var imgUrl = '';
+            if (data.photo) {
+                imgUrl = '../uploads/' + data.photo;
+            } else {
+                imgUrl = /*[[@{/assets/img/placeholder-image.png}]]*/ 'default';
+            }
+            $('<a href="products/edit-product/' + data.productId + '" class="product-link">\n' +
+                ' <div class="product-item d-flex justify-content-center flex-column">\n' +
+                '   <figure class="mb-1 rounded-2" style="border: 1px solid #4e5264">\n' +
+                '     <img src="' + imgUrl + '" class="product-image">\n' +
+                '   </figure>\n' +
+                '   <span class="text-center product-name">' + data.name + '</span>\n' +
+                '  </div>\n' +
+                '</a>').appendTo(".product-items");
+        }
+
+
+        if (result.totalPages > 1) {
+            const size = result.size;
+
+            const from = page > 0 ? (page * size) + 1 : 1;
+            const to = from + (size - 1);
+            const total = result.totalElements;
+
+            if (from === total) {
+                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                    'Показано ' + from + ' з ' + total + ' продуктів' +
+                    '</div>').appendTo(".card-footer");
+            } else {
+                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                    'Показано ' + from + '-' + to + ' з ' + total + ' продуктів' +
+                    '</div>').appendTo(".card-footer")
+            }
+
+            showPagination(result.totalPages);
+
+            switch (page) {
+                case (result.totalPages - 1):
+                    $(".page-item.last").addClass('disabled');
+                    $(".page-item.next").addClass('disabled');
+                    break;
+                case 0:
+                    $(".page-item.first").addClass('disabled');
+                    $(".page-item.prev").addClass('disabled');
+                    break;
+            }
+        }
+
+        function showPagination(countItems) {
+            var paginationList = '<ul class="pagination pagination-sm">\n' +
+                '<li class="page-item first">\n' +
+                '   <a class="page-link waves-effect" onclick="getUsers(0)"><i class="ti ti-chevrons-left tf-icon fs-6"></i></a>\n' +
+                '</li>\n' +
+                '<li class="page-item prev">\n' +
+                '   <a class="page-link waves-effect" onclick="getUsers(' + (page - 1) + ')"><i class="ti ti-chevron-left tf-icon fs-6"></i></a>\n' +
+                '</li>\n';
+            for (let item = 0; item < countItems; item++) {
+                paginationList += '<li class="page-item ' + (page === item ? 'active' : '') + '">\n' +
+                    '<a class="page-link waves-effect" onclick="getUsers(' + item + ')">' + (item + 1) + '</a>\n' +
+                    '</li>';
+            }
+            paginationList += '<li class="page-item next">\n' +
+                '       <a class="page-link waves-effect" onclick="getUsers(' + (page + 1) + ')"><i class="ti ti-chevron-right tf-icon fs-6"></i></a>\n' +
+                '   </li>\n' +
+                '      <li class="page-item last">\n' +
+                '       <a class="page-link waves-effect" onclick="getUsers(' + (countItems - 1) + ')"><i class="ti ti-chevrons-right tf-icon fs-6"></i></a>\n' +
+                '      </li>\n' +
+                '   </ul>\n'
+
+            $(paginationList).appendTo(".card-footer");
+        }
+
+    }
+
+    //clear table before getAll
+    function clearTableLine() {
+        $(".product-items").children().remove();
+        $(".card-footer").children().remove();
+    }
+
+    function blockUserById(id) {
+        $.ajax({
+            type: "POST",
+            url: "users/blockUser/" + id,
+            success: function () {
+                $('<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Статус користувача змінено !' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper")
+                autoCloseAlert();
+                getUsers(currentPage)
+            },
+            error: function () {
+                $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Ой.. Щось пішло не так !' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper")
+                autoCloseAlert();
+
+            }
+        })
+    }
+
+    // delete
+
+    function autoCloseAlert() {
+        $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+            $("#success-alert").slideUp(500);
+        });
+    }
+</script>
 
 <!-- Core JS -->
 <!-- build:js assets/vendor/js/core.js -->
@@ -114,17 +329,5 @@
 <script th:src="@{/assets/js/main.js}"></script>
 
 <!-- Page JS -->
-<script>
-
-  $.ajax({
-    type:"GET",
-    url: 'products/getAllProducts?page=0',
-    dataType: "JSON",
-    success: function (response) {
-      console.log(response);
-    }
-  })
-</script>
-
 </body>
 </html>

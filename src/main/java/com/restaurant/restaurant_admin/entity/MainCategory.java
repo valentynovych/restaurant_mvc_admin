@@ -32,5 +32,5 @@ public class MainCategory {
     @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
     private List<Subcategory> subcategories;
     @OneToMany(mappedBy = "mainCategory")
-    private List<ProductAndDishes> childProducts;
+    private List<Product> childProducts;
 }

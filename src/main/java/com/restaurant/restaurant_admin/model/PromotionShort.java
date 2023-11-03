@@ -3,9 +3,7 @@ package com.restaurant.restaurant_admin.model;
 import lombok.Data;
 
 @Data
-public class ProductShortResponse {
-
-    private Long productId;
+public class PromotionShort {
+    private Long id;
     private String name;
-    private String photo;
 }

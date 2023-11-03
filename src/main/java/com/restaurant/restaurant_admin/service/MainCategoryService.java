@@ -3,7 +3,7 @@ package com.restaurant.restaurant_admin.service;
 import com.restaurant.restaurant_admin.entity.MainCategory;
 import com.restaurant.restaurant_admin.mapper.MainCategoryMapper;
 import com.restaurant.restaurant_admin.model.MainCategoryDTO;
-import com.restaurant.restaurant_admin.model.MainCategoryTablesResponse;
+import com.restaurant.restaurant_admin.model.MainCategoryShortResponse;
 import com.restaurant.restaurant_admin.repository.MainCategoryRepo;
 import com.restaurant.restaurant_admin.repository.specification.MainCategorySpecification;
 import com.restaurant.restaurant_admin.repository.specification.SearchCriteria;
@@ -46,7 +46,7 @@ public class MainCategoryService {
         return dto;
     }
 
-    public List<MainCategoryTablesResponse> getAllMainCategories() {
+    public List<MainCategoryShortResponse> getAllMainCategories() {
         log.info("method getAllMainCategories() -> start");
         List<MainCategory> mainCategories = (List<MainCategory>) mainCategoryRepo.findAll();
         log.info("method getAllMainCategories() -> exit, return MainCategoryTablesResponse list");

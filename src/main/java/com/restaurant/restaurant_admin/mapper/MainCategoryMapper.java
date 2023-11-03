@@ -1,7 +1,7 @@
 package com.restaurant.restaurant_admin.mapper;
 
 import com.restaurant.restaurant_admin.model.MainCategoryDTO;
-import com.restaurant.restaurant_admin.model.MainCategoryTablesResponse;
+import com.restaurant.restaurant_admin.model.MainCategoryShortResponse;
 import com.restaurant.restaurant_admin.entity.MainCategory;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -16,7 +16,7 @@ public interface MainCategoryMapper extends SubcategoryMapper{
 
     MainCategory mainCategoryDtoToMainCategory(MainCategoryDTO mainCategory);
 
-    MainCategoryTablesResponse toMainCategoryTablesResponse(MainCategory mainCategory);
+    MainCategoryShortResponse toMainCategoryTablesResponse(MainCategory mainCategory);
 
     List<MainCategoryDTO> listMainCategoryToDtoList(List<MainCategory> mainCategories);
 

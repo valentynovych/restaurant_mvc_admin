@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+
+<html
+        lang="en"
+        class="light-style layout-navbar-fixed layout-menu-fixed"
+        dir="ltr"
+        data-theme="theme-default"
+        data-assets-path="../../assets/"
+        data-template="vertical-menu-template-starter"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="utf-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Редагування товару</title>
+
+    <meta name="description" content=""/>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/img/favicon/favicon.ico}"/>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet"
+    />
+
+    <!-- Icons -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/fontawesome.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/tabler-icons.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/flag-icons.css}"/>
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/core.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/theme-default.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/demo.css}"/>
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/typeahead-js/typeahead.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/animate-css/animate.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/flatpickr/flatpickr.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script th:src="@{/assets/vendor/js/helpers.js}"></script>
+
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script th:src="@{/assets/js/config.js}"></script>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js}"></script>
+</head>
+
+<body>
+<!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <!-- Menu -->
+
+        <th:block th:insert="~{fragments/admin-sidebar.html :: sidebar}"></th:block>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+            <!-- Navbar -->
+            <th:block th:insert="~{fragments/admin-navbar.html :: navbar}"></th:block>
+            <!-- / Navbar -->
+            <!-- Content wrapper -->
+            <div class="content-wrapper">
+                <!-- Content -->
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <div class="d-flex flex-row justify-content-between align-items-center">
+                        <h4 class="fw-bold pt-3">Редагування товару</h4>
+                    </div>
+                    <div class="card">
+                        <form id="productForm">
+                            <div class="card-body d-flex flex-row gap-5">
+                                <div class="ms-5 col-md-4">
+                                    <div class="card-header d-flex justify-content-end align-items-center"
+                                         style="position: absolute; top: 0; right: 1rem">
+                                        <label class="switch switch-success">
+                                            <input type="checkbox" class="switch-input" id="isActive"
+                                                   name="isActive">
+                                            <span class="switch-toggle-slider">
+                                        <span class="switch-on">
+                                            <i class="ti ti-check"></i>
+                                        </span>
+                                            <span class="switch-off">
+                                                <i class="ti ti-x"></i>
+                                            </span>
+                                        </span>
+                                            <span class="switch-label">Статус</span>
+                                        </label>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label" for="isIngredient">Тип</label>
+                                        <select class="form-select" id="isIngredient" name="isIngredient"></select>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label" for="name">Назва</label>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                               placeholder="Назва товару">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label" for="mainCategory">Категорія</label>
+                                        <select class="form-select" id="mainCategory" name="mainCategory"></select>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label" for="subcategory">Підкатегорія</label>
+                                        <select class="form-select" id="subcategory" name="subcategory"></select>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label" for="price">Ціна, грн</label>
+                                        <input type="text" class="form-control" id="price" name="price"
+                                               placeholder="Ціна, грн">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label" for="weight">Вага, гр</label>
+                                        <input type="text" class="form-control" id="weight" name="weight"
+                                               placeholder="Вага, гр.">
+                                    </div>
+                                    <div class="mb-2 d-flex gap-2">
+                                        <div style="width: -webkit-fill-available;">
+                                            <label class="form-label" for="promotion">Акція</label>
+                                            <select type="text" class="form-select" id="promotion"
+                                                    name="promotion"></select>
+                                        </div>
+                                        <div class="form-check mt-4">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                   id="promotionIsActive" name="promotionIsActive"/>
+                                            <label class="form-check-label" for="promotionIsActive">
+                                                Активна
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <label class="form-check-label" for="isNovelty">
+                                            Новинка
+                                        </label>
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="isNovelty" name="isNovelty"/>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label" for="characteristics">Характеристики</label>
+                                        <input type="text" class="form-control" id="characteristics"
+                                               name="characteristics" placeholder="Характеристики товару">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label" for="description">Опис</label>
+                                        <input type="text" class="form-control" id="description" name="description"
+                                               placeholder="Опис товару">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-4">
+                                    <div class="d-flex flex-row">
+                                        <div>
+                                            <label class="text-center ">Фото товару:</label>
+                                            <figure class="border-secondary"
+                                                    style="border-width: 1px; border-style: solid; width: 300px; height: 240px">
+                                                <img src="" id="photo" width="300" height="240">
+                                                <input type="hidden" name="photoName" id="photoName">
+                                                <input type="file" accept=".png, .jpg, .jpeg" class="input-upload"
+                                                       id="photoFile" name="photoFile">
+                                            </figure>
+                                        </div>
+                                        <div class="actions d-flex flex-column gap-2 ms-3" style="margin-top: 5rem">
+                                            <label class="btn btn-outline-secondary p-1" for="photoFile">
+                                                <i class="ti ti-pencil"></i>
+                                            </label>
+                                            <label class="btn btn-outline-danger p-1 delete-image-button">
+                                                <i class="ti ti-trash-x"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label badge bg-label-secondary text-black"
+                                               for="consistsOfIngredients">Інгредієнти</label>
+                                        <select class="form-select select2" id="consistsOfIngredients"
+                                                name="consistsOfIngredients" multiple></select>
+                                    </div>
+
+                                </div>
+                                <input type="hidden" id="productId" name="productId">
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <button type="button" class="btn btn-primary send-product" style="margin-left: 15rem;">
+                                    Зберегти
+                                </button>
+                            </div>
+                            <div class="card-footer d-flex justify-content-center">
+
+                            </div>
+                        </form>
+                        <!--Ingredient form-->
+                        <form id="ingredientForm" style="display: none">
+                            <div class="card-body d-flex flex-row gap-5">
+                                <div class="ms-5 col-md-4">
+                                    <div class="card-header d-flex justify-content-end align-items-center"
+                                         style="position: absolute; top: 0; right: 1rem">
+                                        <label class="switch switch-success">
+                                            <input type="checkbox" class="switch-input" id="isActiveI"
+                                                   name="isActive">
+                                            <span class="switch-toggle-slider">
+                                        <span class="switch-on">
+                                            <i class="ti ti-check"></i>
+                                        </span>
+                                            <span class="switch-off">
+                                                <i class="ti ti-x"></i>
+                                            </span>
+                                        </span>
+                                            <span class="switch-label">Статус</span>
+                                        </label>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label" for="isIngredient">Тип</label>
+                                        <select class="form-select" id="isIngredientI" name="isIngredient"></select>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label" for="name">Назва</label>
+                                        <input type="text" class="form-control" id="nameI" name="name"
+                                               placeholder="Назва товару">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label badge bg-label-secondary text-black"
+                                               for="forMainCategory">Для товарів категорій</label>
+                                        <select class="form-select select2" id="forMainCategory"
+                                                name="forMainCategory" multiple></select>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label" for="ingredientCategory">Категорія</label>
+                                        <select class="form-select" id="ingredientCategory"
+                                                name="ingredientCategory"></select>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label" for="price">Ціна, грн</label>
+                                        <input type="text" class="form-control" id="priceI" name="price"
+                                               placeholder="Ціна, грн">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label" for="weight">Вага, гр</label>
+                                        <input type="text" class="form-control" id="weightI" name="weight"
+                                               placeholder="Вага, гр.">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-4">
+                                    <div class="d-flex flex-row">
+                                        <div>
+                                            <label class="text-center ">Фото товару:</label>
+                                            <figure class="border-secondary"
+                                                    style="border-width: 1px; border-style: solid; width: 300px; height: 240px">
+                                                <img src="" id="photoI" width="300" height="240">
+                                                <input type="hidden" name="photoName" id="photoNameI">
+                                                <input type="file" accept=".png, .jpg, .jpeg" class="input-upload"
+                                                       id="photoFileI" name="photoFile">
+                                            </figure>
+                                        </div>
+                                        <div class="actions d-flex flex-column gap-2 ms-3" style="margin-top: 5rem">
+                                            <label class="btn btn-outline-secondary p-1" for="photoFileI">
+                                                <i class="ti ti-pencil"></i>
+                                            </label>
+                                            <label class="btn btn-outline-danger p-1 delete-image-button">
+                                                <i class="ti ti-trash-x"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="productIdI" name="productId">
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <button type="button" class="btn btn-primary send-ingredient"
+                                        style="margin-left: 15rem;">
+                                    Зберегти
+                                </button>
+                            </div>
+                            <div class="card-footer d-flex justify-content-center">
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- / Content -->
+                <div class="content-backdrop fade"></div>
+            </div>
+            <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+
+    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+    <div class="drag-target"></div>
+</div>
+<!-- / Layout wrapper -->
+
+
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
+
+<script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
+
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+<script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/i18n/uk.min.js}"
+        integrity="sha512-TDV/1TfxlJAwv/y8HVjHO/AbxfEi3JzUJhQ9HL8GqMprZTcgRggSavorvX2bYzpWyJLrav/Ub/ikmK1sd3eyTw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Main JS -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+<!-- Page JS -->
+
+<script th:src="@{/assets/vendor/libs/flatpickr/flatpickr.js}"></script>
+<script th:src="@{https://npmcdn.com/flatpickr/dist/l10n/uk.js}"></script>
+<script th:inline="javascript">
+    let src = /*[[@{/assets/img/placeholder-image.png}]]*/ 'default';
+    window.onload = function () {
+        var images = document.querySelectorAll("img");
+        for (var i = 0; i < images.length; i++) {
+            if (!images[i].complete || images[i].naturalWidth === 0) {
+                images[i].src = src;
+            }
+        }
+    };
+</script>
+
+<script th:inline="javascript">
+    var product = {
+        isIngredient: false
+    };
+
+    $(window).on("load", function () {
+        fillInputs(product)
+    });
+
+    var $select = $("select[name='isIngredient']");
+    $select.each(function () {
+        $(this).on("select2:select", function (e) {
+            if (e.params.data.id === 'true') {
+                $('#productForm').css('display', 'none')
+                $('#ingredientForm').css('display', 'block')
+                product.isIngredient = true;
+            } else if (e.params.data.id === 'false') {
+                $('#productForm').css('display', 'block')
+                $('#ingredientForm').css('display', 'none')
+                product.isIngredient = false;
+            }
+            fillInputs(product);
+        })
+    });
+
+    function fillInputs(product) {
+        console.log(product)
+
+        if (product.isIngredient === true) {
+            $('#productForm').css('display', 'none')
+            $('#ingredientForm').css('display', 'block')
+            fillIngredientInputs(product)
+        } else {
+            $('#productForm').css('display', 'block')
+            $('#ingredientForm').css('display', 'none')
+            fillProductInputs(product);
+        }
+    }
+
+    function fillProductInputs(product) {
+        $.fn.select2.defaults.set("language", "uk");
+
+        var $isIngredient = $('#isIngredient');
+        $isIngredient.select2({
+            placeholder: 'Виберіть тип продукту',
+            minimumResultsForSearch: -1,
+            data: [
+                {
+                    "id": false,
+                    "text": "Товар"
+                },
+                {
+                    "id": true,
+                    "text": "Інгредієнт"
+                }
+            ]
+        });
+        $isIngredient.val('' + product.isIngredient).trigger('change')
+
+        $('#mainCategory').select2({
+            placeholder: 'Виберіть категорію продукту',
+            allowClear: true,
+            maximumInputLength: 100,
+            ajax: {
+                type: "GET",
+                url: 'getCategories',
+                data: function (params) {
+                    return {
+                        search: params.term || '',
+                        page: (params.page - 1) || 0
+                    };
+                },
+                processResults: function (response) {
+                    return {
+                        results: $.map(response.content, function (cat) {
+                            return {
+                                id: cat.id,
+                                text: cat.categoryName
+                            }
+                        }),
+                        pagination: {
+                            more: response.pageable.pageNumber < response.totalPages
+                        }
+                    };
+                },
+                cache: true,
+            }
+        });
+
+        $('#subcategory').select2({
+            placeholder: 'Виберіть категорію продукту',
+            allowClear: true,
+            maximumInputLength: 100,
+            ajax: {
+                type: "GET",
+                url: 'getSubcategories',
+                data: function (params) {
+                    return {
+                        search: params.term || '',
+                        page: (params.page - 1) || 0
+                    };
+                },
+                processResults: function (response) {
+                    return {
+                        results: $.map(response.content, function (cat) {
+                            return {
+                                id: cat.subcategoryId,
+                                text: cat.subcategoryName
+                            }
+                        }),
+                        pagination: {
+                            more: response.pageable.pageNumber < response.totalPages
+                        }
+                    };
+                },
+                cache: true,
+            }
+        });
+
+        $('#promotion').select2({
+            placeholder: 'Застосувати акцію',
+            allowClear: true,
+            maximumInputLength: 100,
+            ajax: {
+                type: "GET",
+                url: 'getPromotion',
+                data: function (params) {
+                    return {
+                        search: params.term || '',
+                        page: (params.page - 1) || 0
+                    };
+                },
+                processResults: function (response) {
+                    return {
+                        results: $.map(response.content, function (prom) {
+                            return {
+                                id: prom.id,
+                                text: prom.name
+                            }
+                        }),
+                        pagination: {
+                            more: response.pageable.pageNumber < response.totalPages
+                        }
+                    };
+                },
+                cache: true,
+            }
+        });
+
+        $('#consistsOfIngredients').select2({
+            placeholder: 'Склад',
+            allowClear: true,
+            maximumInputLength: 100,
+            ajax: {
+                type: "GET",
+                url: 'getIngredients',
+                data: function (params) {
+                    return {
+                        search: params.term || '',
+                        page: (params.page - 1) || 0
+                    };
+                },
+                processResults: function (response) {
+                    console.log(response)
+                    return {
+                        results: $.map(response.content, function (prom) {
+                            if (prom) return {
+                                "id": prom.productId,
+                                "text": prom.name
+                            }
+                        }),
+                        pagination: {
+                            more: response.pageable.pageNumber < response.totalPages
+                        }
+                    };
+                },
+                cache: true,
+            }
+        });
+    }
+
+    function fillIngredientInputs(product) {
+        $.fn.select2.defaults.set("language", "uk");
+
+        var $isIngredient = $('#isIngredientI');
+        $isIngredient.select2({
+            placeholder: 'Виберіть тип продукту',
+            minimumResultsForSearch: -1,
+            data: [
+                {
+                    "id": false,
+                    "text": "Товар"
+                },
+                {
+                    "id": true,
+                    "text": "Інгредієнт"
+                }
+            ]
+        });
+        $isIngredient.val('' + product.isIngredient).trigger("change")
+
+        function getCategoryLabel(ingredientCategory) {
+            switch (ingredientCategory) {
+                case 'MEATS':
+                    return 'М\'ясо';
+                case 'CHEESES':
+                    return 'Сири';
+                case 'VEGETABLES':
+                    return 'Овочі';
+                case 'SEAFOOD':
+                    return 'Морепродукти';
+                case 'SAUCES':
+                    return 'Соуси';
+                case 'OTHER':
+                    return 'Інше';
+                default:
+                    return 'Не відомо';
+            }
+        }
+
+        $('#ingredientCategory').select2({
+            placeholder: 'Виберіть категорію продукту',
+            allowClear: true,
+            maximumInputLength: 100,
+            ajax: {
+                type: "GET",
+                url: 'getIngredientCategories',
+                processResults: function (response) {
+                    console.log(response)
+                    return {
+                        results: $.map(response, function (cat) {
+                            return {
+                                id: cat,
+                                text: getCategoryLabel(cat)
+                            }
+                        })
+                    };
+                }
+            }
+        });
+
+        $('#forMainCategory').select2({
+            placeholder: 'Для категорій',
+            allowClear: true,
+            maximumInputLength: 100,
+            ajax: {
+                type: "GET",
+                url: 'getCategories',
+                data: function (params) {
+                    return {
+                        search: params.term || '',
+                        page: (params.page - 1) || 0
+                    };
+                },
+                processResults: function (response) {
+                    console.log(response)
+                    return {
+                        results: $.map(response.content, function (cat) {
+                            return {
+                                id: cat.id,
+                                text: cat.categoryName
+                            }
+                        }),
+                        pagination: {
+                            more: response.pageable.pageNumber < response.totalPages
+                        }
+                    };
+                },
+                cache: true,
+            }
+        })
+    }
+
+    $('.send-product').on("click", function () {
+        var formData = new FormData($('#productForm')[0]);
+        $('.invalid-feedback').remove();
+        $('.is-invalid').removeClass('is-invalid');
+
+        if ($('#isActive').is(":checked")) {
+            formData.set("isActive", 'true');
+        } else {
+            formData.set("isActive", 'false');
+        }
+
+        if ($('#isNovelty').is(":checked")) {
+            formData.set("isNovelty", 'true');
+        } else {
+            formData.set("isNovelty", 'false');
+        }
+
+        formData.set("isIngredient", $('#isIngredient').find(':selected').val());
+
+        if ($('#promotionIsActive').is(":checked")) {
+            formData.set("promotionIsActive", 'true');
+        } else {
+            formData.set("promotionIsActive", 'false');
+        }
+        for (const dat of formData.entries()) {
+            console.log(dat)
+        }
+
+        $.ajax({
+            type: "POST",
+            url: 'add-product',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Оновлення успішне !' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper");
+                autoCloseAlert();
+            },
+            error: function (error) {
+                const errors = error.responseJSON;
+                for (let error of errors) {
+                    $(document).find("#" + error.field).addClass("is-invalid").parent().append($(
+                        '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
+                    ))
+                }
+                $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Ой.. Щось пішло не так :)' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper");
+                autoCloseAlert();
+            }
+        })
+    });
+
+    $('.send-ingredient').on("click", function () {
+        var formData = new FormData($('#ingredientForm')[0]);
+
+        $('.invalid-feedback').remove();
+        $('.is-invalid').removeClass('is-invalid');
+
+        if ($('#isActiveI').is(":checked")) {
+            formData.set("isActive", 'true');
+        } else {
+            formData.set("isActive", 'false');
+        }
+
+        formData.set("isIngredient", $('#isIngredientI').find(':selected').val());
+
+        $.ajax({
+            type: "POST",
+            url: 'add-ingredient',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Оновлення успішне !' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper");
+                autoCloseAlert();
+            },
+            error: function (error) {
+                const errors = error.responseJSON;
+                for (let error of errors) {
+                    $('#ingredientForm').find("input[name='" + error.field + "']").addClass("is-invalid").after($(
+                        '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
+                    ));
+                    $('#ingredientForm').find("select[name='" + error.field + "']").addClass("is-invalid").parent().append($(
+                        '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
+                    ))
+                }
+                $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Ой.. Щось пішло не так :)' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper");
+                autoCloseAlert();
+            }
+        })
+    });
+
+    $("#photoFile").on("change", previewImage);
+
+    function previewImage() {
+        if (this.files && this.files[0]) {
+            const type = this.files[0].type;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                if (type === "image/jpeg" || type === "image/jpg" || type === "image/png") {
+                    $("#photo").attr("src", e.target.result);
+                } else {
+                    $("#photoFile").addClass("is-invalid")
+                        .after($('<p class="error-message text-center text-danger m-0">' +
+                            'Вибраний файл не є зображенням у форматі jpeg, jpg або png.</p>'
+                        ))
+                }
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+    }
+
+    $("#photoFileI").on("change", previewImageI);
+
+    function previewImageI() {
+        if (this.files && this.files[0]) {
+            const type = this.files[0].type;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                if (type === "image/jpeg" || type === "image/jpg" || type === "image/png") {
+                    $("#photoI").attr("src", e.target.result);
+                } else {
+                    $("#photoFileI").addClass("is-invalid")
+                        .after($('<p class="error-message text-center text-danger m-0">' +
+                            'Вибраний файл не є зображенням у форматі jpeg, jpg або png.</p>'
+                        ))
+                }
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+    }
+
+    function autoCloseAlert() {
+        $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+            $("#success-alert").slideUp(500);
+        });
+    }
+
+</script>
+</body>
+</html>

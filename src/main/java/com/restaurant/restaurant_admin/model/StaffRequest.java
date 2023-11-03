@@ -25,10 +25,10 @@ public class StaffRequest {
     private String email;
     @NotNull(message = "Обов'язкове поле")
     private Boolean status;
-    @Pattern(regexp = "\\d{9,15}", message = "Телефон не відповідає формату")
+    @Pattern(regexp = "^\\d{9,15}", message = "Телефон не відповідає формату")
     private String phone;
     //    @NotNull(message = "Обов'язкове поле")
-    @NotNull(message = "Обов'язкове поле")
+    //@NotNull(message = "Обов'язкове поле")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date dateOfBirth;
     @Size(max = 100, message = "Довжина поля не більше 50 символів")

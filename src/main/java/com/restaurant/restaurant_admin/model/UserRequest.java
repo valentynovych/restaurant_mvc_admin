@@ -16,7 +16,6 @@ public class UserRequest {
     @NotEmpty(message = "Поле не може бути пустим")
     @Size(max = 50, message = "Може містити більше 50 символів")
     private String lastName;
-    @NotEmpty(message = "Поле не може бути пустим")
     @Pattern(regexp = "\\d{9,15}", message = "Телефон не відповідає формату")
     private String phone;
     @NotNull(message = "Дата не може пуста")

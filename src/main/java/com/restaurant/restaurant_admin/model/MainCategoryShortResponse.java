@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class MainCategoryTablesResponse {
+public class MainCategoryShortResponse {
 
     private Long id;
     private String categoryName;
@@ -15,11 +15,11 @@ public class MainCategoryTablesResponse {
     private Date dateOfCreate;
     private Integer countChildProduct;
 
-    public MainCategoryTablesResponse() {
+    public MainCategoryShortResponse() {
     }
 
-    public MainCategoryTablesResponse(Long id, String categoryName, Boolean isActive, String previewIcon,
-                           Integer topPosition, Date dateOfCreate, Integer countChildProduct) {
+    public MainCategoryShortResponse(Long id, String categoryName, Boolean isActive, String previewIcon,
+                                     Integer topPosition, Date dateOfCreate, Integer countChildProduct) {
         this.id = id;
         this.categoryName = categoryName;
         this.isActive = isActive;

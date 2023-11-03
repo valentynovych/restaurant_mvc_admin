@@ -28,7 +28,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     @JoinColumn(name = "id")
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ProductAndDishes> productWishlist;
+    private List<Product> productWishlist;
     @OneToMany(mappedBy = "user",
             cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Address> addresses;
@@ -37,7 +37,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     @JoinColumn(name = "id")
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ProductAndDishes> shoppingCart;
+    private List<Product> shoppingCart;
     @OneToMany(mappedBy = "user")
     private List<Order> userOrders;
 }

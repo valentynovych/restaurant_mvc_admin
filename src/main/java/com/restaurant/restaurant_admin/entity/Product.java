@@ -1,66 +1,47 @@
 package com.restaurant.restaurant_admin.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-@MappedSuperclass
-public abstract class Product {
+import java.math.BigDecimal;
+import java.util.List;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "product")
+public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Boolean status;
-    private Double price;
+    private Boolean isActive;
+    private Boolean isIngredient;
+    private BigDecimal price;
     private Integer weight;
     private String photo;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
+    private Boolean isNovelty;
+    private String characteristics;
+    private String description;
+    private Boolean promotionIsActive;
+    @ManyToOne
+    private Promotion promotion;
+    @ManyToOne
+    private MainCategory mainCategory;
+    @ManyToOne
+    private Subcategory subcategory;
+    @JoinTable(name = "products_ingredients",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
+    @ManyToMany
+    private List<Product> consistsOfIngredients;
+    @JoinTable(name = "ingredients_main_categories",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "main_category_id"))
+    @ManyToMany
+    private List<MainCategory> forMainCategory;
+    @Enumerated(EnumType.STRING)
+    private IngredientCategory ingredientCategory;
 }

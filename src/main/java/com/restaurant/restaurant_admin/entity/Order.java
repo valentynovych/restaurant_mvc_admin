@@ -35,5 +35,5 @@ public class Order {
             inverseJoinColumns = @JoinColumn(name = "order_id"))
     @JoinColumn(name = "id")
     @ManyToMany
-    private List<ProductAndDishes> products;
+    private List<Product> products;
 }

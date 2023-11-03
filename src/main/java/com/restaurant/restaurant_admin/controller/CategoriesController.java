@@ -1,7 +1,7 @@
 package com.restaurant.restaurant_admin.controller;
 
 import com.restaurant.restaurant_admin.model.MainCategoryDTO;
-import com.restaurant.restaurant_admin.model.MainCategoryTablesResponse;
+import com.restaurant.restaurant_admin.model.MainCategoryShortResponse;
 import com.restaurant.restaurant_admin.model.SubcategoryDTO;
 import com.restaurant.restaurant_admin.service.MainCategoryService;
 import com.restaurant.restaurant_admin.service.SubcategoryService;
@@ -78,7 +78,7 @@ public class CategoriesController {
     }
 
     @GetMapping("/getAll")
-    public @ResponseBody List<MainCategoryTablesResponse> getAllMainCategories() {
+    public @ResponseBody List<MainCategoryShortResponse> getAllMainCategories() {
         return categoryService.getAllMainCategories();
     }
 
@@ -99,7 +99,7 @@ public class CategoriesController {
     }
 
     @GetMapping("/getPageSearch")
-    public @ResponseBody Page<MainCategoryDTO> getCategoriesOnPage(@RequestParam int page, @RequestParam String search) {
+    public @ResponseBody Page<MainCategoryDTO> getCategoriesOnPage(@RequestParam int page, @RequestParam(required = false) String search) {
         return categoryService.getMainCategoriesBySearch(search, page, pageSize);
     }
 

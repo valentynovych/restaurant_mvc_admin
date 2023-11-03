@@ -16,5 +16,5 @@ public class Subcategory {
     @ManyToOne
     private MainCategory parentCategory;
     @OneToMany(mappedBy = "subcategory")
-    private List<ProductAndDishes> products;
+    private List<Product> products;
 }
