@@ -1,6 +1,6 @@
 package com.restaurant.restaurant_admin.controller;
 
-import com.restaurant.restaurant_admin.entity.Role;
+import com.restaurant.restaurant_admin.entity.enums.Role;
 import com.restaurant.restaurant_admin.model.StaffRequest;
 import com.restaurant.restaurant_admin.model.StaffResponse;
 import com.restaurant.restaurant_admin.service.StaffService;

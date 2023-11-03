@@ -1,5 +1,6 @@
 package com.restaurant.restaurant_admin.entity;
 
+import com.restaurant.restaurant_admin.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

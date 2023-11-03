@@ -1,6 +1,6 @@
 package com.restaurant.restaurant_admin.model;
 
-import com.restaurant.restaurant_admin.entity.IngredientCategory;
+import com.restaurant.restaurant_admin.entity.enums.IngredientCategory;
 import lombok.Data;
 
 import java.math.BigDecimal;

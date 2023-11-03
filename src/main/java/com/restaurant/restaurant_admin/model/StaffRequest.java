@@ -1,6 +1,6 @@
 package com.restaurant.restaurant_admin.model;
 
-import com.restaurant.restaurant_admin.entity.Role;
+import com.restaurant.restaurant_admin.entity.enums.Role;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;

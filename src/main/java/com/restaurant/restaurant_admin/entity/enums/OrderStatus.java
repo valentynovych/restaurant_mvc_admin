@@ -1,4 +1,4 @@
-package com.restaurant.restaurant_admin.entity;
+package com.restaurant.restaurant_admin.entity.enums;
 
 public enum OrderStatus {
     NEW("Новий"),

@@ -1,5 +1,6 @@
 package com.restaurant.restaurant_admin.entity;
 
+import com.restaurant.restaurant_admin.entity.enums.IngredientCategory;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

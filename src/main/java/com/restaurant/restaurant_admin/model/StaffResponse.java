@@ -1,7 +1,6 @@
 package com.restaurant.restaurant_admin.model;
 
-import com.restaurant.restaurant_admin.entity.Role;
-import jakarta.validation.constraints.*;
+import com.restaurant.restaurant_admin.entity.enums.Role;
 import lombok.Data;
 
 import java.util.Date;

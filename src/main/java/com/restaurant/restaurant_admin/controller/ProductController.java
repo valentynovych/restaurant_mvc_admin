@@ -1,6 +1,6 @@
 package com.restaurant.restaurant_admin.controller;
 
-import com.restaurant.restaurant_admin.entity.IngredientCategory;
+import com.restaurant.restaurant_admin.entity.enums.IngredientCategory;
 import com.restaurant.restaurant_admin.model.IngredientRequest;
 import com.restaurant.restaurant_admin.model.ProductRequest;
 import com.restaurant.restaurant_admin.model.ProductShortResponse;
