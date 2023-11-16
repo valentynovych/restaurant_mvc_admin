@@ -26,7 +26,7 @@ public class CategoriesController {
     private final MainCategoryService categoryService;
     private final SubcategoryService subcategoryService;
     private final UploadFileUtil fileUtil;
-    private final int pageSize = 2; // TODO: pageSize = 10
+    private final int pageSize = 10; // TODO: pageSize = 10
 
     @GetMapping
     public ModelAndView viewCategories() {

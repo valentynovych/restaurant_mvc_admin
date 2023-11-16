@@ -27,7 +27,7 @@ public class StaffController {
 
     private final StaffService staffService;
 
-    private final int pageSize = 2;
+    private final int pageSize = 10;
 
     @GetMapping
     public ModelAndView viewStaff() {

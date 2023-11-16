@@ -31,4 +31,10 @@ public interface UserMapper {
     @Mapping(target = "usedBonuses", source = "userDetails.usedBonuses")
     UserShortDetails userToShortDetails(User user);
 
+    @Mapping(source = "userId", target = "id")
+    @Mapping(source = "firstName", target = "userDetails.firstName")
+    @Mapping(source = "lastName", target = "userDetails.lastName")
+    @Mapping(source = "phone", target = "userDetails.phone")
+    @Mapping(source = "registrationDate", target = "userDetails.registrationDate")
+    User userResponseToUser(UserShortResponse userShortResponse);
 }

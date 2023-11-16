@@ -27,7 +27,6 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepo productRepo;
-    private final ProductMapper mapper;
     private final MainCategoryService categoryService;
     private final SubcategoryService subcategoryService;
     private final UploadFileUtil fileUtil;
@@ -37,7 +36,8 @@ public class ProductService {
         Pageable pageable = PageRequest.of(page, pageSize);
         log.info("method getProductPage -> get products by pageable - page: " + page + " pageSize: " + pageSize);
         Page<Product> productPage = productRepo.findAll(pageable);
-        List<ProductShortResponse> shortResponses = mapper.productListToShortResponseList(productPage.getContent());
+        List<ProductShortResponse> shortResponses =
+                ProductMapper.MAPPER.productListToShortResponseList(productPage.getContent());
         Page<ProductShortResponse> shortResponsePage =
                 new PageImpl<>(shortResponses, pageable, productPage.getTotalElements());
         log.info("method getProductPage -> exit, return products by pageable");
@@ -52,8 +52,10 @@ public class ProductService {
                 new SearchCriteria("name", ":", search));
         log.info("method getProductsBySearch -> get products by pageable - page: " + page + " pageSize: " + pageSize);
         Page<Product> productPage = productRepo.findAll(likeName, pageable);
-        List<ProductShortResponse> responseList = mapper.productListToShortResponseList(productPage.getContent());
-        Page<ProductShortResponse> responsePage = new PageImpl<>(responseList, pageable, productPage.getTotalElements());
+        List<ProductShortResponse> responseList =
+                ProductMapper.MAPPER.productListToShortResponseList(productPage.getContent());
+        Page<ProductShortResponse> responsePage =
+                new PageImpl<>(responseList, pageable, productPage.getTotalElements());
         log.info("method getProductsBySearch -> exit, return products by pageable");
         return responsePage;
     }
@@ -63,7 +65,7 @@ public class ProductService {
         Optional<Product> byId = productRepo.findById(productId);
         Product product = byId.orElseThrow(EntityNotFoundException::new);
         log.info("method getProductPage -> product isPresent, map to ProductResponse");
-        ProductResponse productResponse = mapper.productToProductResponse(product);
+        ProductResponse productResponse = ProductMapper.MAPPER.productToProductResponse(product);
         log.info("method getProductPage -> exit, return ProductResponse");
         return productResponse;
     }
@@ -89,7 +91,7 @@ public class ProductService {
         );
         log.info("method getIngredients -> get products by pageable - page: " + page + " pageSize: " + pageSize);
         Page<Product> productPage = productRepo.findAll(isIngredient.and(likeName), pageable);
-        List<ProductShortResponse> responseList = mapper.productListToShortResponseList(productPage.getContent());
+        List<ProductShortResponse> responseList = ProductMapper.MAPPER.productListToShortResponseList(productPage.getContent());
         Page<ProductShortResponse> responsePage = new PageImpl<>(responseList, pageable, productPage.getTotalElements());
         log.info("method getIngredients -> exit, return products by pageable");
         return responsePage;
@@ -100,7 +102,7 @@ public class ProductService {
         if (productRequest != null) {
             Optional<Product> byId = productRepo.findById(productRequest.getProductId());
             Product product = byId.orElseThrow(EntityNotFoundException::new);
-            product = mapper.productRequestToProduct(productRequest);
+            product = ProductMapper.MAPPER.productRequestToProduct(productRequest);
             if (product.getPromotion().getId() == null) {
                 product.setPromotion(null);
             }
@@ -132,7 +134,7 @@ public class ProductService {
         if (ingredientRequest != null) {
             Optional<Product> byId = productRepo.findById(ingredientRequest.getProductId());
             Product product = byId.orElseThrow(EntityNotFoundException::new);
-            product = mapper.ingredientReguestToProduct(ingredientRequest);
+            product = ProductMapper.MAPPER.ingredientReguestToProduct(ingredientRequest);
             log.info("method updateIngredient -> save Product");
 
             if (ingredientRequest.getPhotoFile() != null && !ingredientRequest.getPhotoFile().isEmpty()) {
@@ -147,7 +149,7 @@ public class ProductService {
     public void createProduct(ProductRequest productRequest) {
         log.info("method createProduct -> start");
         if (productRequest != null) {
-            Product product = mapper.productRequestToProduct(productRequest);
+            Product product = ProductMapper.MAPPER.productRequestToProduct(productRequest);
             if (product.getPromotion().getId() == null) {
                 product.setPromotion(null);
             }
@@ -164,7 +166,7 @@ public class ProductService {
     public void createProduct(IngredientRequest ingredientRequest) {
         log.info("method createProduct -> start");
         if (ingredientRequest != null) {
-            Product product = mapper.ingredientReguestToProduct(ingredientRequest);
+            Product product = ProductMapper.MAPPER.ingredientReguestToProduct(ingredientRequest);
             log.info("method createProduct -> save Product");
             if (ingredientRequest.getPhotoFile() != null && !ingredientRequest.getPhotoFile().isEmpty()) {
                 String filename = savePhotoFile(ingredientRequest.getPhotoFile());
@@ -194,5 +196,24 @@ public class ProductService {
         }
         log.info("method deleteProductById -> exit, return false");
         return false;
+    }
+
+    public Page<ProductShortResponse> getProductsWithoutIngredients(int page, int pageSize, String search) {
+        log.info("method getProductsWithoutIngredients -> start");
+        Pageable pageable = PageRequest.of(page, pageSize);
+        ProductSpecification notIngredient = new ProductSpecification(
+                new SearchCriteria("isIngredient", "", false)
+        );
+        ProductSpecification likeName = new ProductSpecification(
+                new SearchCriteria("name", ":", search)
+        );
+        log.info("method getProductsWithoutIngredients -> get products by pageable - page: " + page + " pageSize: " + pageSize);
+        Page<Product> productPage = productRepo.findAll(notIngredient.and(likeName), pageable);
+        List<ProductShortResponse> responseList =
+                ProductMapper.MAPPER.productListToShortResponseList(productPage.getContent());
+        Page<ProductShortResponse> responsePage =
+                new PageImpl<>(responseList, pageable, productPage.getTotalElements());
+        log.info("method getProductsWithoutIngredients -> exit, return products by pageable");
+        return responsePage;
     }
 }

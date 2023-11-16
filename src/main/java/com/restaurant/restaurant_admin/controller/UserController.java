@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController {
 
     private final UserService userService;
-    private final int pageSize = 5;
+    private final int pageSize = 10;
 
     @GetMapping()
     public ModelAndView viewUsers() {

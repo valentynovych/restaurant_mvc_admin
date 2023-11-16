@@ -27,13 +27,13 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepo userRepo;
-    private final UserMapper mapper;
+    //private final UserMapper mapper;
 
     public Page<UserShortResponse> getUsersOnPage(int page, int pageSize) {
         log.info("method getUsersOnPage -> start, get page: " + page);
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<User> users = userRepo.findAll(pageable);
-        List<UserShortResponse> userList = mapper.userListToShortResponceList(users.getContent());
+        List<UserShortResponse> userList = UserMapper.MAPPER.userListToShortResponceList(users.getContent());
         Page<UserShortResponse> userShortResponsePage = new PageImpl<>(userList, pageable, users.getTotalElements());
         log.info("method getUsersOnPage -> exit, return Page<UserShortResponse>");
         return userShortResponsePage;
@@ -51,7 +51,7 @@ public class UserService {
                 .or(Specification.where(UserSpecification.joinDetails(likePhone)))
                 .or(Specification.where(UserSpecification.joinDetails(likeFirstName)))
                 .or(Specification.where(UserSpecification.joinDetails(likeLastName))), pageable);
-        List<UserShortResponse> userList = mapper.userListToShortResponceList(users.getContent());
+        List<UserShortResponse> userList = UserMapper.MAPPER.userListToShortResponceList(users.getContent());
         Page<UserShortResponse> userShortResponsePage = new PageImpl<>(userList, pageable, users.getTotalElements());
         log.info("method getUsersOnPage -> exit, return Page<UserShortResponse>");
         return userShortResponsePage;
@@ -61,7 +61,7 @@ public class UserService {
         log.info(String.format("method getUserDetailsById -> start, get user by id: %s", userId));
         Optional<User> byId = userRepo.findById(userId);
         User user = byId.orElseThrow(EntityNotFoundException::new);
-        UserShortDetails userShortDetails = mapper.userToShortDetails(user);
+        UserShortDetails userShortDetails = UserMapper.MAPPER.userToShortDetails(user);
         log.info("method getUserDetailsById -> exit, return UserShortDetails()");
         return userShortDetails;
     }

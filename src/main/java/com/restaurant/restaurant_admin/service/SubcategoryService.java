@@ -26,12 +26,12 @@ import java.util.List;
 @Log4j2
 public class SubcategoryService {
     private final SubcategoryRepo subcategoryRepo;
-    private final MainCategoryMapper mapper;
+    //private final MainCategoryMapper mapper;
 
     public List<SubcategoryDTO> getSubcategoriesByParent(Long parentCategory) {
         MainCategory mainCategory = new MainCategory();
         mainCategory.setId(parentCategory);
-        return mapper.subcategoryListToDto(subcategoryRepo.findAllByParentCategory(mainCategory));
+        return MainCategoryMapper.MAPPER.subcategoryListToDto(subcategoryRepo.findAllByParentCategory(mainCategory));
     }
 
     public Page<SubcategoryDTO> getSubcategories(int page, int pageSize, String search) {
@@ -39,7 +39,7 @@ public class SubcategoryService {
         SubcategorySpecification likeName = new SubcategorySpecification(
                 new SearchCriteria("subcategoryName", ":", search));
         Page<Subcategory> subcategoryPage = subcategoryRepo.findAll(likeName, pageable);
-        List<SubcategoryDTO> dtoList = mapper.subcategoryListToDto(subcategoryPage.getContent());
+        List<SubcategoryDTO> dtoList = MainCategoryMapper.MAPPER.subcategoryListToDto(subcategoryPage.getContent());
         Page<SubcategoryDTO> subcategoryDTOPage = new PageImpl<>(dtoList, pageable, subcategoryPage.getTotalElements());
         return subcategoryDTOPage;
     }

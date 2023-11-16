@@ -36,7 +36,7 @@ public class StaffService implements UserDetailsService {
 
     private final ApplicationContext context;
     private final StaffRepo staffRepo;
-    private final StaffMapper mapper;
+    //private final StaffMapper mapper;
     private final UploadFileUtil fileUtil;
     private PasswordEncoder passwordEncoder;
 
@@ -44,7 +44,7 @@ public class StaffService implements UserDetailsService {
         log.info("method getStaffOnPage -> start get staffOnPage, page: " + page + " , pageSize: " + pageSize);
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Staff> staffPage = staffRepo.findAll(pageable);
-        List<StaffResponse> staffResponses = mapper.staffListToModelResponseList(staffPage.getContent());
+        List<StaffResponse> staffResponses = StaffMapper.MAPPER.staffListToModelResponseList(staffPage.getContent());
         log.info("method getStaffOnPage -> exit");
         return new PageImpl<>(staffResponses, pageable, staffPage.getTotalElements());
     }
@@ -60,7 +60,7 @@ public class StaffService implements UserDetailsService {
         StaffSpecification spec4 =
                 new StaffSpecification(new SearchCriteria("phone", ":", search));
         Page<Staff> staffPage = staffRepo.findAll(spec1.or(spec2).or(spec3).or(spec4), pageable);
-        List<StaffResponse> staffResponses = mapper.staffListToModelResponseList(staffPage.getContent());
+        List<StaffResponse> staffResponses = StaffMapper.MAPPER.staffListToModelResponseList(staffPage.getContent());
         return new PageImpl<>(staffResponses, pageable, staffPage.getTotalElements());
 
     }
@@ -69,7 +69,7 @@ public class StaffService implements UserDetailsService {
         log.info("method getStaffById -> start get staff by id: " + staffId);
         Optional<Staff> byId = staffRepo.findById(staffId);
         Staff staff = byId.orElseThrow(EntityNotFoundException::new);
-        StaffResponse staffResponse = mapper.staffToModelResponse(staff);
+        StaffResponse staffResponse = StaffMapper.MAPPER.staffToModelResponse(staff);
         log.info("method getStaffById -> exit, return staffResponse");
         return staffResponse;
     }
@@ -79,7 +79,7 @@ public class StaffService implements UserDetailsService {
         log.info("method updateStaff -> start update Staff");
         if (staffRequest != null) {
             log.info("method updateStaff -> staffRequest isPresent");
-            Staff staff = mapper.requestToStaff(staffRequest);
+            Staff staff = StaffMapper.MAPPER.requestToStaff(staffRequest);
             if (staffRequest.getPhotoFile() != null && !staffRequest.getPhotoFile().isEmpty()) {
                 log.info("method updateStaff -> save upload image");
                 staff.setPhoto(savePhotoFile(staffRequest.getPhotoFile()));
@@ -112,7 +112,7 @@ public class StaffService implements UserDetailsService {
         log.info("method createStaff -> start update Staff");
         if (staffRequest != null) {
             log.info("method createStaff -> staffRequest isPresent");
-            Staff staff = mapper.requestToStaff(staffRequest);
+            Staff staff = StaffMapper.MAPPER.requestToStaff(staffRequest);
             staff.setPassword(passwordEncoder.encode(staffRequest.getPassword()));
             if (staffRequest.getPhotoFile() != null && !staffRequest.getPhotoFile().isEmpty()) {
                 log.info("method createStaff -> save upload image");
@@ -159,5 +159,10 @@ public class StaffService implements UserDetailsService {
                 staff.getPassword(),
                 staff.getAuthorities()
         );
+    }
+
+    public Staff getStaffByUsername(String currUsername) {
+        Optional<Staff> byEmail = staffRepo.findByEmail(currUsername);
+        return byEmail.orElseThrow(EntityNotFoundException::new);
     }
 }

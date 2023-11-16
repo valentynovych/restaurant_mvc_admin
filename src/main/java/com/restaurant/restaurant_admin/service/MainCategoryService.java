@@ -28,7 +28,7 @@ import java.util.Optional;
 @Log4j2
 public class MainCategoryService {
     private final MainCategoryRepo mainCategoryRepo;
-    private final MainCategoryMapper mapper;
+    //private final MainCategoryMapper mapper;
     private final UploadFileUtil fileUtil;
 
     public MainCategoryDTO getMainCategoryById(Long id) {
@@ -52,7 +52,7 @@ public class MainCategoryService {
         log.info("method getAllMainCategories() -> exit, return MainCategoryTablesResponse list");
         return mainCategories
                 .stream()
-                .map(mapper::toMainCategoryTablesResponse)
+                .map(MainCategoryMapper.MAPPER::toMainCategoryTablesResponse)
                 .toList();
     }
 
@@ -70,7 +70,7 @@ public class MainCategoryService {
 
     public void createMainCategory(MainCategoryDTO mainCategoryDTO, MultipartFile previewIconFile) {
         log.info("method createMainCategory -> start map DTO to Entity");
-        MainCategory mainCategory = mapper.mainCategoryDtoToMainCategory(mainCategoryDTO);
+        MainCategory mainCategory = MainCategoryMapper.MAPPER.mainCategoryDtoToMainCategory(mainCategoryDTO);
         mainCategory.setDateOfCreate(new Date());
         mainCategory.setCountChildProduct(0);
 
@@ -85,7 +85,7 @@ public class MainCategoryService {
 
     public void updateMainCategory(MainCategoryDTO mainCategoryDTO, MultipartFile previewIconFile) {
         log.info("method updateMainCategory -> start map DTO to Entity");
-        MainCategory mainCategory = mapper.mainCategoryDtoToMainCategory(mainCategoryDTO);
+        MainCategory mainCategory = MainCategoryMapper.MAPPER.mainCategoryDtoToMainCategory(mainCategoryDTO);
         if (mainCategoryDTO.getSubcategories() != null) {
             log.info("method updateMainCategory -> start update subcategories on entity");
             mainCategory.getSubcategories()
@@ -118,7 +118,7 @@ public class MainCategoryService {
         log.info("method getMainCategoriesByPage -> start getting categories by page");
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<MainCategory> mainCategories = mainCategoryRepo.findAll(pageable);
-        List<MainCategoryDTO> mainCategoryDTOS = mapper.listMainCategoryToDtoList(mainCategories.getContent());
+        List<MainCategoryDTO> mainCategoryDTOS = MainCategoryMapper.MAPPER.listMainCategoryToDtoList(mainCategories.getContent());
         Page<MainCategoryDTO> mainCategoriesDTOPage =
                 new PageImpl<>(mainCategoryDTOS, pageable, mainCategories.getTotalElements());
         log.info("method getMainCategoriesByPage -> exit, return page with categories");
@@ -132,7 +132,7 @@ public class MainCategoryService {
                 new MainCategorySpecification(
                         new SearchCriteria("categoryName", ":", search));
         Page<MainCategory> mainCategoryPage = mainCategoryRepo.findAll(spec, pageable);
-        List<MainCategoryDTO> mainCategoryDTOS = mapper.listMainCategoryToDtoList(mainCategoryPage.getContent());
+        List<MainCategoryDTO> mainCategoryDTOS = MainCategoryMapper.MAPPER.listMainCategoryToDtoList(mainCategoryPage.getContent());
         Page<MainCategoryDTO> mainCategoriesDTOPage =
                 new PageImpl<>(mainCategoryDTOS, pageable, mainCategoryPage.getTotalElements());
         log.info("method getMainCategoriesBySearch -> exit, return page with categories");

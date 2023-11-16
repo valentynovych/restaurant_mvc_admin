@@ -19,7 +19,10 @@ public interface ProductMapper {
 
     @Mapping(target = "productId", source = "id")
     ProductShortResponse productToShortResponse(Product product);
+    @Mapping(target = "id", source = "productId")
+    Product shortResponseToProduct(ProductShortResponse product);
 
+    @Mapping(target = "productId", source = "id")
     List<ProductShortResponse> productListToShortResponseList(List<Product> products);
 
     @Mapping(target = "productId", source = "id")

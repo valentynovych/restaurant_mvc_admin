@@ -89,7 +89,8 @@
                                 </label>
                             </div>
                             <div>
-                                <a href="products/add" class="btn btn-primary"><i class="ti ti-plus me-1"></i>Додати товар</a>
+                                <a href="products/add" class="btn btn-primary"><i class="ti ti-plus me-1"></i>Додати
+                                    товар</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -162,7 +163,7 @@
 <!--AJAX requests-->
 <script th:inline="javascript">
     $(document).ready(function () {
-        getUsers(0)
+        getProducts(0)
     });
 
     let currentPage;
@@ -171,14 +172,10 @@
     $("input[type='search']").on("input", function () {
         searchText = this.value;
         clearTimeout(timer);
-        timer = setTimeout(getUsers(0), 300);
+        timer = setTimeout(getProducts(0), 300);
     });
 
-    function getUsers(page) {
-        getUsersPage(page);
-    }
-
-    function getUsersPage(page) {
+    function getProducts(page) {
         var getUrl = 'products/getAllProducts?page=' + page;
         if (searchText) getUrl += '&search=' + searchText;
 
@@ -189,13 +186,13 @@
             success: function (result) {
                 console.log(result)
                 clearTableLine();
-                drawCards(result, page)
+                drawTable(result, page)
             }
         });
 
     }
 
-    function drawCards(result, page) {
+    function drawTable(result, page) {
 
         for (const data of result.content) {
             var imgUrl = '';
@@ -249,21 +246,21 @@
         function showPagination(countItems) {
             var paginationList = '<ul class="pagination pagination-sm">\n' +
                 '<li class="page-item first">\n' +
-                '   <a class="page-link waves-effect" onclick="getUsers(0)"><i class="ti ti-chevrons-left tf-icon fs-6"></i></a>\n' +
+                '   <a class="page-link waves-effect" onclick="getProducts(0)"><i class="ti ti-chevrons-left tf-icon fs-6"></i></a>\n' +
                 '</li>\n' +
                 '<li class="page-item prev">\n' +
-                '   <a class="page-link waves-effect" onclick="getUsers(' + (page - 1) + ')"><i class="ti ti-chevron-left tf-icon fs-6"></i></a>\n' +
+                '   <a class="page-link waves-effect" onclick="getProducts(' + (page - 1) + ')"><i class="ti ti-chevron-left tf-icon fs-6"></i></a>\n' +
                 '</li>\n';
             for (let item = 0; item < countItems; item++) {
                 paginationList += '<li class="page-item ' + (page === item ? 'active' : '') + '">\n' +
-                    '<a class="page-link waves-effect" onclick="getUsers(' + item + ')">' + (item + 1) + '</a>\n' +
+                    '<a class="page-link waves-effect" onclick="getProducts(' + item + ')">' + (item + 1) + '</a>\n' +
                     '</li>';
             }
             paginationList += '<li class="page-item next">\n' +
-                '       <a class="page-link waves-effect" onclick="getUsers(' + (page + 1) + ')"><i class="ti ti-chevron-right tf-icon fs-6"></i></a>\n' +
+                '       <a class="page-link waves-effect" onclick="getProducts(' + (page + 1) + ')"><i class="ti ti-chevron-right tf-icon fs-6"></i></a>\n' +
                 '   </li>\n' +
                 '      <li class="page-item last">\n' +
-                '       <a class="page-link waves-effect" onclick="getUsers(' + (countItems - 1) + ')"><i class="ti ti-chevrons-right tf-icon fs-6"></i></a>\n' +
+                '       <a class="page-link waves-effect" onclick="getProducts(' + (countItems - 1) + ')"><i class="ti ti-chevrons-right tf-icon fs-6"></i></a>\n' +
                 '      </li>\n' +
                 '   </ul>\n'
 
@@ -288,7 +285,7 @@
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
                     '</div>').appendTo(".content-wrapper")
                 autoCloseAlert();
-                getUsers(currentPage)
+                getProducts(currentPage)
             },
             error: function () {
                 $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
