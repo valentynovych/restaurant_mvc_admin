@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -74,9 +75,8 @@ public class OrderService {
                 .build();
 
         log.info(String.format("method getOrdersByFilters -> find orders by pageable, page: %s, pageSize: %s", page, pageSize));
-        Page<Order> orderPage = orderRepo.findAll(
-                new OrderSpecification(orderCriteria)
-                        .and(OrderSpecification.joinUser(orderCriteria)), pageable);
+        Page<Order> orderPage = orderRepo.findAll(Specification.where(
+               new OrderSpecification(orderCriteria)), pageable);
         orderPage.getContent().forEach(order -> order.setTotalAmount(countTotalAmount(order)));
         List<OrderShortResponse> shortResponseList =
                 OrderMapper.MAPPER.listOrderToShortResponseList(orderPage.getContent());
