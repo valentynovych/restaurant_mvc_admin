@@ -1,11 +1,10 @@
 package com.restaurant.restaurant_admin.repository;
 
-import com.restaurant.restaurant_admin.entity.Order;
 import com.restaurant.restaurant_admin.entity.Promotion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 
-public interface OrderRepo extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
-
-    long countAllByUserPromotion(Promotion promotion);
+@Repository
+public interface PromotionRepo extends JpaRepository<Promotion, Long>, JpaSpecificationExecutor<Promotion> {
 }

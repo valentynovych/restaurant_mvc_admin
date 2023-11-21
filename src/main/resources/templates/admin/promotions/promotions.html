@@ -10,91 +10,367 @@
         xmlns:th="http://www.thymeleaf.org"
 >
 <head>
-  <meta charset="utf-8"/>
-  <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-  />
+    <meta charset="utf-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
 
-  <title>Статистика</title>
+    <title>Акції</title>
 
-  <meta name="description" content=""/>
+    <meta name="description" content=""/>
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" th:href="@{/assets/img/favicon/favicon.ico}"/>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/img/favicon/favicon.ico}"/>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link
-          href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-          rel="stylesheet"
-  />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet"
+    />
 
-  <!-- Icons -->
-  <link rel="stylesheet" th:href="@{/assets/vendor/fonts/fontawesome.css}"/>
-  <link rel="stylesheet" th:href="@{/assets/vendor/fonts/tabler-icons.css}"/>
-  <link rel="stylesheet" th:href="@{/assets/vendor/fonts/flag-icons.css}"/>
+    <!-- Icons -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/fontawesome.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/tabler-icons.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/flag-icons.css}"/>
 
-  <!-- Core CSS -->
-  <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/core.css}"/>
-  <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/theme-default.css}"/>
-  <link rel="stylesheet" th:href="@{/assets/css/demo.css}"/>
+    <!-- Core CSS -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/core.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/theme-default.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/demo.css}"/>
 
-  <!-- Vendors CSS -->
-  <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"/>
-  <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/typeahead-js/typeahead.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/animate-css/animate.css}"/>
 
-  <!-- Page CSS -->
+    <!-- Page CSS -->
 
-  <!-- Helpers -->
-  <script th:src="@{/assets/vendor/js/helpers.js}"></script>
+    <!-- Helpers -->
+    <script th:src="@{/assets/vendor/js/helpers.js}"></script>
 
-  <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-  <script th:src="@{/assets/js/config.js}"></script>
-  <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js}"></script>
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script th:src="@{/assets/js/config.js}"></script>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js}"></script>
 </head>
 
 <body>
 <!-- Layout wrapper -->
 <div class="layout-wrapper layout-content-navbar">
-  <div class="layout-container">
-    <!-- Menu -->
+    <div class="layout-container">
+        <!-- Menu -->
 
-    <th:block th:insert="~{fragments/admin-sidebar.html :: sidebar}"></th:block>
-    <!-- / Menu -->
+        <th:block th:insert="~{fragments/admin-sidebar.html :: sidebar}"></th:block>
+        <!-- / Menu -->
 
-    <!-- Layout container -->
-    <div class="layout-page">
-      <!-- Navbar -->
-      <th:block th:insert="~{fragments/admin-navbar.html :: navbar}"></th:block>
-      <!-- / Navbar -->
+        <!-- Layout container -->
+        <div class="layout-page">
+            <!-- Navbar -->
+            <th:block th:insert="~{fragments/admin-navbar.html :: navbar}"></th:block>
+            <!-- / Navbar -->
 
-      <!-- Content wrapper -->
-      <div class="content-wrapper">
-        <!-- Content -->
+            <!-- Content wrapper -->
+            <div class="content-wrapper">
+                <!-- Content -->
 
-        <div class="container-xxl flex-grow-1 container-p-y">
-          <h4 class="fw-bold py-3 mb-4">Page 1</h4>
-          <p>
-            Sample page.<br/>For more layout options refer
-          </p>
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <div class="d-flex flex-row justify-content-between align-items-center">
+                        <h4 class="fw-bold py-3">Акції</h4>
+                    </div>
+                    <div class="card">
+                        <div class="card-header py-2 d-flex justify-content-between">
+                            <div class="search-input-wrapper col-md-4">
+                                <label class="d-flex align-items-center gap-1 w-100">
+                                    Пошук:
+                                    <input type="search" class="form-control" placeholder="Назва..">
+                                </label>
+                            </div>
+                            <a th:href="@{/admin/promotions/add}" class="btn btn-primary">
+                                <i class="ti ti-plus me-1"></i>
+                                <span>Додати</span>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <div class="table-responsive overflow-visible">
+                                    <table class="table">
+                                        <thead class="table-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Назва</th>
+                                            <th>Дата створення</th>
+                                            <th>Вирокристань</th>
+                                            <th>Статус</th>
+                                            <th>Дії</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="table-border-bottom-0">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between pb-0"></div>
+                    </div>
+
+                </div>
+                <!-- / Content -->
+                <div class="content-backdrop fade"></div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title " id="modalCenterTitle">Видалити категорію ?</h5>
+                            <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                            ></button>
+                        </div>
+                        <div class="modal-body">
+                            <span>Видалити категорію без можливості відновлення ?</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                                Скасувати
+                            </button>
+                            <button type="button" class="btn btn-danger" id="delete-staff">Видалити</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Content wrapper -->
         </div>
-        <!-- / Content -->
-        <div class="content-backdrop fade"></div>
-      </div>
-      <!-- Content wrapper -->
+        <!-- / Layout page -->
     </div>
-    <!-- / Layout page -->
-  </div>
-  <!-- Overlay -->
-  <div class="layout-overlay layout-menu-toggle"></div>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
 
-  <!-- Drag Target Area To SlideIn Menu On Small Screens -->
-  <div class="drag-target"></div>
+    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+    <div class="drag-target"></div>
 </div>
 <!-- / Layout wrapper -->
 
+<!--AJAX requests-->
+<script>
+    $(document).ready(function () {
+        getPromotionPage(0)
+    });
+
+    let currentPage;
+    let searchText;
+    $("input[type='search']").on("input", function () {
+        searchText = this.value;
+        getPromotionPage(0);
+    });
+
+    function getPromotionPage(page) {
+        if (searchText) {
+            getPromotionsBySearch(page, searchText);
+        } else {
+            getPromotions(page);
+        }
+    }
+
+    function getPromotions(page) {
+
+        $.ajax({
+            type: 'GET',
+            url: 'promotions/getPromotions?page=' + page,
+            dataType: 'JSON',
+            success: function (result) {
+                console.log(result)
+                clearTableLine();
+                drawTable(result, page)
+            }
+        });
+    }
+
+    function getPromotionsBySearch(page, search) {
+
+        $.ajax({
+            type: 'GET',
+            url: 'promotions/getPromotionsBySearch?page=' + page + '&search=' + search,
+            dataType: 'json',
+            success: function (result) {
+                currentPage = page;
+                clearTableLine();
+                drawTable(result, page);
+
+            }
+        });
+    }
+
+    function drawTable(result, page) {
+        for (const data of result.content) {
+
+            const badge = data.isActive ? '<span class="badge bg-label-primary me-1">Активна</span>'
+                : '<span class="badge bg-label-dark me-1">Вимкнена</span>';
+
+            var date = new Date(data.dateOfCreate * 1000);
+            var usedCount = data.usedCount ? data.usedCount : 0;
+
+            $('<tr>\n' +
+                '<td>' + data.id + '</td>\n' +
+                '<td>' + data.name + '</td>\n' +
+                '<td>' + date.toLocaleDateString() + '</td>\n' +
+                '<td>' + usedCount + '</td>\n' +
+                '<td>' + badge + '</td>\n' +
+                '<td>\n' +
+                '  <div class="dropdown">\n' +
+                '   <button type="button" class="btn p-0 dropdown-toggle hide-arrow"\n' +
+                '           data-bs-toggle="dropdown">\n' +
+                '    <i class="ti ti-dots-vertical"></i>\n' +
+                '     </button>\n' +
+                '     <div class="dropdown-menu">\n' +
+                '     <a class="dropdown-item" href="promotions/edit-promotion/' + data.id + '">\n' +
+                '     <i class="ti ti-pencil me-1"></i>Редагувати\n' +
+                '     </a>\n' +
+                '     <button type="button" class="dropdown-item btn justify-content-start" data-bs-toggle="modal" data-bs-target="#modalCenter"' +
+                '     onclick="addDeleteLink(' + data.id + ')">\n' +
+                '     <i class="ti ti-trash me-1"></i>Видалити\n' +
+                '     </button>\n' +
+                '     </div>\n' +
+                '     </div>\n' +
+                '</td>\n' +
+                '</tr>').appendTo("tbody");
+        }
+
+
+        if (result.totalPages > 1) {
+            const size = result.size;
+
+            const from = page > 0 ? (page * size) + 1 : 1;
+            const to = from + (size - 1);
+            const total = result.totalElements;
+
+            if (from === total) {
+                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                    'Показано ' + from + ' з ' + total + ' категорій' +
+                    '</div>').appendTo(".card-footer");
+            } else {
+                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                    'Показано ' + from + '-' + to + ' з ' + total + ' категорій' +
+                    '</div>').appendTo(".card-footer")
+            }
+
+            showPagination(result.totalPages);
+
+            switch (page) {
+                case (result.totalPages - 1):
+                    $(".page-item.last").addClass('disabled');
+                    $(".page-item.next").addClass('disabled');
+                    break;
+                case 0:
+                    $(".page-item.first").addClass('disabled');
+                    $(".page-item.prev").addClass('disabled');
+                    break;
+            }
+        }
+
+        function showPagination(countItems) {
+            var paginationList = '<ul class="pagination pagination-sm">\n' +
+                '<li class="page-item first">\n' +
+                '   <a class="page-link waves-effect" onclick="getPromotionPage(0)"><i class="ti ti-chevrons-left tf-icon fs-6"></i></a>\n' +
+                '</li>\n' +
+                '<li class="page-item prev">\n' +
+                '   <a class="page-link waves-effect" onclick="getPromotionPage(' + (page - 1) + ')"><i class="ti ti-chevron-left tf-icon fs-6"></i></a>\n' +
+                '</li>\n';
+            for (let item = 0; item < countItems; item++) {
+                paginationList += '<li class="page-item ' + (page === item ? 'active' : '') + '">\n' +
+                    '<a class="page-link waves-effect" onclick="getPromotionPage(' + item + ')">' + (item + 1) + '</a>\n' +
+                    '</li>';
+            }
+            paginationList += '<li class="page-item next">\n' +
+                '       <a class="page-link waves-effect" onclick="getPromotionPage(' + (page + 1) + ')"><i class="ti ti-chevron-right tf-icon fs-6"></i></a>\n' +
+                '   </li>\n' +
+                '      <li class="page-item last">\n' +
+                '       <a class="page-link waves-effect" onclick="getPromotionPage(' + (countItems - 1) + ')"><i class="ti ti-chevrons-right tf-icon fs-6"></i></a>\n' +
+                '      </li>\n' +
+                '   </ul>\n'
+
+            $(paginationList).appendTo(".card-footer");
+        }
+
+    }
+
+    //clear table before getAll
+    function clearTableLine() {
+        $("tbody").find("tr").each(function () {
+            this.remove();
+        });
+        $(".card-footer").children().remove();
+    }
+
+    // add attr to modal button from delete function
+    function addDeleteLink(id) {
+        $('#delete-staff').attr('onClick', 'deleteStaff(' + id + ')');
+    }
+
+    function blockStaffById(id) {
+        $.ajax({
+            type: "POST",
+            url: "staff/blockStaff/" + id,
+            success: function () {
+                $('<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Статус користувача змінено !' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper")
+                autoCloseAlert();
+                getPromotionPage(currentPage)
+            },
+            error: function () {
+                $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Ой.. Щось пішло не так !' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper")
+                autoCloseAlert();
+
+            }
+        })
+    }
+
+    // delete
+    function deleteStaff(id) {
+        $.ajax({
+            type: "DELETE",
+            url: 'staff/delete/' + id,
+            success: function (response) {
+                $('.btn-close').click();
+
+                $('<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Користувач з ID:' + id + ' видалений !' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper")
+                autoCloseAlert();
+                getPromotionPage(currentPage)
+            },
+            error: function (error) {
+                $('.btn-close').click();
+
+                $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Ой.. Щось пішло не так !' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper");
+                autoCloseAlert();
+            }
+        });
+    }
+
+    function autoCloseAlert() {
+        $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+            $("#success-alert").slideUp(500);
+        });
+    }
+</script>
 <!-- Core JS -->
 <!-- build:js assets/vendor/js/core.js -->
 <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
