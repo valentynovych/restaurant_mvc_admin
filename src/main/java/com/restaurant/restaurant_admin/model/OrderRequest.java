@@ -13,6 +13,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
 
 @Data
 public class OrderRequest {
@@ -24,7 +26,7 @@ public class OrderRequest {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
     private BigDecimal totalAmount;
-    private Promotion userPromotion;
+    private List<PromotionResponse> usedPromotion;
     private Integer usedBonuses;
     @NotEmpty(message = "Обов'язкове поле")
     private String payment;

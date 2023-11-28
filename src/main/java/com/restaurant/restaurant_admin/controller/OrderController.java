@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -22,7 +23,7 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
-    private final int pageSize = 2;
+    private final int pageSize = 10;
 
     @GetMapping
     public ModelAndView viewOrders() {
@@ -31,6 +32,11 @@ public class OrderController {
 
     @GetMapping("/edit-order/{orderId}")
     public ModelAndView viewEditOrder(@PathVariable Long orderId) {
+        return new ModelAndView("admin/orders/edit-order");
+    }
+
+    @GetMapping("/add")
+    public ModelAndView viewAddOrder() {
         return new ModelAndView("admin/orders/edit-order");
     }
 
@@ -92,5 +98,14 @@ public class OrderController {
             return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(orderService.updateOrder(orderRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
+    public @ResponseBody ResponseEntity<?> createOrder(@Valid @ModelAttribute OrderRequest orderRequest,
+                                                       BindingResult result) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(orderService.createOrder(orderRequest), HttpStatus.OK);
     }
 }

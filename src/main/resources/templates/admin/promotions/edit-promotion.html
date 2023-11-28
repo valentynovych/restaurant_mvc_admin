@@ -564,9 +564,9 @@
 
         var $forProduct = $('#forProduct');
         if ($forProduct) {
-            const promotionalProductData = promotion.promotionalProduct ? [{
-                id: promotion.promotionalProduct.productId,
-                text: promotion.promotionalProduct.name
+            const promotionalProductData = promotion.forProduct ? [{
+                id: promotion.forProduct.productId,
+                text: promotion.forProduct.name
             }] : '';
             $forProduct.select2({
                 placeholder: 'Виберіть акційний товар',

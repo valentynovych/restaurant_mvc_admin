@@ -25,6 +25,10 @@ public interface ProductMapper {
     @Mapping(target = "productId", source = "id")
     List<ProductShortResponse> productListToShortResponseList(List<Product> products);
 
+    @Mapping(target = "id", source = "productId")
+    @Mapping(target = "subcategory.id", source = "subcategory.subcategoryId")
+    Product productResponseToProduct(ProductResponse itemProduct);
+
     @Mapping(target = "productId", source = "id")
     @Mapping(target = "subcategory.subcategoryId", source = "subcategory.id")
     @Mapping(target = "isActive", source = "isActive")

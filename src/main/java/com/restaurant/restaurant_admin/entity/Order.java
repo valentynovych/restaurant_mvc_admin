@@ -24,8 +24,11 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
     private BigDecimal totalAmount;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Promotion userPromotion;
+    @JoinTable(name = "orders_promotions",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "promotion_id"))
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<Promotion> usedPromotion;
     private Integer usedBonuses;
     private String payment;
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
@@ -36,6 +39,6 @@ public class Order {
     private String cutlery;
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private Staff orderPlaced;
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<OrderItem> orderItems;
 }

@@ -10,6 +10,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class OrderResponse {
@@ -19,7 +20,7 @@ public class OrderResponse {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
     private BigDecimal totalAmount;
-    private Promotion userPromotion;
+    private Set<PromotionResponse> usedPromotion;
     private Integer usedBonuses;
     private String payment;
     private Address address;

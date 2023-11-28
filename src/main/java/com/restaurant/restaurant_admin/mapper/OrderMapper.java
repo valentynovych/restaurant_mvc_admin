@@ -1,9 +1,6 @@
 package com.restaurant.restaurant_admin.mapper;
 
-import com.restaurant.restaurant_admin.entity.Order;
-import com.restaurant.restaurant_admin.entity.OrderItem;
-import com.restaurant.restaurant_admin.entity.Staff;
-import com.restaurant.restaurant_admin.entity.User;
+import com.restaurant.restaurant_admin.entity.*;
 import com.restaurant.restaurant_admin.model.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,6 +8,7 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring",
         unmappedSourcePolicy = ReportingPolicy.IGNORE,
@@ -37,6 +35,9 @@ public interface OrderMapper extends ProductMapper {
     @Mapping(target = "orderItems", ignore = true)
     Order requestToOrder(OrderRequest orderRequest);
 
+    Set<PromotionResponse> setPromotionToSetResponse(Set<Promotion> promotions);
+    Set<Promotion> setResponseToSetPromotion(Set<PromotionResponse> responseSet);
+
     default StaffResponse staffToResponse(Staff staff) {
         return Mappers.getMapper(StaffMapper.class).staffToModelResponse(staff);
     }
@@ -53,4 +54,11 @@ public interface OrderMapper extends ProductMapper {
         return Mappers.getMapper(UserMapper.class).userToShortRequest(user);
     }
 
+    default PromotionResponse promotionToPromotionResponse(Promotion promotion) {
+        return Mappers.getMapper(PromotionMapper.class).promotionToPromotionResponse(promotion);
+    }
+
+    default Promotion promotionResponseToPromotion(PromotionResponse promotionResponse) {
+        return Mappers.getMapper(PromotionMapper.class).promotionResponseToPromotion(promotionResponse);
+    }
 }

@@ -110,7 +110,8 @@
                                                     data-bs-toggle="modal" data-bs-target="#modal-add-orderItem">
                                                 Додати продукт
                                             </button>
-                                            <button type="button" class="btn btn-outline-primary">
+                                            <button type="button" class="btn btn-outline-primary" id="add-promotion"
+                                                    data-bs-toggle="modal" data-bs-target="#modal-add-promotion">
                                                 Додати знижку
                                             </button>
                                         </div>
@@ -328,6 +329,38 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modal-add-promotion" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Додати акцію до замовлення</h5>
+                            <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                            ></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-2">
+                                <label class="form-label badge bg-label-secondary text-black"
+                                       for="new-orderItem">Виберіть знижку</label>
+                                <select class="form-select select2" id="new-promotion"
+                                        name="new-promotion"></select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                                Скасувати
+                            </button>
+                            <button type="button" class="btn btn-primary" id="save-new-promotion">Зберегти
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Content wrapper -->
         </div>
         <!-- / Layout page -->
@@ -383,8 +416,9 @@
 
 <script th:inline="javascript">
     const path = window.location.pathname;
-    const orderId = path.substring(path.lastIndexOf('/') + 1, path.length);
+    const orderId = Number(path.substring(path.lastIndexOf('/') + 1, path.length));
     var order;
+    const contextPath = /*[[@{/admin/orders/}]]*/ 'default';
 
     function parseMapToRes(data) {
         const mapResponse = new Map(data);
@@ -400,22 +434,39 @@
         return list;
     }
 
-    $.ajax({
-        type: "GET",
-        url: '../getOrder/' + orderId,
-        dataType: "JSON",
-        success: function (response) {
-            fillInputs(response);
-            order = response;
-        },
-        error: function (error) {
-            $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                'Ой.. Щось пішло не так :)' +
-                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                '</div>').appendTo(".content-wrapper");
-            autoCloseAlert();
+    if (orderId) {
+        $.ajax({
+            type: "GET",
+            url: contextPath + 'getOrder/' + orderId,
+            dataType: "JSON",
+            success: function (response) {
+                fillInputs(response);
+                order = response;
+            },
+            error: function (error) {
+                $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Ой.. Щось пішло не так :)' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper");
+                autoCloseAlert();
+            }
+        });
+    } else {
+        order = {
+            orderId: 0,
+            datetimeOfCreate: Date.now().valueOf() / 1000,
+            status: "NEW",
+            totalAmount: 0,
+            usedPromotion: [],
+            usedBonuses: 0,
+            payment: "Готівка",
+            deliveryTime: 75,
+            cutlery: 1,
+            orderPlaced: null,
+            orderItems: []
         }
-    });
+        fillInputs(order)
+    }
 
     function getOrderItem(item) {
         for (let i = 0; i < order.orderItems.length; i++) {
@@ -430,10 +481,7 @@
         let orderItem = getOrderItem(itemId);
 
         function createData(dataList) {
-            // console.log('----------')
-            // console.log(dataList)
             if (dataList && dataList.length > 0) {
-
                 return $.map(dataList, function (dataItem) {
                     return {
                         id: dataItem.productId,
@@ -456,7 +504,7 @@
             data: createData(orderItem.exclusionIngredients),
             ajax: {
                 type: "GET",
-                url: '../getOrderItemIngredients/' + orderItem.product.productId,
+                url: contextPath + 'getOrderItemIngredients/' + orderItem.product.productId,
                 processResults: function (response) {
                     // console.log(response)
                     return {
@@ -479,7 +527,7 @@
             data: createData(orderItem.additionalIngredients),
             ajax: {
                 type: "GET",
-                url: '../../products/getIngredients',
+                url: contextPath + '../products/getIngredients',
                 data: function (params) {
                     return {
                         search: params.term || '',
@@ -510,11 +558,12 @@
 
     function drawProductsTable(order) {
         $('tbody').children().remove();
-         console.log('drawProductsTable -> ')
-         console.log(order)
+        console.log('drawProductsTable -> ')
+        console.log(order)
 
         for (let item of order.orderItems) {
             let productName = item.product.name;
+            if (item.isGiftProduct) productName = '<i class="ti ti-gift me-1 text-info"></i>' + productName;
             const additional = item.additionalIngredients;
             if (Array.isArray(additional) && additional.length) {
                 productName += '<br> <span class="fst-italic text-black">додати (';
@@ -532,10 +581,18 @@
                 }
                 productName += ')</span>'
             }
+            var priceString;
+            if (item.itemSalePrice) {
+                priceString = '<span class="text-decoration-line-through text-danger">' + item.itemPrice + ' грн.</span>' +
+                    '<br/>' +
+                    '<span>' + item.itemSalePrice + ' грн.</span>';
+            } else {
+                priceString = '<span class="itemPrice">' + item.itemPrice + '</span> грн.';
+            }
 
             $('<tr>\n' +
                 '<td>' + productName + '</td>\n' +
-                '<td><span class="itemPrice">' + item.itemPrice + '</span> грн.' + '</td>\n' +
+                '<td>' + priceString + '</td>\n' +
                 '<td><button type="button" class="btn btn-primary py-1 px-2" onclick="modalDetails(' + item.id + ')" ' +
                 '      data-bs-toggle="modal" data-bs-target="#modal-change-product">\n' +
                 '     <i class="ti ti-pencil me-1"></i>Редагувати\n' +
@@ -547,13 +604,23 @@
                 '</tr>').appendTo("tbody");
         }
 
-        //if (order.userPromotion) {
-        $('<tr>' +
-            '<td>Знижка</td>' +
-            '<td>-38.17</td>' +
-            '<td> 3%</td>' +
-            '</tr>').appendTo("tbody")
-        //}
+        if (order.usedPromotion) {
+            var promotionsName = '';
+            var promotionsAmount = 0;
+            for (let prom of order.usedPromotion) {
+                promotionsName += '<br><span class="fst-italic">' + prom.name + '</span>'
+            }
+            for (let item of order.orderItems) {
+                promotionsAmount += item.itemPrice;
+            }
+            promotionsAmount = order.totalAmount - promotionsAmount;
+            $('<tr>' +
+                '<td>Знижки:' + promotionsName + '</td>' +
+                '<td>' + promotionsAmount.toFixed(2) + ' грн.</td>' +
+                '<td></td>' +
+                '</tr>').appendTo("tbody")
+        }
+
         if (order.usedBonuses) {
             $('<tr>' +
                 '<td>Використано бонусів</td>' +
@@ -607,7 +674,7 @@
             }],
             ajax: {
                 type: "GET",
-                url: '../getAllOrderStatus',
+                url: contextPath + 'getAllOrderStatus',
                 processResults: function (response) {
                     const mapResponse = new Map(Object.entries(response));
                     return {
@@ -619,8 +686,12 @@
         $('#orderId').val(order.orderId);
         const dateOfCreate = new Date(order.datetimeOfCreate * 1000);
         $('#datetimeOfCreate').val(dateOfCreate.toLocaleDateString("uk") + ' ' + dateOfCreate.toLocaleTimeString("uk"));
-        $('#fullName').val(order.user.firstName + ' ' + order.user.lastName);
-        $('#phone').val(order.user.phone);
+
+        if (order.user) {
+            $('#fullName').val(order.user.firstName + ' ' + order.user.lastName);
+            $('#phone').val(order.user.phone);
+        }
+
         if (order.address) {
             $('#city').val(order.address.city);
             $('#street').val(order.address.street);
@@ -636,7 +707,9 @@
         var $comment = $('#comment');
         autosize($comment);
         $comment.val(order.comment);
-        $('#orderPlacer').val(order.orderPlaced.firstName + ' ' + order.orderPlaced.lastName);
+        if (order.orderPlaced) {
+            $('#orderPlacer').val(order.orderPlaced.firstName + ' ' + order.orderPlaced.lastName);
+        }
         $('#payment').val(order.payment);
 
         var date = new Date();
@@ -671,7 +744,7 @@
             autoFocus: true,
             ajax: {
                 type: "GET",
-                url: '../getProducts',
+                url: contextPath + 'getProducts',
                 data: function (params) {
                     return {
                         search: params.term || '',
@@ -695,6 +768,53 @@
             }
         });
     });
+    var $newPromotion = $('#new-promotion');
+    $('#add-promotion').on('click', function () {
+        $newPromotion.empty().trigger('change');
+        $newPromotion.select2({
+            dropdownParent: $('#modal-add-promotion'),
+            placeholder: 'Додати акцію',
+            maximumInputLength: 100,
+            autoFocus: true,
+            ajax: {
+                type: "GET",
+                url: contextPath + '../promotions/getActivePromotions',
+                data: function (params) {
+                    return {
+                        search: params.term || '',
+                        page: (params.page - 1) || 0
+                    };
+                },
+                processResults: function (response) {
+                    return {
+                        results: $.map(response.content, function (prom) {
+                            if (prom) return {
+                                id: prom.id,
+                                text: prom.name
+                            }
+                        }),
+                        pagination: {
+                            more: response.pageable.pageNumber < response.totalPages
+                        }
+                    };
+                },
+                cache: true,
+            }
+        });
+    });
+
+    $('#save-new-promotion').on('click', function () {
+        const newPromotion = $newPromotion.select2('data')[0];
+        console.log(newPromotion);
+        order.usedPromotion.push({
+            id: newPromotion.id,
+            name: newPromotion.text
+        });
+        console.log(order.usedPromotion)
+
+        $('#modal-add-promotion').find('.btn-close').click();
+        $('#save-order').click();
+    });
 
     function addNewOrderItem(select) {
         // console.log(select)
@@ -702,7 +822,7 @@
         var newOrderItem = {
             id: 0,
             order: {
-                orderId: orderId
+                orderId: order.orderId
             },
             product: {
                 productId: Number(newProduct.id)
@@ -715,10 +835,11 @@
         formData.append("id", newOrderItem.id);
         formData.append("order.orderId", newOrderItem.order.orderId);
         formData.append("product.productId", newOrderItem.product.productId);
+        formData.append("isGiftProduct", false);
 
         $.ajax({
             type: "POST",
-            url: '../add-orderItem',
+            url: contextPath + 'add-orderItem',
             contentType: false,
             processData: false,
             data: formData,
@@ -731,6 +852,7 @@
                     '</div>').appendTo(".content-wrapper");
                 autoCloseAlert();
                 order = response;
+                console.log(order);
             },
             error: function (error) {
                 $('#modal-add-orderItem').find('button.btn-close').click();
@@ -746,11 +868,12 @@
         const newAdditional = $('#additionalIngredients').select2('data');
 
         var orderItem = order.orderItems.find(x => x.id === Number(orderItemId));
+        console.log(orderItem)
 
         var newOrderItem = {
             id: orderItemId,
             order: {
-                orderId: orderId
+                orderId: order.orderId
             },
             product: {
                 productId: orderItem.product.productId
@@ -767,13 +890,31 @@
                     name: prod.text
                 }
             }),
+
+            itemPrice: orderItem.itemPrice,
+            itemSalePrice: orderItem.itemSalePrice,
+            isGiftProduct: orderItem.isGiftProduct,
+            promotionName: orderItem.promotionName,
+            promotionCondition: orderItem.promotionCondition,
+            promotionType: orderItem.promotionType,
+            discountAmount: orderItem.discountAmount,
+            minimalAmount: orderItem.minimalAmount,
+            promoCode: orderItem.promoCode
         };
 
         var formData = new FormData();
         formData.append("id", newOrderItem.id);
         formData.append("order.orderId", newOrderItem.order.orderId);
         formData.append("product.productId", newOrderItem.product.productId);
-        formData.append("itemPrice", orderItem.itemPrice)
+        formData.append("itemPrice", newOrderItem.itemPrice);
+        if (newOrderItem.itemSalePrice) formData.append("itemSalePrice", newOrderItem.itemSalePrice);
+        if (newOrderItem.isGiftProduct) formData.append("isGiftProduct", newOrderItem.isGiftProduct);
+        if (newOrderItem.promotionName) formData.append("promotionName", newOrderItem.promotionName);
+        if (newOrderItem.promotionCondition) formData.append("promotionCondition", newOrderItem.promotionCondition);
+        if (newOrderItem.promotionType) formData.append("promotionType", newOrderItem.promotionType);
+        if (newOrderItem.discountAmount) formData.append("discountAmount", newOrderItem.discountAmount);
+        if (newOrderItem.minimalAmount) formData.append("minimalAmount", newOrderItem.minimalAmount);
+        if (newOrderItem.promoCode) formData.append("promoCode", newOrderItem.promoCode);
 
         for (let i = 0; i < newOrderItem.additionalIngredients.length; i++) {
             formData.append("additionalIngredients[" + i + "].productId", newOrderItem.additionalIngredients[i].id);
@@ -787,7 +928,7 @@
 
         $.ajax({
             type: "POST",
-            url: '../edit-orderItem',
+            url: contextPath + 'edit-orderItem',
             contentType: false,
             processData: false,
             data: formData,
@@ -817,24 +958,32 @@
         for (const dat of formData.entries()) {
             // console.log(dat)
         }
-        formData.append('address.id', order.address.id)
-        var val = $('#fullName').val().split(' ');
+        formData.append('address.id', order.address ? order.address.id : '')
+        const val = $('#fullName').val().split(' ');
         formData.append('user.firstName', val[0]);
         formData.append('user.lastName', val[1]);
-        formData.append('user.userId', order.user.userId);
-        formData.append('totalAmount', order.totalAmount);
-        formData.append('usedBonuses', order.usedBonuses);
-        // formData.append('userPromotion', order.usedPromotion);
-        formData.append('orderPlaced.staffId', order.orderPlaced.staffId);
+        formData.append('user.userId', order.user ? order.user.userId : '');
+        formData.append('totalAmount', Number(order.totalAmount));
+        formData.append('usedBonuses', Number(order.usedBonuses));
+        // formData.append('usedPromotion', order.usedPromotion);
+        formData.append('orderPlaced.staffId', order.orderPlaced ? order.orderPlaced.staffId : '');
+        formData.set('orderId', order.orderId);
+        if (order.usedPromotion) {
+            for (let i = 0; i < order.usedPromotion.length; i++) {
+                formData.append("usedPromotion[" + i + "].id", order.usedPromotion[i].id);
+            }
+        }
+
+        var postPath = orderId ? contextPath + 'update-order' : contextPath + 'add';
 
         $.ajax({
             type: "POST",
-            url: '../update-order',
+            url: postPath,
             data: formData,
             processData: false,
             contentType: false,
             success: function (response) {
-                 console.log(response)
+                console.log(response)
                 fillInputs(response)
                 $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
                     'Оновлення успішне !' +
@@ -872,7 +1021,7 @@
 
         $.ajax({
             type: "DELETE",
-            url: "../delete-orderItem/" + orderItemId,
+            url: contextPath + "delete-orderItem/" + orderItemId,
             success: function (response) {
                 $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
                     'Продукт успішно видалено !' +
@@ -881,6 +1030,7 @@
                 autoCloseAlert();
 
                 $('tbody').find("[onclick='addDeleteLink(" + orderItemId + ")']").parent().parent().remove();
+                $('#save-order').click();
 
             }, error: function () {
                 $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
@@ -894,7 +1044,7 @@
 
     function autoCloseAlert() {
         $(".alert").fadeTo(2000, 500).slideUp(500, function () {
-            $("#success-alert").slideUp(500);
+            $(".alert").slideUp(500);
         });
     }
 

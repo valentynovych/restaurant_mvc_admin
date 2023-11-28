@@ -53,6 +53,11 @@ public class PromotionController {
         return new ResponseEntity<>(promotionService.getAllPromotionsBySearch(page, pageSize, search), HttpStatus.OK);
     }
 
+    @GetMapping("/getActivePromotions")
+    public @ResponseBody ResponseEntity<?> getAllActivePromotionsSearch(@RequestParam int page, @RequestParam String search) {
+        return new ResponseEntity<>(promotionService.getAllActivePromotionsBySearch(page, pageSize, search), HttpStatus.OK);
+    }
+
     @GetMapping("/getPromotion/{promotionId}")
     public @ResponseBody ResponseEntity<PromotionResponse> getAllPromotions(@PathVariable Long promotionId) {
         return new ResponseEntity<>(promotionService.getPromotion(promotionId), HttpStatus.OK);
@@ -95,8 +100,7 @@ public class PromotionController {
         if (result.hasErrors()) {
             return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
-        promotionService.updatePromotion(promotionRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(promotionService.updatePromotion(promotionRequest), HttpStatus.OK);
     }
 
     @PostMapping("/add-promotion")

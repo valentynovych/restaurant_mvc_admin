@@ -1,6 +1,8 @@
 package com.restaurant.restaurant_admin.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.restaurant.restaurant_admin.entity.enums.PromotionCondition;
+import com.restaurant.restaurant_admin.entity.enums.PromotionType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +24,7 @@ public class OrderItem {
     @ManyToOne
     private Product product;
     private BigDecimal itemPrice;
+    private BigDecimal itemSalePrice;
     @ManyToMany
     @JoinTable(name = "order_item_exclusion_ingredients",
             joinColumns = @JoinColumn(name = "order_item_id"),
@@ -32,17 +35,13 @@ public class OrderItem {
             joinColumns = @JoinColumn(name = "order_item_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> additionalIngredients;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrderItem orderItem = (OrderItem) o;
-        return id.equals(orderItem.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+    private Boolean isGiftProduct;
+    private String promotionName;
+    @Enumerated(EnumType.STRING)
+    private PromotionCondition promotionCondition;
+    @Enumerated(EnumType.STRING)
+    private PromotionType promotionType;
+    private Integer discountAmount;
+    private Integer minimalAmount;
+    private String promoCode;
 }

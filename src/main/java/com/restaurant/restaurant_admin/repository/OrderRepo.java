@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface OrderRepo extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
-    long countAllByUserPromotion(Promotion promotion);
+    long countAllByUsedPromotion(Promotion promotion);
 }

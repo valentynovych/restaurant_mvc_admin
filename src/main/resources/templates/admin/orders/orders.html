@@ -47,7 +47,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/typeahead-js/typeahead.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/animate-css/animate.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/flatpickr/flatpickr.css}"/>
-    <link rel="stylesheet" th:href="@{/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css}" />
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
 
     <!-- Page CSS -->
@@ -99,6 +99,10 @@
                                     <select class="form-select" id="filter-by-status"></select>
                                 </div>
                             </div>
+                            <a th:href="@{/admin/orders/add}" class="btn btn-primary ">
+                                <i class="ti ti-plus me-1"></i>
+                                <span>Створити</span>
+                            </a>
                         </div>
                         <div class="card-body">
                             <div>
@@ -321,11 +325,11 @@
             const badge = getStatusLabel(data.status);
 
             $('<tr>\n' +
-                '<td>' + data.orderId + '</td>\n' +
+                '<td><i class="ti ti-number"></i>' + data.orderId + '</td>\n' +
                 '<td>' + dateString + '</td>\n' +
                 '<td>' + listProducts + '</td>\n' +
-                '<td>' + data.user.phone + '</td>\n' +
-                '<td>' + data.user.firstName + ' ' + data.user.lastName + '</td>\n' +
+                '<td>' + (data.user ? data.user.phone : '') + '</td>\n' +
+                '<td>' + (data.user ? data.user.firstName : '') + ' ' + (data.user ? data.user.lastName : '') + '</td>\n' +
                 '<td><span class="badge ' + badge[0] + '">' + badge[1] + '</span></td>\n' +
                 '<td>' + data.totalAmount + '</td>\n' +
                 '<td> <a href="orders/edit-order/' + data.orderId + '">\n' +

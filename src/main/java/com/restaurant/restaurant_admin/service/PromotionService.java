@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -136,5 +137,20 @@ public class PromotionService {
             log.error("Error on save file image, error message: " + e.getMessage());
             throw new RuntimeException();
         }
+    }
+
+    public Page<PromotionResponse> getAllActivePromotionsBySearch(int page, int pageSize, String search) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        SearchCriteria likeName = new SearchCriteria("name", ":", search);
+        SearchCriteria isActive = new SearchCriteria("isActive", "!", true);
+        Page<Promotion> promotionPage = promotionRepo.findAll(
+                new PromotionSpecification(likeName)
+                        .and(new PromotionSpecification(isActive)),
+                pageable);
+        List<PromotionResponse> promotionShortList =
+                PromotionMapper.MAPPER.listPromotionToPromotionResponse(promotionPage.getContent());
+        Page<PromotionResponse> responsePage =
+                new PageImpl<>(promotionShortList, pageable, promotionPage.getTotalElements());
+        return responsePage;
     }
 }
