@@ -1,6 +1,7 @@
 package com.restaurant.restaurant_admin.service;
 
 import com.restaurant.restaurant_admin.entity.Staff;
+import com.restaurant.restaurant_admin.entity.enums.Role;
 import com.restaurant.restaurant_admin.mapper.StaffMapper;
 import com.restaurant.restaurant_admin.model.StaffRequest;
 import com.restaurant.restaurant_admin.model.StaffResponse;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.naming.AuthenticationException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -124,10 +128,17 @@ public class StaffService implements UserDetailsService {
         }
     }
 
-    public boolean deleteStaffById(Long staffId) {
+    public boolean deleteStaffById(Long staffId) throws AuthenticationException {
         Optional<Staff> byId = staffRepo.findById(staffId);
         if (byId.isPresent()) {
-            staffRepo.delete(byId.get());
+            Staff staff = byId.get();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication.getName().equals(staff.getUsername())) {
+                throw new AuthenticationException("Can`t delete current staff");
+            } else if (staff.getStaffRole().equals(Role.ROLE_ADMIN)) {
+                throw new AuthenticationException("Admin staff can`t delete");
+            }
+            staffRepo.delete(staff);
             return true;
         }
         return false;

@@ -249,16 +249,16 @@
             const size = result.size;
 
             const from = page > 0 ? (page * size) + 1 : 1;
-            const to = from + (size - 1);
+            const to = from + result.numberOfElements - 1;
             const total = result.totalElements;
 
             if (from === total) {
                 $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
-                    'Показано ' + from + ' з ' + total + ' категорій' +
+                    'Показано ' + from + ' з ' + total + ' акцій' +
                     '</div>').appendTo(".card-footer");
             } else {
                 $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
-                    'Показано ' + from + '-' + to + ' з ' + total + ' категорій' +
+                    'Показано ' + from + '-' + to + ' з ' + total + ' акцій' +
                     '</div>').appendTo(".card-footer")
             }
 

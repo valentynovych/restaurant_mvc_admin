@@ -216,7 +216,7 @@
             const size = result.size;
 
             const from = page > 0 ? (page * size) + 1 : 1;
-            const to = from + (size - 1);
+            const to = from + result.numberOfElements - 1;
             const total = result.totalElements;
 
             if (from === total) {

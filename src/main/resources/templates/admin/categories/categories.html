@@ -248,34 +248,36 @@
                 '</td>\n' +
                 '</tr>').appendTo("tbody");
         }
-        const size = result.size;
-
-        const from = page > 0 ? (page * size) + 1 : 1;
-        const to = from + (size - 1);
-        const total = result.totalElements;
-
-        if (from === total) {
-            $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
-                'Показано ' + from + ' з ' + total + ' категорій' +
-                '</div>').appendTo(".card-footer");
-        } else {
-            $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
-                'Показано ' + from + '-' + to + ' з ' + total + ' категорій' +
-                '</div>').appendTo(".card-footer")
-        }
-
         if (result.totalPages > 1) {
-            showPagination(result.totalPages);
+            const size = result.size;
 
-            switch (page) {
-                case (result.totalPages - 1):
-                    $(".page-item.last").addClass('disabled');
-                    $(".page-item.next").addClass('disabled');
-                    break;
-                case 0:
-                    $(".page-item.first").addClass('disabled');
-                    $(".page-item.prev").addClass('disabled');
-                    break;
+            const from = page > 0 ? (page * size) + 1 : 1;
+            const to = from + result.numberOfElements - 1;
+            const total = result.totalElements;
+
+            if (from === total) {
+                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                    'Показано ' + from + ' з ' + total + ' категорій' +
+                    '</div>').appendTo(".card-footer");
+            } else {
+                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                    'Показано ' + from + '-' + to + ' з ' + total + ' категорій' +
+                    '</div>').appendTo(".card-footer")
+            }
+
+            if (result.totalPages > 1) {
+                showPagination(result.totalPages);
+
+                switch (page) {
+                    case (result.totalPages - 1):
+                        $(".page-item.last").addClass('disabled');
+                        $(".page-item.next").addClass('disabled');
+                        break;
+                    case 0:
+                        $(".page-item.first").addClass('disabled');
+                        $(".page-item.prev").addClass('disabled');
+                        break;
+                }
             }
         }
 

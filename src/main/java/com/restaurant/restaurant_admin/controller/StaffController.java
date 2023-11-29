@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.naming.AuthenticationException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -100,7 +101,12 @@ public class StaffController {
 
     @DeleteMapping("/delete/{staffId}")
     public @ResponseBody ResponseEntity<?> deleteStaff(@PathVariable Long staffId) {
-        var isDeleted = staffService.deleteStaffById(staffId);
+        boolean isDeleted = false;
+        try {
+            isDeleted = staffService.deleteStaffById(staffId);
+        } catch (AuthenticationException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
         if (isDeleted) {
             return new ResponseEntity<>(HttpStatus.OK);
         }

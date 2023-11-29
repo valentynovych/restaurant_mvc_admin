@@ -265,17 +265,17 @@
             const size = result.size;
 
             const from = page > 0 ? (page * size) + 1 : 1;
-            const to = from + (size - 1);
+            const to = from + result.numberOfElements - 1;
             const total = result.totalElements;
 
             if (from === total) {
                 $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
-                    'Показано ' + from + ' з ' + total + ' категорій' +
+                    'Показано ' + from + ' з ' + total + ' користувачів' +
                     '</div>').appendTo(".card-footer");
             } else {
                 $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
-                    'Показано ' + from + '-' + to + ' з ' + total + ' категорій' +
-                    '</div>').appendTo(".card-footer")
+                    'Показано ' + from + '-' + to + ' з ' + total + ' користувачів' +
+                    '</div>').appendTo(".card-footer");
             }
 
             showPagination(result.totalPages);
@@ -371,9 +371,10 @@
             },
             error: function (error) {
                 $('.btn-close').click();
+                console.log(error)
 
                 $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Ой.. Щось пішло не так !' +
+                    'Ой.. Щось пішло не так ! <br/>' + error.responseText +
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
                     '</div>').appendTo(".content-wrapper");
                 autoCloseAlert();
