@@ -131,12 +131,6 @@
                     <div class="card">
                         <div class="card-header py-2 d-flex flex-row justify-content-between align-items-center">
                             <span class="fw-bold h3">Історія замовлень</span>
-                            <div class="search-input-wrapper col-md-4">
-                                <label class="d-flex align-items-center gap-1 w-100">
-                                    Пошук:
-                                    <input type="search" class="form-control" placeholder="ПІБ, E-Mail, Телефон">
-                                </label>
-                            </div>
                         </div>
                         <div class="card-body">
                             <div>
@@ -244,57 +238,18 @@
         if (details.photo) $("#photo").attr("src", '../../../uploads/' + details.photo);
         $('#edit-link').attr("href", '../edit-user/' + details.userId);
     }
-
-</script>
-
-<!--AJAX requests for table-->
-<script>
     $(document).ready(function () {
-        getOrders(0)
+        getUsersOrdersBySearch(0);
     });
 
     let currentPage;
-    let searchText;
-    let timer;
-    $("input[type='search']").on("input", function () {
-        searchText = this.value;
-        clearTimeout(timer);
-        timer = setTimeout(getOrders(0), 300);
-    });
 
-    function getOrders(page) {
-        if (searchText) {
-            getUsersOrdersBySearch(page, searchText);
-        } else {
-            getUserOrdersPage(page);
-        }
-    }
-
-    function getUserOrdersPage(page) {
+    function getUsersOrdersBySearch(page) {
+        let getPath = 'getOrdersByUser?page=' + page + '&userId=' + userId;
 
         $.ajax({
             type: 'GET',
-            url: 'users/getPage?page=' + page,
-            dataType: 'JSON',
-            success: function (result) {
-                currentPage = page;
-                clearTableLine();
-                drawTable(result, page)
-            },
-            error: function () {
-                $('<tr>' +
-                    '<td colspan="8" class="text-center">Результатів не знайдено</td>' +
-                    '</tr>').appendTo("tbody");
-            }
-        });
-
-    }
-
-    function getUsersOrdersBySearch(page, search) {
-
-        $.ajax({
-            type: 'GET',
-            url: 'users/getPageSearch?page=' + page + '&search=' + search,
+            url: '../../orders/' + getPath,
             dataType: 'json',
             success: function (result) {
                 currentPage = page;
@@ -310,97 +265,118 @@
         });
     }
 
+    function getStatusLabel(status) {
+        switch (status) {
+            case 'NEW':
+                return ['bg-label-primary', 'Новий'];
+            case 'ACCEPTED':
+                return ['bg-label-info', 'Прийнятий'];
+            case 'NOT_CONFIRMED_PREPARING':
+                return ['bg-label-danger', 'Не підтверджений'];
+            case 'PREPARING':
+                return ['bg-label-light', 'Готується'];
+            case 'DELIVERED':
+                return ['bg-label-warning', 'Доставляється'];
+            case 'COMPLETED':
+                return ['bg-label-success', 'Завершений'];
+            case 'CANCELED':
+                return ['bg-label-dark', 'Скасований'];
+            default:
+                return 'Не відомо';
+        }
+    }
+
+    function getProductsWithCount(products) {
+        const productsMap = new Map();
+
+        for (const item of products) {
+            productsMap.set(item.product.name, (productsMap.get(item.product.name) || 0) + 1);
+        }
+
+        const productsWithCount = [];
+        for (const [name, count] of productsMap) {
+            productsWithCount.push(` ${name} - ${count}х`);
+        }
+        return productsWithCount;
+    }
+
     function drawTable(result, page) {
 
-        if (result.size >= 1) {
-            for (const data of result.content) {
-                const date = new Date(data.registrationDate);
-                let dateString = date.toLocaleDateString("uk");
+        for (const data of result.content) {
+            const date = new Date(data.datetimeOfCreate * 1000);
+            let dateString = date.toLocaleString("uk");
 
-                $('<tr>\n' +
-                    '<td>' + data.userId + '</td>\n' +
-                    '<td>' + dateString + '</td>\n' +
-                    '<td>' + data.email + '</td>\n' +
-                    '<td>' + data.phone + '</td>\n' +
-                    '<td>' + data.firstName + ' ' + data.lastName + '</td>\n' +
-                    '<td>' + data.totalOrders + '</td>\n' +
-                    '<td>\n' +
-                    '  <div class="dropdown">\n' +
-                    '   <button type="button" class="btn p-0 dropdown-toggle hide-arrow"\n' +
-                    '           data-bs-toggle="dropdown">\n' +
-                    '    <i class="ti ti-dots-vertical"></i>\n' +
-                    '     </button>\n' +
-                    '     <div class="dropdown-menu">\n' +
-                    '     <a class="dropdown-item" href="users/user-details/' + data.userId + '">\n' +
-                    '     <i class="ti ti-pencil me-1"></i>Перегляд\n' +
-                    '     </a>\n' +
-                    '     <button class="dropdown-item btn" onclick="blockUserById(' + data.userId + ')">' +
-                    '     <i class="ti ti-lock-open-off me-1"></i>Заблокувати</button>' +
-                    '     </div>\n' +
-                    '     </div>\n' +
-                    '</td>\n' +
-                    '</tr>').appendTo("tbody");
-            }
+            let listProducts = getProductsWithCount(data.orderItems);
+            const badge = getStatusLabel(data.status);
 
-
-            if (result.totalPages > 1) {
-                const size = result.size;
-
-                const from = page > 0 ? (page * size) + 1 : 1;
-                const to = from + (size - 1);
-                const total = result.totalElements;
-
-                if (from === total) {
-                    $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
-                        'Показано ' + from + ' з ' + total + ' користувачів' +
-                        '</div>').appendTo(".card-footer");
-                } else {
-                    $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
-                        'Показано ' + from + '-' + to + ' з ' + total + ' користувачів' +
-                        '</div>').appendTo(".card-footer")
-                }
-
-                showPagination(result.totalPages);
-
-                switch (page) {
-                    case (result.totalPages - 1):
-                        $(".page-item.last").addClass('disabled');
-                        $(".page-item.next").addClass('disabled');
-                        break;
-                    case 0:
-                        $(".page-item.first").addClass('disabled');
-                        $(".page-item.prev").addClass('disabled');
-                        break;
-                }
-            }
-
-            function showPagination(countItems) {
-                var paginationList = '<ul class="pagination pagination-sm">\n' +
-                    '<li class="page-item first">\n' +
-                    '   <a class="page-link waves-effect" onclick="getOrders(0)"><i class="ti ti-chevrons-left tf-icon fs-6"></i></a>\n' +
-                    '</li>\n' +
-                    '<li class="page-item prev">\n' +
-                    '   <a class="page-link waves-effect" onclick="getOrders(' + (page - 1) + ')"><i class="ti ti-chevron-left tf-icon fs-6"></i></a>\n' +
-                    '</li>\n';
-                for (let item = 0; item < countItems; item++) {
-                    paginationList += '<li class="page-item ' + (page === item ? 'active' : '') + '">\n' +
-                        '<a class="page-link waves-effect" onclick="getOrders(' + item + ')">' + (item + 1) + '</a>\n' +
-                        '</li>';
-                }
-                paginationList += '<li class="page-item next">\n' +
-                    '       <a class="page-link waves-effect" onclick="getOrders(' + (page + 1) + ')"><i class="ti ti-chevron-right tf-icon fs-6"></i></a>\n' +
-                    '   </li>\n' +
-                    '      <li class="page-item last">\n' +
-                    '       <a class="page-link waves-effect" onclick="getOrders(' + (countItems - 1) + ')"><i class="ti ti-chevrons-right tf-icon fs-6"></i></a>\n' +
-                    '      </li>\n' +
-                    '   </ul>\n'
-
-                $(paginationList).appendTo(".card-footer");
-            }
-        } else {
-            $('<tr>' +
-                '<td colspan="8" class="text-center">Результатів не знайдено</td>' +
+            $('<tr>\n' +
+                '<td><i class="ti ti-number"></i>' + data.orderId + '</td>\n' +
+                '<td>' + dateString + '</td>\n' +
+                '<td>' + listProducts + '</td>\n' +
+                '<td>' + (data.user ? data.user.phone : '') + '</td>\n' +
+                '<td>' + (data.user ? data.user.firstName : '') + ' ' + (data.user ? data.user.lastName : '') + '</td>\n' +
+                '<td><span class="badge ' + badge[0] + '">' + badge[1] + '</span></td>\n' +
+                '<td>' + data.totalAmount + '</td>\n' +
+                '<td> <a href="../../orders/edit-order/' + data.orderId + '">\n' +
+                '     <i class="ti ti-pencil me-1"></i>' +
+                '     </a>\n</td>\n' +
                 '</tr>').appendTo("tbody");
+        }
+
+
+        if (result.totalPages > 1) {
+            const size = result.size;
+
+            const from = page > 0 ? (page * size) + 1 : 1;
+            const to = from + (size - 1);
+            const total = result.totalElements;
+
+            if (from === total) {
+                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                    'Показано ' + from + ' з ' + total + ' користувачів' +
+                    '</div>').appendTo(".card-footer");
+            } else {
+                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                    'Показано ' + from + '-' + to + ' з ' + total + ' користувачів' +
+                    '</div>').appendTo(".card-footer")
+            }
+
+            showPagination(result.totalPages);
+
+            switch (page) {
+                case (result.totalPages - 1):
+                    $(".page-item.last").addClass('disabled');
+                    $(".page-item.next").addClass('disabled');
+                    break;
+                case 0:
+                    $(".page-item.first").addClass('disabled');
+                    $(".page-item.prev").addClass('disabled');
+                    break;
+            }
+        }
+
+        function showPagination(countItems) {
+            var paginationList = '<ul class="pagination pagination-sm">\n' +
+                '<li class="page-item first">\n' +
+                '   <a class="page-link waves-effect" onclick="getOrders(0)"><i class="ti ti-chevrons-left tf-icon fs-6"></i></a>\n' +
+                '</li>\n' +
+                '<li class="page-item prev">\n' +
+                '   <a class="page-link waves-effect" onclick="getOrders(' + (page - 1) + ')"><i class="ti ti-chevron-left tf-icon fs-6"></i></a>\n' +
+                '</li>\n';
+            for (let item = 0; item < countItems; item++) {
+                paginationList += '<li class="page-item ' + (page === item ? 'active' : '') + '">\n' +
+                    '<a class="page-link waves-effect" onclick="getOrders(' + item + ')">' + (item + 1) + '</a>\n' +
+                    '</li>';
+            }
+            paginationList += '<li class="page-item next">\n' +
+                '       <a class="page-link waves-effect" onclick="getOrders(' + (page + 1) + ')"><i class="ti ti-chevron-right tf-icon fs-6"></i></a>\n' +
+                '   </li>\n' +
+                '      <li class="page-item last">\n' +
+                '       <a class="page-link waves-effect" onclick="getOrders(' + (countItems - 1) + ')"><i class="ti ti-chevrons-right tf-icon fs-6"></i></a>\n' +
+                '      </li>\n' +
+                '   </ul>\n'
+
+            $(paginationList).appendTo(".card-footer");
         }
 
     }
@@ -412,6 +388,7 @@
         });
         $(".card-footer").children().remove();
     }
+
 </script>
 <!-- Core JS -->
 <!-- build:js assets/vendor/js/core.js -->

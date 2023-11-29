@@ -14,4 +14,5 @@ public class OrderCriteria {
     private Instant dateTo;
     private OrderStatus orderStatus;
     private String search;
+    private Long userId;
 }

@@ -43,6 +43,10 @@ public class OrderSpecification implements Specification<Order> {
             }
             predicates.add(criteriaBuilder.or(predicatesOr.toArray(new Predicate[0])));
         }
+        if (orderCriteria.getUserId() != null) {
+            Join<User, Order> joinUser = root.join("user");
+            predicates.add(criteriaBuilder.equal(joinUser.get("id"), orderCriteria.getUserId()));
+        }
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
 }

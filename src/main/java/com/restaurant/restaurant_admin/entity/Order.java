@@ -37,7 +37,7 @@ public class Order {
     private String reservedTime;
     private String comment;
     private String cutlery;
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Staff orderPlaced;
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<OrderItem> orderItems;

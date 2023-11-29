@@ -52,6 +52,12 @@ public class OrderController {
         return orderService.getOrdersByFilters(page, pageSize, search, date, status);
     }
 
+    @GetMapping("/getOrdersByUser")
+    public @ResponseBody Page<OrderShortResponse> getOrdersByUser(@RequestParam int page,
+                                                               @RequestParam Long userId) {
+        return orderService.getOrdersByUser(page, pageSize, userId);
+    }
+
     @GetMapping("/getAllOrderStatus")
     public @ResponseBody ResponseEntity<?> getAllStatus() {
         return new ResponseEntity<>(orderService.getAllOrderStatutes(), HttpStatus.OK);

@@ -87,6 +87,25 @@ public class OrderService {
         return shortResponsePage;
     }
 
+    public Page<OrderShortResponse> getOrdersByUser(int page, int pageSize, Long userId) {
+        log.info("method getOrdersByUser -> start");
+        Pageable pageable = PageRequest.of(page, pageSize);
+        OrderCriteria orderCriteria = OrderCriteria.builder()
+                .userId(userId)
+                .build();
+
+        log.info(String.format("method getOrdersByUser -> find orders by pageable, page: %s, pageSize: %s", page, pageSize));
+        Page<Order> orderPage = orderRepo.findAll(Specification.where(
+                new OrderSpecification(orderCriteria)), pageable);
+
+        List<OrderShortResponse> shortResponseList =
+                OrderMapper.MAPPER.listOrderToShortResponseList(orderPage.getContent());
+        Page<OrderShortResponse> shortResponsePage =
+                new PageImpl<>(shortResponseList, pageable, orderPage.getTotalElements());
+        log.info(String.format("method getOrdersByUser -> exit, finds orders - %s", shortResponsePage.getTotalElements()));
+        return shortResponsePage;
+    }
+
     public Map<String, String> getAllOrderStatutes() {
         log.info("method getAllOrderStatutes -> start");
         Map<String, String> statutes = new HashMap<>();
