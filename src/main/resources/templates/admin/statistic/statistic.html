@@ -44,6 +44,8 @@
     <!-- Vendors CSS -->
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/typeahead-js/typeahead.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/apex-charts/apex-charts.css}"/>
 
     <!-- Page CSS -->
 
@@ -76,10 +78,88 @@
                 <!-- Content -->
 
                 <div class="container-xxl flex-grow-1 container-p-y">
-                    <h4 class="fw-bold py-3 mb-4">Page 1</h4>
-                    <p>
-                        Sample page.<br/>For more layout options refer
-                    </p>
+                    <div class="card mb-4">
+                        <div class="card-widget-separator-wrapper">
+                            <div class="card-body card-widget-separator">
+                                <div class="row gy-4 gy-sm-1">
+                                    <div class="col-sm-6 col-lg-3">
+                                        <div class="d-flex justify-content-between align-items-start card-widget-1 border-end pb-3 pb-sm-0">
+                                            <div>
+                                                <h6 class="mb-2">Замовлень за 30 днів</h6>
+                                                <h4 class="mb-2" id="ordersOfLastMonth"></h4>
+                                                <!--                                                <p class="mb-0"><span class="text-muted me-2">5k orders</span><span-->
+                                                <!--                                                        class="badge bg-label-success">+5.7%</span></p>-->
+                                            </div>
+                                            <span class="avatar me-sm-4"><span
+                                                    class="avatar-initial bg-label-secondary rounded"><i
+                                                    class="ti-md ti ti-smart-home text-body"></i></span>
+                                            </span>
+                                        </div>
+                                        <hr class="d-none d-sm-block d-lg-none me-4">
+                                    </div>
+                                    <div class="col-sm-6 col-lg-3">
+                                        <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-3 pb-sm-0">
+                                            <div>
+                                                <h6 class="mb-2">Сума замовлень за 30 днів</h6>
+                                                <h4 class="mb-2" id="amountOfLastMonth"></h4>
+                                                <!--                                                <p class="mb-0"><span class="text-muted me-2">21k orders</span><span-->
+                                                <!--                                                        class="badge bg-label-success">+12.4%</span></p>-->
+                                            </div>
+                                            <span class="avatar p-2 me-lg-4"><span
+                                                    class="avatar-initial bg-label-secondary rounded"><i
+                                                    class="ti-md ti ti-cash text-body"></i></span>
+                                            </span>
+                                        </div>
+                                        <hr class="d-none d-sm-block d-lg-none">
+                                    </div>
+                                    <div class="col-sm-6 col-lg-3">
+                                        <div class="d-flex justify-content-between align-items-start border-end pb-3 pb-sm-0 card-widget-3">
+                                            <div>
+                                                <h6 class="mb-2">Сума замовлень за сьогодні</h6>
+                                                <h4 class="mb-2" id="amountOfLastDay"></h4>
+                                                <!--                                                <p class="mb-0 text-muted">6k orders</p>-->
+                                            </div>
+                                            <span class="avatar p-2 me-sm-4"><span
+                                                    class="avatar-initial bg-label-secondary rounded"><i
+                                                    class="ti-md ti ti-cash text-body"></i></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-3">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h6 class="mb-2">Активних замовлень</h6>
+                                                <h4 class="mb-2" id="activeOrders"></h4>
+                                                <!--                                                <p class="mb-0"><span class="text-muted me-2">150 orders</span><span-->
+                                                <!--                                                        class="badge bg-label-danger">-3.5%</span></p>-->
+                                            </div>
+                                            <span class="avatar p-2"><span
+                                                    class="avatar-initial bg-label-secondary rounded"><i
+                                                    class="ti-md ti ti-rocket text-body"></i></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card mt-3">
+                            <div class="card-header h4">Статистика замовлень</div>
+                            <div class="card-body" id="order-statistic"></div>
+                        </div>
+<!--                        <div class="d-flex flex-row mt-3 justify-content-between">-->
+                        <div class="row mt-3 gap-3 mx-1">
+                            <div class="card col">
+                                <div class="card-header h4">Популярні категорії</div>
+                                <div class="card-body" id="popular-categories"></div>
+                            </div>
+                            <div class="card col" >
+                                <div class="card-header h4">Вік користувачів</div>
+                                <div class="card-body" id="users-age"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- / Content -->
                 <div class="content-backdrop fade"></div>
@@ -110,10 +190,391 @@
 <!-- endbuild -->
 
 <!-- Vendors JS -->
+<script th:src="@{/assets/vendor/libs/apex-charts/apexcharts.js}"></script>
 
 <!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
 
 <!-- Page JS -->
+<script th:inline="javascript">
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: 'statistic/getOrderStatisticOnCharts',
+            success: function (response) {
+                drawChartOrders(response);
+            },
+            error: function (error) {
+                $('<div class="bs-toast toast fade show" role="alert" aria-live="assertive" aria-atomic="true" ' +
+                    'style="position: absolute; top: 3rem; right: 1.5rem">\n' +
+                    '    <div class="toast-body d-flex flex-row justify-content-between">\n' +
+                    '      <span class="text-danger">Не вдалось оновити статистику замовлень</span>\n' +
+                    '      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>\n' +
+                    '    </div>' +
+                    '  </div>').appendTo('.content-wrapper');
+                console.log(error);
+            }
+        });
+
+        function drawChartOrders(data) {
+            const map = new Map(Object.entries(data))
+
+            const lineChartEl = document.querySelector('#order-statistic'),
+                lineChartConfig = {
+                    chart: {
+                        height: 400,
+                        type: 'line',
+                        parentHeightOffset: 0,
+                        zoom: {
+                            enabled: false
+                        },
+                        toolbar: {
+                            show: false
+                        }
+                    },
+                    series: [
+                        {
+                            data: Array.from(map.values())
+                        }
+                    ],
+                    markers: {
+                        strokeWidth: 3,
+                        strokeOpacity: 1,
+                        strokeColors: [config.colors.white],
+                        colors: [config.colors.warning],
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        curve: 'straight',
+                        width: 2
+                    },
+                    colors: [config.colors.primary],
+                    grid: {
+                        xaxis: {
+                            lines: {
+                                show: true
+                            }
+                        },
+                        padding: {
+                            top: -20
+                        }
+                    },
+                    tooltip: {
+                        custom: function ({series, seriesIndex, dataPointIndex, w}) {
+                            return '<div class="px-3 py-2">' + '<span>Замовлень: ' + series[seriesIndex][dataPointIndex] + '</span>' + '</div>';
+                        }
+                    },
+                    xaxis: {
+                        categories: Array.from(map.keys()),
+                        axisBorder: {
+                            show: false
+                        },
+                        axisTicks: {
+                            show: false
+                        },
+                        labels: {
+                            style: {
+                                colors: '#7367f0',
+                                fontSize: '13px'
+                            }
+                        }
+                    },
+                    yaxis: {
+                        floating: false,
+                        labels: {
+                            style: {
+                                colors: config.colors.primary,
+                                fontSize: '13px'
+                            }
+                        }
+                    }
+                };
+            if (typeof lineChartEl !== undefined && lineChartEl !== null) {
+                const lineChart = new ApexCharts(lineChartEl, lineChartConfig);
+                lineChart.render();
+            }
+        }
+
+        $.ajax({
+            type: "GET",
+            url: 'statistic/getGlobalStatistic',
+            success: function (response) {
+                fillGeneralStatistic(response);
+            },
+            error: function (error) {
+                $('<div class="bs-toast toast fade show" role="alert" aria-live="assertive" aria-atomic="true" ' +
+                    'style="position: absolute; top: 3rem; right: 1.5rem">\n' +
+                    '    <div class="toast-body d-flex flex-row justify-content-between">\n' +
+                    '      <span class="text-danger">Не вдалось оновити основну статистику</span>\n' +
+                    '      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>\n' +
+                    '    </div>' +
+                    '  </div>').appendTo('.content-wrapper');
+            }
+        });
+
+        function fillGeneralStatistic(stat) {
+
+            $('#amountOfLastMonth').html(stat.amountOfLastMonth + " грн.");
+            $('#ordersOfLastMonth').html(stat.ordersOfLastMonth);
+            $('#amountOfLastDay').html(stat.amountOfLastDay + " грн.");
+            $('#activeOrders').html(stat.activeOrders);
+        }
+
+        $.ajax({
+            type: "GET",
+            url: 'statistic/getUsersAge',
+            success: function (response) {
+                drawUsersAge(response);
+            },
+            error: function (err) {
+                drawUsersAge(err);
+            }
+        })
+
+        function drawUsersAge(usersAge) {
+            const userMap = new Map(Object.entries(usersAge));
+            console.log(userMap)
+            const horizontalBarChartEl = document.querySelector('#users-age'),
+                horizontalBarChartConfig = {
+                    chart: {
+                        height: 400,
+                        type: 'bar',
+                        toolbar: {
+                            show: false
+                        }
+                    },
+                    plotOptions: {
+                        bar: {
+                            horizontal: true,
+                            barHeight: '30%',
+                            startingShape: 'rounded',
+                            borderRadius: 8
+                        }
+                    },
+                    grid: {
+                        borderColor: config.colors.borderColor,
+                        xaxis: {
+                            lines: {
+                                show: false
+                            }
+                        },
+                        padding: {
+                            top: -20,
+                            bottom: -12
+                        }
+                    },
+                    colors: config.colors.info,
+                    dataLabels: {
+                        enabled: false
+                    },
+                    series: [
+                        {
+                            data: Array.from(userMap.values())
+                        }
+                    ],
+                    xaxis: {
+                        categories: Array.from(userMap.keys()),
+                        axisBorder: {
+                            show: false
+                        },
+                        axisTicks: {
+                            show: false
+                        },
+                        labels: {
+                            style: {
+                                colors: config.colors.primary,
+                                fontSize: '13px'
+                            }
+                        }
+                    },
+                    yaxis: {
+                        labels: {
+                            style: {
+                                colors: config.colors.info,
+                                fontSize: '13px'
+                            }
+                        }
+                    }
+                };
+            if (typeof horizontalBarChartEl !== undefined && horizontalBarChartEl !== null) {
+                const horizontalBarChart = new ApexCharts(horizontalBarChartEl, horizontalBarChartConfig);
+                horizontalBarChart.render();
+            }
+        }
+
+        $.ajax({
+            type: "GET",
+            url: 'statistic/getPopularCategory',
+            success: function (response) {
+                drawPopularCategory(response);
+            },
+            error: function (error) {
+                console.log(error);
+                $('<div class="bs-toast toast fade show" role="alert" aria-live="assertive" aria-atomic="true" ' +
+                    'style="position: absolute; top: 3rem; right: 1.5rem">\n' +
+                    '    <div class="toast-body d-flex flex-row justify-content-between">\n' +
+                    '      <span class="text-danger">Не вдалось оновити популярні категорії</span>\n' +
+                    '      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>\n' +
+                    '    </div>' +
+                    '  </div>').appendTo('.content-wrapper');
+            }
+        });
+
+        function drawPopularCategory(categories) {
+            const categoriesMap = new Map(Object.entries(categories));
+
+            const donutChartEl = document.querySelector('#popular-categories'),
+                donutChartConfig = {
+                    chart: {
+                        height: 400,
+                        type: 'donut'
+                    },
+                    labels: Array.from(categoriesMap.keys()),
+                    series: Array.from(categoriesMap.values()),
+                    // colors: [
+                    //     chartColors.donut.series1,
+                    //     chartColors.donut.series4,
+                    //     chartColors.donut.series3,
+                    //     chartColors.donut.series2
+                    // ],
+                    stroke: {
+                        show: false,
+                        curve: 'straight'
+                    },
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function (val, opt) {
+                            return parseInt(val, 10) + '%';
+                        }
+                    },
+                    legend: {
+                        show: true,
+                        position: 'bottom',
+                        markers: {offsetX: -3},
+                        itemMargin: {
+                            vertical: 3,
+                            horizontal: 10
+                        },
+                        labels: {
+                            colors: config.colors.primary,
+                            useSeriesColors: false
+                        }
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    name: {
+                                        fontSize: '2rem',
+                                        fontFamily: 'Public Sans'
+                                    },
+                                    value: {
+                                        fontSize: '1.2rem',
+                                        color: config.colors.secondary,
+                                        fontFamily: 'Public Sans',
+                                        formatter: function (val) {
+                                            return parseInt(val, 10) + ' замовлень';
+                                        }
+                                    },
+                                    total: {
+                                        show: true,
+                                        fontSize: '1.5rem',
+                                        color: config.colors.secondary,
+                                        label: Array.from(categoriesMap.keys())[0],
+                                        formatter: function (w) {
+                                            return Array.from(categoriesMap.values())[0] + ' замовлень';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    responsive: [
+                        {
+                            breakpoint: 992,
+                            options: {
+                                chart: {
+                                    height: 380
+                                },
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        colors: config.colors.success,
+                                        useSeriesColors: false
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            breakpoint: 576,
+                            options: {
+                                chart: {
+                                    height: 320
+                                },
+                                plotOptions: {
+                                    pie: {
+                                        donut: {
+                                            labels: {
+                                                show: true,
+                                                name: {
+                                                    fontSize: '1.5rem'
+                                                },
+                                                value: {
+                                                    fontSize: '1rem'
+                                                },
+                                                total: {
+                                                    fontSize: '1.5rem'
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        colors: config.colors.secondary,
+                                        useSeriesColors: false
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            breakpoint: 420,
+                            options: {
+                                chart: {
+                                    height: 280
+                                },
+                                legend: {
+                                    show: false
+                                }
+                            }
+                        },
+                        {
+                            breakpoint: 360,
+                            options: {
+                                chart: {
+                                    height: 250
+                                },
+                                legend: {
+                                    show: false
+                                }
+                            }
+                        }
+                    ]
+                };
+            if (typeof donutChartEl !== undefined && donutChartEl !== null) {
+                const donutChart = new ApexCharts(donutChartEl, donutChartConfig);
+                donutChart.render();
+            }
+
+        }
+
+    });
+
+</script>
 </body>
 </html>
