@@ -1,0 +1,14 @@
+{
+  "pages": [
+    {
+      "name": "Статистика",
+      "icon": "ti-smart-home",
+      "url": "statistic.html"
+    },
+    {
+      "name": "Dashboard Analytics",
+      "icon": "ti-smart-home",
+      "url": "index.html"
+    }
+  ]
+}
