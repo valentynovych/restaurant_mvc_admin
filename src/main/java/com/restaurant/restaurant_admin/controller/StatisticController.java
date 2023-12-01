@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/admin/statistic")
 @RequiredArgsConstructor
@@ -42,5 +44,8 @@ public class StatisticController {
         return new ResponseEntity<>(statisticService.getPopularCategory(), HttpStatus.OK);
     }
 
-
+    @GetMapping("/getCurrentStaff")
+    public @ResponseBody ResponseEntity<?> getCurrentStaff(Principal staff) {
+        return new ResponseEntity<>(statisticService.getCurrentStaff(staff), HttpStatus.OK);
+    }
 }

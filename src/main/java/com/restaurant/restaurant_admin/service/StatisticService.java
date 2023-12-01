@@ -1,9 +1,12 @@
 package com.restaurant.restaurant_admin.service;
 
 import com.restaurant.restaurant_admin.entity.Order;
+import com.restaurant.restaurant_admin.entity.Staff;
 import com.restaurant.restaurant_admin.entity.User;
 import com.restaurant.restaurant_admin.entity.enums.OrderStatus;
+import com.restaurant.restaurant_admin.mapper.StaffMapper;
 import com.restaurant.restaurant_admin.model.PopularCategory;
+import com.restaurant.restaurant_admin.model.StaffResponse;
 import com.restaurant.restaurant_admin.model.StatisticModel;
 import com.restaurant.restaurant_admin.repository.OrderItemRepo;
 import com.restaurant.restaurant_admin.repository.OrderRepo;
@@ -12,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -27,17 +31,18 @@ public class StatisticService {
     private final OrderRepo orderRepo;
     private final UserRepo userRepo;
     private final OrderItemRepo orderItemRepo;
+    private final StaffService staffService;
 
     public Map<String, Integer> getOrderStatistic() {
         Map<String, Integer> orderOnDate = new LinkedHashMap<>();
         Instant today = Instant.now();
-        Instant lastMonth = today.minus(30, ChronoUnit.DAYS);
+        Instant lastMonth = today.minus(29, ChronoUnit.DAYS);
 
         Instant tempDate = Instant.from(lastMonth);
         List<Order> orderByDatetimeOfCreateAfter =
                 orderRepo.findOrderByDatetimeOfCreateAfter(lastMonth);
 
-        while (today.isAfter(tempDate)) {
+        while (today.isAfter(tempDate.minus(1, ChronoUnit.DAYS))) {
             LocalDate localDate = LocalDate.ofInstant(tempDate, ZoneId.systemDefault());
             String dateStr = localDate.format(DateTimeFormatter.ofPattern("dd.MM"));
             LocalDateTime startOfDay = localDate.atStartOfDay();
@@ -138,5 +143,13 @@ public class StatisticService {
                 .stream()
                 .collect(Collectors.toMap(PopularCategory::getCategoryName, PopularCategory::getCountUsed));
         return map;
+    }
+
+    public StaffResponse getCurrentStaff(Principal staff) {
+        if (staff != null) {
+            Staff staffByUsername = staffService.getStaffByUsername(staff.getName());
+            return StaffMapper.MAPPER.staffToModelResponse(staffByUsername);
+        }
+        return null;
     }
 }

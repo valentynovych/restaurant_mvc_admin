@@ -169,6 +169,9 @@ public class OrderService {
             }
             orderItem.setItemPrice(itemPrice.add(additionalPrice));
             orderItem.setItemSalePrice(itemSalePrice);
+            if (itemSalePrice != null && itemSalePrice.compareTo(orderItem.getItemPrice()) >= 0) {
+                itemSalePrice = null;
+            }
             totalAmount = totalAmount.add(itemSalePrice != null ? orderItem.getItemSalePrice() : orderItem.getItemPrice());
         }
         if (order.getUsedBonuses() != null && order.getUsedBonuses() > 0) {
@@ -255,6 +258,7 @@ public class OrderService {
         userDetails.setFirstName(userDetailsRequest.getFirstName());
         userDetails.setPhone(userDetailsRequest.getPhone());
         user.setUserDetails(userDetails);
+        user.setTotalOrders(1);
         request.setUser(user);
 
         SecurityContext context = SecurityContextHolder.getContext();
