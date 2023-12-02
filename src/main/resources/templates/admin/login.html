@@ -219,9 +219,11 @@
                     window.location = xhr.responseURL;
                 },
                 error: function (error) {
-                    console.log(error)
-                    const errors = error.responseJSON;
+                    // console.log(error)
+                    // console.log(xhr);
+                    const errors = JSON.parse(error.responseText);
                     for (let error of errors) {
+                        console.log(error)
                         $(document).find("#" + error.field).addClass("is-invalid").after($(
                             '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
                         ))

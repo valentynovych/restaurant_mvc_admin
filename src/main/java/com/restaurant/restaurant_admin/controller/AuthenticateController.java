@@ -63,6 +63,7 @@ public class AuthenticateController {
 
         } catch (BadCredentialsException e) {
             result.addError(new FieldError("loginRequest", "password", "Не правильний логін або пароль"));
+            result.addError(new FieldError("loginRequest", "username", ""));
             return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             throw new RuntimeException(e);
