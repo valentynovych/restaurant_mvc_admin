@@ -1,6 +1,7 @@
 package com.restaurant.restaurant_admin.service;
 
 import com.restaurant.restaurant_admin.entity.User;
+import com.restaurant.restaurant_admin.entity.UserDetails;
 import com.restaurant.restaurant_admin.mapper.UserMapper;
 import com.restaurant.restaurant_admin.model.UserRequest;
 import com.restaurant.restaurant_admin.model.UserShortDetails;
@@ -27,7 +28,6 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepo userRepo;
-    //private final UserMapper mapper;
 
     public Page<UserShortResponse> getUsersOnPage(int page, int pageSize) {
         log.info("method getUsersOnPage -> start, get page: " + page);
@@ -73,10 +73,12 @@ public class UserService {
         log.info("method updateUser -> user isPresent, set new fields value");
         user.setEmail(userRequest.getEmail());
         user.setIsActive(userRequest.getIsActive());
-        user.getUserDetails().setPhone(userRequest.getPhone());
-        user.getUserDetails().setDateOfBirth(userRequest.getDateOfBirth());
-        user.getUserDetails().setFirstName(userRequest.getFirstName());
-        user.getUserDetails().setLastName(userRequest.getLastName());
+        UserDetails userDetails = user.getUserDetails();
+        userDetails.setPhone(userRequest.getPhone());
+        userDetails.setDateOfBirth(userRequest.getDateOfBirth());
+        userDetails.setFirstName(userRequest.getFirstName());
+        userDetails.setLastName(userRequest.getLastName());
+        user.setUserDetails(userDetails);
         userRepo.save(user);
         log.info("method updateUser -> user saved, exit");
     }
