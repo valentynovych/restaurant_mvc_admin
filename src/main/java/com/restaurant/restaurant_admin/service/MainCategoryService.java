@@ -27,8 +27,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Log4j2
 public class MainCategoryService {
+
     private final MainCategoryRepo mainCategoryRepo;
-    //private final MainCategoryMapper mapper;
     private final UploadFileUtil fileUtil;
 
     public MainCategoryDTO getMainCategoryById(Long id) {
@@ -48,7 +48,7 @@ public class MainCategoryService {
 
     public List<MainCategoryShortResponse> getAllMainCategories() {
         log.info("method getAllMainCategories() -> start");
-        List<MainCategory> mainCategories = (List<MainCategory>) mainCategoryRepo.findAll();
+        List<MainCategory> mainCategories = mainCategoryRepo.findAll();
         log.info("method getAllMainCategories() -> exit, return MainCategoryTablesResponse list");
         return mainCategories
                 .stream()
