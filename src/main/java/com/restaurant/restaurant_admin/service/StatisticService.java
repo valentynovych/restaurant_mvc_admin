@@ -12,6 +12,7 @@ import com.restaurant.restaurant_admin.repository.OrderItemRepo;
 import com.restaurant.restaurant_admin.repository.OrderRepo;
 import com.restaurant.restaurant_admin.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class StatisticService {
 
     private final OrderRepo orderRepo;
@@ -34,6 +36,7 @@ public class StatisticService {
     private final StaffService staffService;
 
     public Map<String, Integer> getOrderStatistic() {
+        log.info("getOrderStatistic() -> start");
         Map<String, Integer> orderOnDate = new LinkedHashMap<>();
         Instant today = Instant.now();
         Instant lastMonth = today.minus(29, ChronoUnit.DAYS);
@@ -57,10 +60,12 @@ public class StatisticService {
             orderOnDate.put(dateStr, countOrderOnDate);
             tempDate = tempDate.plus(1, ChronoUnit.DAYS);
         }
+        log.info("getOrderStatistic() -> exit");
         return orderOnDate;
     }
 
     public StatisticModel getGlobalStatistic() {
+        log.info("getGlobalStatistic() -> start");
         Instant today = Instant.now();
         List<Order> orderByDatetimeOfCreateAfter = orderRepo.findOrderByDatetimeOfCreateAfter(
                 today.minus(30, ChronoUnit.DAYS));
@@ -81,6 +86,7 @@ public class StatisticService {
                 .stream()
                 .filter(order -> order.getStatus().equals(OrderStatus.NEW)).count();
 
+        log.info("getGlobalStatistic() -> exit");
         return StatisticModel
                 .builder()
                 .activeOrders(activeOrders)
@@ -91,57 +97,55 @@ public class StatisticService {
     }
 
     public Map<String, Integer> getUsersAge() {
+        log.info("getUsersAge() -> start");
         Map<String, Integer> usersAgeMap = new LinkedHashMap<>(6);
         List<User> userList = userRepo.findAll();
-        //Instant today = Instant.now();
         ZonedDateTime today = ZonedDateTime.now(ZoneId.systemDefault());
 
+        userList = userList.stream().filter(user -> user.getUserDetails().getDateOfBirth() != null).toList();
         usersAgeMap.put("Більше 50 років", (int) userList
                 .stream()
-                .filter(user -> user.getUserDetails().getDateOfBirth() != null)
                 .filter(user -> user.getUserDetails().getDateOfBirth().toInstant()
                         .isBefore(today.minusYears(50).toInstant())).count());
         usersAgeMap.put("40 - 49 років", (int) userList
                 .stream()
-                .filter(user -> user.getUserDetails().getDateOfBirth() != null)
                 .filter(user -> user.getUserDetails().getDateOfBirth().toInstant()
                         .isAfter(today.minusYears(49).toInstant())
                         && user.getUserDetails().getDateOfBirth().toInstant()
                         .isBefore(today.minusYears(40).toInstant())).count());
         usersAgeMap.put("30 - 39 років", (int) userList
                 .stream()
-                .filter(user -> user.getUserDetails().getDateOfBirth() != null)
                 .filter(user -> user.getUserDetails().getDateOfBirth().toInstant()
                         .isAfter(today.minusYears(39).toInstant())
                         && user.getUserDetails().getDateOfBirth().toInstant()
                         .isBefore(today.minusYears(30).toInstant())).count());
         usersAgeMap.put("25 - 29 років", (int) userList
                 .stream()
-                .filter(user -> user.getUserDetails().getDateOfBirth() != null)
                 .filter(user -> user.getUserDetails().getDateOfBirth().toInstant()
                         .isAfter(today.minusYears(29).toInstant())
                         && user.getUserDetails().getDateOfBirth().toInstant()
                         .isBefore(today.minusYears(25).toInstant())).count());
         usersAgeMap.put("18 - 24 років", (int) userList
                 .stream()
-                .filter(user -> user.getUserDetails().getDateOfBirth() != null)
                 .filter(user -> user.getUserDetails().getDateOfBirth().toInstant()
                         .isBefore(today.minusYears(18).toInstant())
                         && user.getUserDetails().getDateOfBirth().toInstant()
                         .isAfter(today.minusYears(24).toInstant())).count());
         usersAgeMap.put("Менше 18 років", (int) userList
                 .stream()
-                .filter(user -> user.getUserDetails().getDateOfBirth() != null)
                 .filter(user -> user.getUserDetails().getDateOfBirth().toInstant()
                         .isAfter(today.minusYears(17).toInstant())).count());
+        log.info("getUsersAge() -> exit");
         return usersAgeMap;
     }
 
     public Map<String, Long> getPopularCategory() {
+        log.info("getPopularCategory() -> start");
         List<PopularCategory> countUsedMainCategoryInOrders = orderItemRepo.findCountUsedMainCategoryInOrders();
         Map<String, Long> map = countUsedMainCategoryInOrders
                 .stream()
                 .collect(Collectors.toMap(PopularCategory::getCategoryName, PopularCategory::getCountUsed));
+        log.info("getPopularCategory() -> exit");
         return map;
     }
 
