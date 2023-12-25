@@ -12,7 +12,6 @@ import com.restaurant.restaurant_admin.utils.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -38,11 +37,10 @@ import java.util.Optional;
 public class StaffService implements UserDetailsService {
 
 
-    private final ApplicationContext context;
+    //private final ApplicationContext context;
     private final StaffRepo staffRepo;
-    //private final StaffMapper mapper;
     private final UploadFileUtil fileUtil;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public Page<StaffResponse> getStaffOnPage(int page, int pageSize) {
         log.info("method getStaffOnPage -> start get staffOnPage, page: " + page + " , pageSize: " + pageSize);
@@ -54,6 +52,8 @@ public class StaffService implements UserDetailsService {
     }
 
     public Page<StaffResponse> getStaffPageOnSearch(String search, int page, int pageSize) {
+        log.info(String.format("getStaffPageOnSearch() -> start, with page: %s, pageSize: %s, by search: %s",
+                page, pageSize, search));
         Pageable pageable = PageRequest.of(page, pageSize);
         StaffSpecification spec1 =
                 new StaffSpecification(new SearchCriteria("email", ":", search));
@@ -65,7 +65,9 @@ public class StaffService implements UserDetailsService {
                 new StaffSpecification(new SearchCriteria("phone", ":", search));
         Page<Staff> staffPage = staffRepo.findAll(spec1.or(spec2).or(spec3).or(spec4), pageable);
         List<StaffResponse> staffResponses = StaffMapper.MAPPER.staffListToModelResponseList(staffPage.getContent());
-        return new PageImpl<>(staffResponses, pageable, staffPage.getTotalElements());
+        Page<StaffResponse> staffResponses1 = new PageImpl<>(staffResponses, pageable, staffPage.getTotalElements());
+        log.info("getStaffPageOnSearch() -> exit");
+        return staffResponses1;
 
     }
 
@@ -79,7 +81,7 @@ public class StaffService implements UserDetailsService {
     }
 
     public void updateStaff(StaffRequest staffRequest) {
-        passwordEncoder = context.getBean(PasswordEncoder.class);
+        //passwordEncoder = context.getBean(PasswordEncoder.class);
         log.info("method updateStaff -> start update Staff");
         if (staffRequest != null) {
             log.info("method updateStaff -> staffRequest isPresent");
@@ -112,7 +114,7 @@ public class StaffService implements UserDetailsService {
     }
 
     public void createStaff(StaffRequest staffRequest) {
-        passwordEncoder = context.getBean(PasswordEncoder.class);
+        //passwordEncoder = context.getBean(PasswordEncoder.class);
         log.info("method createStaff -> start update Staff");
         if (staffRequest != null) {
             log.info("method createStaff -> staffRequest isPresent");
@@ -134,8 +136,10 @@ public class StaffService implements UserDetailsService {
             Staff staff = byId.get();
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication.getName().equals(staff.getUsername())) {
+                log.info("deleteStaffById() -> Can`t delete current staff");
                 throw new AuthenticationException("Can`t delete current staff");
             } else if (staff.getStaffRole().equals(Role.ROLE_ADMIN)) {
+                log.info("deleteStaffById() -> Admin staff can`t delete");
                 throw new AuthenticationException("Admin staff can`t delete");
             }
             staffRepo.delete(staff);
