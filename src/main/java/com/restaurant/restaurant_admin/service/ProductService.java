@@ -42,7 +42,6 @@ public class ProductService {
                 new PageImpl<>(shortResponses, pageable, productPage.getTotalElements());
         log.info("method getProductPage -> exit, return products by pageable");
         return shortResponsePage;
-
     }
 
     public Page<ProductShortResponse> getProductsBySearch(int page, int pageSize, String search) {
@@ -100,9 +99,7 @@ public class ProductService {
     public void updateProduct(ProductRequest productRequest) {
         log.info("method updateProduct -> start");
         if (productRequest != null) {
-            Optional<Product> byId = productRepo.findById(productRequest.getProductId());
-            Product product = byId.orElseThrow(EntityNotFoundException::new);
-            product = ProductMapper.MAPPER.productRequestToProduct(productRequest);
+            Product product = ProductMapper.MAPPER.productRequestToProduct(productRequest);
             if (product.getPromotion().getId() == null) {
                 product.setPromotion(null);
             }
@@ -132,9 +129,7 @@ public class ProductService {
     public void updateIngredient(IngredientRequest ingredientRequest) {
         log.info("method updateIngredient -> start");
         if (ingredientRequest != null) {
-            Optional<Product> byId = productRepo.findById(ingredientRequest.getProductId());
-            Product product = byId.orElseThrow(EntityNotFoundException::new);
-            product = ProductMapper.MAPPER.ingredientReguestToProduct(ingredientRequest);
+            Product product = ProductMapper.MAPPER.ingredientReguestToProduct(ingredientRequest);
             log.info("method updateIngredient -> save Product");
 
             if (ingredientRequest.getPhotoFile() != null && !ingredientRequest.getPhotoFile().isEmpty()) {
@@ -150,6 +145,7 @@ public class ProductService {
         log.info("method createProduct -> start");
         if (productRequest != null) {
             Product product = ProductMapper.MAPPER.productRequestToProduct(productRequest);
+            product.setIsNovelty(Boolean.TRUE);
             if (product.getPromotion().getId() == null) {
                 product.setPromotion(null);
             }
