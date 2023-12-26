@@ -415,11 +415,10 @@
 </script>
 
 <script th:inline="javascript">
-    const path = window.location.pathname;
-    const orderId = Number(path.substring(path.lastIndexOf('/') + 1, path.length));
+    const path1 = window.location.pathname;
+    const orderId = Number(path1.substring(path1.lastIndexOf('/') + 1, path1.length));
     var order;
     const contextPath = /*[[@{/admin/orders/}]]*/ 'default';
-
     function parseMapToRes(data) {
         const mapResponse = new Map(data);
         const list = [];

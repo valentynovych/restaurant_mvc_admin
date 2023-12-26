@@ -215,6 +215,7 @@ public class OrderService {
     }
 
     private OrderResponse createOrderWithOrderItem(OrderItem orderItem) {
+        log.info("method createOrderWithOrderItem -> start");
         Order order = orderRepo.save(new Order());
         orderItem.setOrder(order);
         ProductResponse product = productService.getProductById(orderItem.getProduct().getId());
@@ -223,6 +224,7 @@ public class OrderService {
         order.setOrderItems(Set.of(itemRepo.save(orderItem)));
         order = countTotalAmount(order);
         OrderResponse save = OrderMapper.MAPPER.orderToResponse(order);
+        log.info("method createOrderWithOrderItem -> exit");
         return save;
     }
 
@@ -245,6 +247,21 @@ public class OrderService {
         request.setOrderItems(orderByDb.getOrderItems());
         request.setDatetimeOfCreate(Instant.now());
 
+        User user = getUser(orderByDb, request);
+        request.setUser(user);
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        String currUsername = context.getAuthentication().getName();
+        Staff staff = staffService.getStaffByUsername(currUsername);
+        request.setOrderPlaced(staff);
+
+        Order save = orderRepo.save(request);
+        OrderResponse orderResponse = OrderMapper.MAPPER.orderToResponse(save);
+        log.info("method createOrder -> exit");
+        return orderResponse;
+    }
+
+    private static User getUser(Order orderByDb, Order request) {
         User user;
         if (orderByDb.getUser() != null) {
             user = orderByDb.getUser();
@@ -259,17 +276,7 @@ public class OrderService {
         userDetails.setPhone(userDetailsRequest.getPhone());
         user.setUserDetails(userDetails);
         user.setTotalOrders(1);
-        request.setUser(user);
-
-        SecurityContext context = SecurityContextHolder.getContext();
-        String currUsername = context.getAuthentication().getName();
-        Staff staff = staffService.getStaffByUsername(currUsername);
-        request.setOrderPlaced(staff);
-
-        Order save = orderRepo.save(request);
-        OrderResponse orderResponse = OrderMapper.MAPPER.orderToResponse(save);
-        log.info("method createOrder -> exit");
-        return orderResponse;
+        return user;
     }
 
     public OrderResponse updateOrder(OrderRequest orderRequest) {
@@ -353,8 +360,10 @@ public class OrderService {
                 }
                 case PERCENT_ON_BIRTHDAY -> {
                     var orderedUser = order.getUser();
-                    var today = new Date();
-                    if (orderedUser.getUserDetails().getDateOfBirth().equals(today)) {
+                    var today = LocalDate.now();
+                    Date dateOfBirth = orderedUser.getUserDetails().getDateOfBirth();
+                    LocalDate userDate = LocalDate.ofInstant(dateOfBirth.toInstant(), ZoneId.systemDefault());
+                    if (today.getMonth().equals(userDate.getMonth()) && today.getDayOfMonth() == userDate.getDayOfMonth()) {
                         item.setItemSalePrice(calculateSalePriceOnPercent(item.getItemPrice(), promotion.getDiscountAmount()));
                     }
                 }
@@ -398,82 +407,6 @@ public class OrderService {
             item.setPromoCode(promotion.getPromoCode());
             item.setPromotionName(promotion.getName());
         }
-//        for (OrderItem item : order.getOrderItems()) {
-//            if (item.getIsGiftProduct() != null && item.getIsGiftProduct()) break;
-//            List<OrderItem> giftsProduct = orderItems.stream().filter(OrderItem::getIsGiftProduct).toList();
-//            if (!giftsProduct.isEmpty() &&
-//                    giftsProduct.stream().anyMatch(orderItem ->
-//                            orderItem.getProduct().getId().equals(promotion.getGiftProduct().getId()))) {
-//                break;
-//            }
-//
-//            switch (promotion.getPromotionCondition()) {
-//                case PERCENT_FOR_CATEGORY -> {
-//                    var product = item.getProduct();
-//                    if (product.getMainCategory().getId().equals(promotion.getForCategory().getId())
-//                            && product.getSubcategory().getId().equals(promotion.getSubcategory().getId())) {
-//                        item.setItemSalePrice(calculateSalePriceOnPercent(item.getItemPrice(), promotion.getDiscountAmount()));
-//                    }
-//                    item.setItemSalePrice(
-//                            calculateSalePriceOnPercent(item.getItemPrice(), promotion.getDiscountAmount()));
-//                }
-//                case PERCENT_FOR_PRODUCT -> {
-//                    if (item.getProduct().getId().equals(promotion.getForProduct().getId())) {
-//                        item.setItemSalePrice(calculateSalePriceOnPercent(item.getItemPrice(), promotion.getDiscountAmount()));
-//                    }
-//                }
-//                case PERCENT_OF_AMOUNT -> {
-//                    if (order.getTotalAmount().compareTo(BigDecimal.valueOf(promotion.getMinimalAmount())) > 0) {
-//                        item.setItemSalePrice(calculateSalePriceOnPercent(item.getItemPrice(), promotion.getDiscountAmount()));
-//                    }
-//                }
-//                case PERCENT_ON_BIRTHDAY -> {
-//                    var orderedUser = order.getUser();
-//                    var today = new Date();
-//                    if (orderedUser.getUserDetails().getDateOfBirth().equals(today)) {
-//                        item.setItemSalePrice(calculateSalePriceOnPercent(item.getItemPrice(), promotion.getDiscountAmount()));
-//                    }
-//                }
-//                case FIRST_BUY -> {
-//                    var orderedUser = order.getUser();
-//                    if (orderedUser.getTotalOrders() == 0) {
-//                        item.setItemSalePrice(calculateSalePriceOnPercent(item.getItemPrice(), promotion.getDiscountAmount()));
-//                    }
-//                }
-//                case FREE_DELIVERY_OF_AMOUNT -> {
-//                    if (order.getTotalAmount().compareTo(BigDecimal.valueOf(promotion.getMinimalAmount())) > 0) {
-//                        order.setTotalAmount(order.getTotalAmount().subtract(new BigDecimal(50)));
-//                    }
-//                }
-//                case THIRD_PRODUCT_ON_GIFT -> {
-//                    var promotionType = promotion.getPromotionType();
-//                    if (promotionType.equals(PromotionType.FOR_PRODUCT)) {
-//                        List<OrderItem> filtered = orderItems.stream().filter(orderItem ->
-//                                orderItem.getProduct().getId().equals(promotion.getForProduct().getId())).toList();
-//                        if (!filtered.isEmpty() && filtered.size() >= 2) {
-//                            orderItems.add(itemRepo.save(createGiftOrderItem(promotion.getGiftProduct(), order)));
-//                            filtered.forEach(orderItems::remove);
-//                        }
-//                    } else if (promotionType.equals(PromotionType.FOR_CATEGORY)) {
-//                        List<OrderItem> filtered = orderItems.stream().filter(orderItem ->
-//                                orderItem.getProduct().getMainCategory().getId().equals(promotion.getForCategory().getId())
-//                                        && orderItem.getProduct().getSubcategory().getId().equals(
-//                                        promotion.getSubcategory().getId())).toList();
-//                        if (!filtered.isEmpty() && filtered.size() >= 2) {
-//                            orderItems.add(itemRepo.save(createGiftOrderItem(promotion.getGiftProduct(), order)));
-//                            filtered.forEach(orderItems::remove);
-//                        }
-//                    }
-//                }
-//            }
-//
-//            item.setPromotionCondition(promotion.getPromotionCondition());
-//            item.setPromotionType(promotion.getPromotionType());
-//            item.setDiscountAmount(promotion.getDiscountAmount());
-//            item.setMinimalAmount(promotion.getMinimalAmount());
-//            item.setPromoCode(promotion.getPromoCode());
-//            item.setPromotionName(promotion.getName());
-//        }
         return order;
     }
 
