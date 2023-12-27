@@ -230,8 +230,8 @@
 </script>
 
 <script th:inline="javascript">
-    const path = window.location.pathname;
-    const promotionId = Number(path.substring(path.lastIndexOf('/') + 1, path.length));
+    const fullPath = window.location.pathname;
+    const promotionId = Number(fullPath.substring(fullPath.lastIndexOf('/') + 1, fullPath.length));
     var promotionObject;
     const contextPath = /*[[@{/admin/promotions/}]]*/ 'default'
 

@@ -48,8 +48,9 @@
     <!-- Vendor -->
 
     <!-- Page CSS -->
-    <!-- Page -->
     <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-auth.css}"/>
+    <!-- Page -->
+
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
@@ -88,7 +89,7 @@
             <div class="w-px-400 mx-auto">
                 <!-- Logo -->
                 <div class="app-brand mb-4">
-                    <a href="index.html" class="app-brand-link gap-2">
+                    <a th:href="@{admin/statistic}" class="app-brand-link gap-2">
                 <span class="app-brand-logo demo">
                   <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -138,18 +139,18 @@
                         />
                     </div>
                     <div class="mb-3 form-password-toggle">
-                        <div class="d-flex justify-content-between">
-                            <label class="form-label" for="password">Пароль</label>
-                        </div>
-                        <div class="input-group">
+                        <label class="form-label" for="password">Пароль</label>
+                        <div class="input-group input-group-merge">
                             <input
                                     type="password"
                                     id="password"
                                     class="form-control"
                                     name="password"
                                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                    aria-describedby="password"
+                                    aria-describedby="basic-default-password"
                             />
+                            <span class="input-group-text cursor-pointer" id="basic-default-password"><i
+                                    class="ti ti-eye-off"></i></span>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -162,75 +163,79 @@
     </div>
 </div>
 
-    <!-- / Content -->
+<!-- / Content -->
 
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
-    <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
-    <script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
-    <script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
-    <script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
-    <script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
 
-    <script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
-    <script th:src="@{/assets/vendor/libs/i18n/i18n.js}"></script>
-    <script th:src="@{/assets/vendor/libs/typeahead-js/typeahead.js}"></script>
+<script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
+<script th:src="@{/assets/vendor/libs/typeahead-js/typeahead.js}"></script>
 
-    <script th:src="@{/assets/vendor/js/menu.js}"></script>
-    <!-- endbuild -->
+<!-- endbuild -->
 
-    <!-- Vendors JS -->
-    <!--    <script th:src="@{/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js}"></script>-->
-    <!--        <script th:src="@{/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js}"></script>-->
-    <!--        <script th:src="@{/assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js}"></script>-->
+<!-- Vendors JS -->
+<script th:src="@{/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js}"></script>
+<script th:src="@{/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js}"></script>
+<script th:src="@{/assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js}"></script>
 
-    <!-- Main JS -->
-    <script th:src="@{/assets/js/main.js}"></script>
+<!-- Main JS -->
+<script th:src="@{/assets/js/main.js}"></script>
 
-    <!-- Page JS -->
-    <!--    <script th:src="@{/assets/js/pages-auth.js}"></script>-->
+<!-- Page JS -->
+<script th:src="@{/assets/js/pages-auth.js}"></script>
 
-    <script th:inline="javascript">
-        $(".login-btn").on("click", function () {
-            sendLoginRequest()
-        })
-        $(document).on("load", function () {
-            console.log(document.URL);
-        });
-
-        function sendLoginRequest() {
-            $(".invalid-feedback").remove();
-            $(".is-invalid").removeClass("is-invalid")
-
-            var formData = new FormData(loginForm);
-
-            var xhr = new XMLHttpRequest();
-                $.ajax({
-                url: /*[[@{/admin/auth/signin}]]*/ 'default',
-                type: "POST",
-                data: formData,
-                dataType: "text",
-                processData: false,
-                contentType: false,
-                xhr: function () {
-                    return xhr;
-                },
-                success: function () {
-                    window.location = xhr.responseURL;
-                },
-                error: function (error) {
-                    // console.log(error)
-                    // console.log(xhr);
-                    const errors = JSON.parse(error.responseText);
-                    for (let error of errors) {
-                        console.log(error)
-                        $(document).find("#" + error.field).addClass("is-invalid").after($(
-                            '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
-                        ))
-                    }
-                }
-            })
+<script th:inline="javascript">
+    $(".login-btn").on("click", function () {
+        sendLoginRequest()
+    })
+    $('#basic-default-password').on("click", function () {
+        var find = $(this).parent().find("input[name='password']");
+        var type = find.attr('type');
+        if (type === 'password') {
+            find.attr('type', 'text');
+            $(this).html('<i class="ti ti-eye"></i>');
+        } else if (type === 'text') {
+            find.attr('type', 'password');
+            $(this).html('<i class="ti ti-eye-off"></i>');
         }
-    </script>
+    })
+
+    function sendLoginRequest() {
+        $(".invalid-feedback").remove();
+        $(".is-invalid").removeClass("is-invalid")
+
+        var formData = new FormData(loginForm);
+
+        var xhr = new XMLHttpRequest();
+        $.ajax({
+            url: /*[[@{/admin/auth/signin}]]*/ 'default',
+            type: "POST",
+            data: formData,
+            dataType: "text",
+            processData: false,
+            contentType: false,
+            xhr: function () {
+                return xhr;
+            },
+            success: function () {
+                window.location = xhr.responseURL;
+            },
+            error: function (error) {
+                const errors = JSON.parse(error.responseText);
+                for (let error of errors) {
+                    console.log(error)
+                    $(document).find("#" + error.field).addClass("is-invalid").after($(
+                        '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
+                    ))
+                }
+            }
+        })
+    }
+</script>
 </body>
 </html>

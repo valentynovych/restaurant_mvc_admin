@@ -41,12 +41,14 @@
                 </div>
             </li>
             <li class="nav-item me-3">
-                <a class="dropdown-item" th:href="@{/logout}">
+                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalLogout">
                     <i class="ti ti-logout ti-sm"></i>
-                </a>
+                </button>
             </li>
         </ul>
+
     </div>
+
     <script th:inline="javascript">
         const path = /*[[@{/admin/statistic}]]*/ 'default';
 
@@ -86,6 +88,33 @@
                     return 'Невідомий';
             }
         }
+
+        $('<!-- Modal -->\n' +
+            '    <div class="modal fade" id="modalLogout" tabindex="-1" aria-hidden="true">\n' +
+            '        <div class="modal-dialog modal-dialog-centered" role="document">\n' +
+            '            <div class="modal-content">\n' +
+            '                <div class="modal-header">\n' +
+            '                    <h5 class="modal-title " id="modalCenterTitle">Вихід</h5>\n' +
+            '                    <button\n' +
+            '                            type="button"\n' +
+            '                            class="btn-close"\n' +
+            '                            data-bs-dismiss="modal"\n' +
+            '                            aria-label="Close"\n' +
+            '                    ></button>\n' +
+            '                </div>\n' +
+            '                <div class="modal-body">\n' +
+            '                    <span>Ви справді хочете вийти з облікового запису ?</span>\n' +
+            '                </div>\n' +
+            '                <div class="modal-footer">\n' +
+            '                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">\n' +
+            '                        Скасувати\n' +
+            '                    </button>\n' +
+            '                    <a href="' + path + '../../../logout" class="btn btn-danger" >Вийти</a>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            '    </div>').appendTo('.layout-container');
+        console.log("sdasd")
 
     </script>
 </nav>

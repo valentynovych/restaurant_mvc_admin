@@ -209,8 +209,8 @@
     $(document).ready(getMainCategory);
 
     function getMainCategory() {
-        const path = window.location.pathname;
-        const mainCategoryId = Number(path.substring(path.lastIndexOf('/') + 1, path.length));
+        const fullPath = window.location.pathname;
+        const mainCategoryId = Number(fullPath.substring(fullPath.lastIndexOf('/') + 1, fullPath.length));
         if (mainCategoryId) {
             console.log(mainCategoryId);
             $.ajax({

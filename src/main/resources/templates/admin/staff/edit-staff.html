@@ -214,7 +214,7 @@
 
 <!-- Page JS -->
 <script th:inline="javascript">
-    let src = /*[[@{/assets/img/placeholder-image.png}]]*/;
+    let src = /*[[@{/assets/img/placeholder-image.png}]]*/ 'default';
     window.onload = function () {
         var images = document.querySelectorAll("img");
         for (var i = 0; i < images.length; i++) {
@@ -239,8 +239,8 @@
 </script>
 <script th:inline="javascript">
     $(document).ready(function () {
-        const path = window.location.pathname;
-        const staffId = Number(path.substring(path.lastIndexOf('/') + 1, path.length));
+        const fullPath = window.location.pathname;
+        const staffId = Number(fullPath.substring(fullPath.lastIndexOf('/') + 1, fullPath.length));
         if (staffId) {
             var password = $(".password-block");
             password.children().remove();

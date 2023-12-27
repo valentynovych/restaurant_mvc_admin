@@ -372,8 +372,8 @@
 </script>
 
 <script th:inline="javascript">
-    const path = window.location.pathname;
-    const productId = Number(path.substring(path.lastIndexOf('/') + 1, path.length));
+    const fullPath = window.location.pathname;
+    const productId = Number(fullPath.substring(fullPath.lastIndexOf('/') + 1, fullPath.length));
     var product;
 
     var $select = $("select[name='isIngredient']");

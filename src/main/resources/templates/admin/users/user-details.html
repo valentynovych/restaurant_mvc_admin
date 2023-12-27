@@ -211,8 +211,8 @@
     };
 </script>
 <script th:inline="javascript">
-    const path = window.location.pathname;
-    const userId = Number(path.substring(path.lastIndexOf('/') + 1, path.length));
+    const fullPath = window.location.pathname;
+    const userId = Number(fullPath.substring(fullPath.lastIndexOf('/') + 1, fullPath.length));
     $.ajax({
         type: "GET",
         url: '../getUserDetails/' + userId,
