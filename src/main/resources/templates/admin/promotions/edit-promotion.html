@@ -274,7 +274,6 @@
             url: contextPath + 'getPromotion/' + promotionId,
             dataType: "JSON",
             success: function (response) {
-                console.log(response);
                 promotionObject = response;
                 afterLoad();
             },
@@ -306,7 +305,7 @@
     }
 
     function afterLoad() {
-        console.log("afterLoad -> start")
+        // console.log("afterLoad -> start")
         $promotionType.select2({
             placeholder: 'Тип акції',
             data: [getPromotionTypeLabelByName(promotionObject.promotionType)],
@@ -357,12 +356,12 @@
             buildFormBody(this.value)
         })
 
-        console.log("afterLoad -> end")
+        // console.log("afterLoad -> end")
         buildFormHeader(promotionObject.promotionType);
     }
 
     function buildFormHeader(promotionType) {
-        console.log("buildFormHeader -> start")
+        // console.log("buildFormHeader -> start")
 
         $('#option-type').children().remove();
         switch (promotionType) {
@@ -385,12 +384,12 @@
                     '     </div>').appendTo('#option-type');
                 break;
         }
-        console.log("buildFormHeader -> end")
+        // console.log("buildFormHeader -> end")
         buildFormBody(promotionObject.promotionCondition);
     }
 
     function buildFormBody(promotionCondition) {
-        console.log("buildFormBody -> start")
+        // console.log("buildFormBody -> start")
 
         $optionCondition.children().remove();
         switch (promotionCondition) {
@@ -419,12 +418,12 @@
             default:
                 $promotionCondition.focus();
         }
-        console.log("buildFormBody -> end")
+        // console.log("buildFormBody -> end")
         fillInputs(promotionObject);
     }
 
     function fillInputs(promotion) {
-        console.log("fillInputs -> start")
+        // console.log("fillInputs -> start")
         $.fn.select2.defaults.set("language", "uk");
 
         $('#name').val(promotion.name);
@@ -544,7 +543,7 @@
                         };
                     },
                     processResults: function (response) {
-                        console.log(response)
+                        // console.log(response)
                         return {
                             results: $.map(response.content, function (product) {
                                 return {
@@ -582,7 +581,7 @@
                         };
                     },
                     processResults: function (response) {
-                        console.log(response)
+                        // console.log(response)
                         return {
                             results: $.map(response.content, function (product) {
                                 return {
@@ -611,7 +610,7 @@
         $description.val(promotion.description);
 
         if (promotion.photo) $("#photo").attr("src", '../../../uploads/' + promotion.photo);
-        console.log("fillInputs -> end")
+        // console.log("fillInputs -> end")
     }
 
     function getPromotionTypeLabelByName(promotionType) {
@@ -695,11 +694,6 @@
             formData.set("activateOnCode", 'false');
         }
 
-
-        // for (const dat of formData.entries()) {
-        //     console.log(dat)
-        // }
-
         const postPath = promotionId ? 'update-promotion' : 'add-promotion'
         $.ajax({
             type: "POST",
@@ -716,7 +710,6 @@
                 autoCloseAlert();
             },
             error: function (error) {
-                console.log('error')
                 const errors = error.responseJSON;
                 for (let error of errors) {
                     $(document).find("select[name='" + error.field + "'], input[name='" + error.field + "']").addClass("is-invalid").parent().append($(

@@ -236,12 +236,10 @@
         getOrdersByFilter(0);
     });
     $('#filter-by-date').on('change', function () {
-        console.log("filter date")
         byDate = this.value;
         getOrdersByFilter(0);
     })
     $('#filter-by-status').on('change', function () {
-        console.log('filter status')
         byStatus = this.value;
         getOrdersByFilter(0);
     })
@@ -251,14 +249,12 @@
         if (searchText) getUrl += '&search=' + searchText;
         if (byDate) getUrl += '&date=' + byDate;
         if (byStatus) getUrl += '&status=' + byStatus;
-        console.log(getUrl)
 
         $.ajax({
             type: 'GET',
             url: getUrl,
             dataType: 'JSON',
             success: function (result) {
-                console.log(result)
                 clearTableLine();
                 drawTable(result, page)
             }
@@ -273,7 +269,6 @@
             url: getUrl,
             dataType: 'JSON',
             success: function (result) {
-                console.log(result)
                 clearTableLine();
                 drawTable(result, page)
             }

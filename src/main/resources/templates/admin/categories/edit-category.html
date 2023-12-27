@@ -212,7 +212,6 @@
         const fullPath = window.location.pathname;
         const mainCategoryId = Number(fullPath.substring(fullPath.lastIndexOf('/') + 1, fullPath.length));
         if (mainCategoryId) {
-            console.log(mainCategoryId);
             $.ajax({
                 type: "GET",
                 url: '../category/' + mainCategoryId,
@@ -228,7 +227,6 @@
                     $("#previewIconName").attr("value", result.previewIcon);
                 },
                 error: function (error) {
-                    console.log(error)
                 }
             });
 
@@ -237,7 +235,6 @@
                 url: '../getSubcategoriesByMain/' + mainCategoryId,
                 dataType: 'JSON',
                 success: function (listSubcategories) {
-                    console.log(listSubcategories);
 
                     if (listSubcategories.length > 0) {
                         $(".subcategory-items").children().remove();
@@ -319,7 +316,6 @@
                     'Категорія успішно не оновленна :)' +
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
                     '</div>').appendTo(".content-wrapper");
-                console.log("Ups: ->" + error);
             }
         })
     });
@@ -333,11 +329,9 @@
                 method: 'DELETE',
                 url: '../delete-image/' + filename,
                 success: function (response) {
-                    console.log(response);
                     $("#previewIconName").removeAttr("value");
                 },
                 error: function (response) {
-                    console.log(response);
                 }
             })
         }

@@ -187,7 +187,6 @@
             url: 'promotions/getPromotions?page=' + page,
             dataType: 'JSON',
             success: function (result) {
-                console.log(result)
                 clearTableLine();
                 drawTable(result, page)
             }

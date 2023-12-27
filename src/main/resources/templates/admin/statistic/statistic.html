@@ -213,7 +213,6 @@
                     '      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>\n' +
                     '    </div>' +
                     '  </div>').appendTo('.content-wrapper');
-                console.log(error);
             }
         });
 
@@ -411,7 +410,6 @@
                 drawPopularCategory(response);
             },
             error: function (error) {
-                console.log(error);
                 $('<div class="bs-toast toast fade show" role="alert" aria-live="assertive" aria-atomic="true" ' +
                     'style="position: absolute; top: 3rem; right: 1.5rem">\n' +
                     '    <div class="toast-body d-flex flex-row justify-content-between">\n' +

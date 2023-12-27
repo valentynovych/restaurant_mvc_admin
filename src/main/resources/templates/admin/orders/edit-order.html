@@ -557,8 +557,8 @@
 
     function drawProductsTable(order) {
         $('tbody').children().remove();
-        console.log('drawProductsTable -> ')
-        console.log(order)
+        // console.log('drawProductsTable -> ')
+        // console.log(order)
 
         for (let item of order.orderItems) {
             let productName = item.product.name;
@@ -804,12 +804,12 @@
 
     $('#save-new-promotion').on('click', function () {
         const newPromotion = $newPromotion.select2('data')[0];
-        console.log(newPromotion);
+        // console.log(newPromotion);
         order.usedPromotion.push({
             id: newPromotion.id,
             name: newPromotion.text
         });
-        console.log(order.usedPromotion)
+        // console.log(order.usedPromotion)
 
         $('#modal-add-promotion').find('.btn-close').click();
         $('#save-order').click();
@@ -851,7 +851,7 @@
                     '</div>').appendTo(".content-wrapper");
                 autoCloseAlert();
                 order = response;
-                console.log(order);
+                // console.log(order);
             },
             error: function (error) {
                 $('#modal-add-orderItem').find('button.btn-close').click();
@@ -867,7 +867,7 @@
         const newAdditional = $('#additionalIngredients').select2('data');
 
         var orderItem = order.orderItems.find(x => x.id === Number(orderItemId));
-        console.log(orderItem)
+        // console.log(orderItem)
 
         var newOrderItem = {
             id: orderItemId,
@@ -943,7 +943,6 @@
             },
             error: function (error) {
                 $('#modal-change-product').find('button.btn-close').click();
-                // console.log(error)
             }
 
         })
@@ -955,7 +954,6 @@
         $('.is-invalid').removeClass('is-invalid');
 
         for (const dat of formData.entries()) {
-            // console.log(dat)
         }
         formData.append('address.id', order.address ? order.address.id : '')
         const val = $('#fullName').val().split(' ');
@@ -982,7 +980,6 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                console.log(response)
                 fillInputs(response)
                 $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
                     'Оновлення успішне !' +
@@ -1013,8 +1010,6 @@
     }
 
     function deleteOrderItem(orderItemId) {
-
-        // console.log(orderItemId)
         $('#modal-delete-product').find('.btn-close').click();
 
 

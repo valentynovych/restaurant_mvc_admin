@@ -183,7 +183,7 @@ public class ProductService {
             }
             Product product = productRepo.findById(productId).orElseThrow();
 
-            if (!product.getPhoto().isEmpty()) {
+            if (product.getPhoto() != null && !product.getPhoto().isEmpty()) {
                 fileUtil.deleteUploadFile(product.getPhoto());
             }
             productRepo.delete(product);

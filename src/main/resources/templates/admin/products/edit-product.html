@@ -397,7 +397,6 @@
         url: '../getProduct/' + productId,
         dataType: "JSON",
         success: function (response) {
-            console.log(response);
             product = response;
             fillInputs(product);
         },
@@ -425,7 +424,6 @@
 
     function fillProductInputs(product) {
         $.fn.select2.defaults.set("language", "uk");
-        console.log(product)
 
         $('#isActive').prop("checked", product.isActive);
         $('#productId').val(product.productId);
@@ -586,7 +584,6 @@
                     };
                 },
                 processResults: function (response) {
-                    console.log(response)
                     return {
                         results: $.map(response.content, function (prom) {
                             if (prom) return {
@@ -607,7 +604,6 @@
     }
 
     function fillIngredientInputs(product) {
-        console.log(product)
         $.fn.select2.defaults.set("language", "uk");
         $('#isActiveI').prop("checked", product.isActive);
         $('#productIdI').val(product.productId);
@@ -662,7 +658,6 @@
                 type: "GET",
                 url: '../getIngredientCategories',
                 processResults: function (response) {
-                    console.log(response)
                     return {
                         results: $.map(response, function (cat) {
                             return {
@@ -700,7 +695,6 @@
                     };
                 },
                 processResults: function (response) {
-                    console.log(response)
                     return {
                         results: $.map(response.content, function (cat) {
                             return {
@@ -743,9 +737,6 @@
             formData.set("promotionIsActive", 'true');
         } else {
             formData.set("promotionIsActive", 'false');
-        }
-        for (const dat of formData.entries()) {
-            console.log(dat)
         }
 
         $.ajax({

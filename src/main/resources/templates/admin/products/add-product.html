@@ -366,7 +366,6 @@
     });
 
     function fillInputs(product) {
-        console.log(product)
 
         if (product.isIngredient === true) {
             $('#productForm').css('display', 'none')
@@ -503,7 +502,6 @@
                     };
                 },
                 processResults: function (response) {
-                    console.log(response)
                     return {
                         results: $.map(response.content, function (prom) {
                             if (prom) return {
@@ -568,7 +566,6 @@
                 type: "GET",
                 url: 'getIngredientCategories',
                 processResults: function (response) {
-                    console.log(response)
                     return {
                         results: $.map(response, function (cat) {
                             return {
@@ -595,7 +592,7 @@
                     };
                 },
                 processResults: function (response) {
-                    console.log(response)
+
                     return {
                         results: $.map(response.content, function (cat) {
                             return {
@@ -636,9 +633,6 @@
             formData.set("promotionIsActive", 'true');
         } else {
             formData.set("promotionIsActive", 'false');
-        }
-        for (const dat of formData.entries()) {
-            console.log(dat)
         }
 
         $.ajax({
