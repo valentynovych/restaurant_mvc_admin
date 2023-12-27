@@ -32,8 +32,10 @@ public class Promotion {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Subcategory subcategory;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private MainCategory forCategory;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Product forProduct;
     @ManyToOne
     private Product giftProduct;
