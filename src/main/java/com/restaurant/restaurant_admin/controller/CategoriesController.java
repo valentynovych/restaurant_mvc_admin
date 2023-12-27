@@ -108,5 +108,14 @@ public class CategoriesController {
         fileUtil.deleteUploadFile(filename);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("delete-subcategory/{subcategoryId}")
+    public @ResponseBody ResponseEntity<?> deleteSubcategoryById(@PathVariable Long subcategoryId) {
+        boolean isDeleted = subcategoryService.deleteSubcategoryById(subcategoryId);
+        if (isDeleted) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }
 

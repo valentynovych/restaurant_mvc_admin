@@ -12,6 +12,7 @@ import com.restaurant.restaurant_admin.utils.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -32,7 +33,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 @Log4j2
 public class StaffService implements UserDetailsService {
 
@@ -41,6 +41,12 @@ public class StaffService implements UserDetailsService {
     private final StaffRepo staffRepo;
     private final UploadFileUtil fileUtil;
     private final PasswordEncoder passwordEncoder;
+
+    public StaffService(StaffRepo staffRepo, UploadFileUtil fileUtil, @Lazy PasswordEncoder passwordEncoder) {
+        this.staffRepo = staffRepo;
+        this.fileUtil = fileUtil;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public Page<StaffResponse> getStaffOnPage(int page, int pageSize) {
         log.info("method getStaffOnPage -> start get staffOnPage, page: " + page + " , pageSize: " + pageSize);

@@ -178,7 +178,7 @@
 <div class="drag-target"></div>
 <!-- / Layout wrapper -->
 <script th:inline="javascript">
-    let src = /*[[@{/assets/img/placeholder-image.png}]]*/;
+    let src = /*[[@{/assets/img/placeholder-image.png}]]*/ 'default';
     window.onload = function () {
         var images = document.querySelectorAll("img");
         for (var i = 0; i < images.length; i++) {
@@ -244,12 +244,14 @@
                     }
 
                     for (let i = 0; i < listSubcategories.length; i++) {
-                        const closeButton = i === 0 ? '' : '<button type="button" class="btn btn-close delete-subcategory" onclick="removeSubcategory(this)" style="position: absolute; top: 0.5rem; right: -1rem"></button>';
+                        const closeButton = i === 0 ? '' : '<button type="button" class="btn btn-close delete-subcategory" ' +
+                            'onclick="removeSubcategory(this)" style="position: absolute; top: 0.5rem; right: -1rem"></button>';
                         $('<div class="mb-2 subcategory-item" style="position: relative">\n' +
                             '<label class="form-label">Назва підкатегорії</label>\n' +
                             '<input type="text" class="form-control" name="subcategories[' + i + '].subcategoryName"\n' +
                             'placeholder="Назва підкатегорії" value="' + listSubcategories[i].subcategoryName + '"/>\n' +
-                            '<input type="hidden" class="subcategory-id" name="subcategories[' + i + '].subcategoryId" value="' + listSubcategories[i].subcategoryId + '">\n' +
+                            '<input type="hidden" class="subcategory-id" name="subcategories[' + i + '].subcategoryId" ' +
+                            'value="' + listSubcategories[i].subcategoryId + '">\n' +
                             closeButton + '</div>').appendTo(".subcategory-items");
                     }
                 }
@@ -258,7 +260,26 @@
     }
 
     function removeSubcategory(el) {
-        $(el).parent().remove();
+        var $parent = $(el).parent();
+        var subcategoryId = $($parent).find('input[type=hidden]').val();
+        $.ajax({
+            type: "DELETE",
+            url: '../delete-subcategory/' + subcategoryId,
+            success: function () {
+                $('<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Підкатегорія успішно видалена !' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper");
+                $parent.remove();
+            },
+            error: function () {
+                $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
+                    'Помилка під час видалення :)' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                    '</div>').appendTo(".content-wrapper");
+            }
+        });
+
     }
 
     $("#post-form").on("click", function () {
@@ -286,10 +307,8 @@
                     'Категорія успішно оновленна !' +
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
                     '</div>').appendTo(".content-wrapper");
-                console.log(response);
             },
             error: function (error) {
-                console.log(error)
                 const errors = error.responseJSON;
                 for (let error of errors) {
                     $("input[name='"+ error.field +"']").addClass("is-invalid").after($(

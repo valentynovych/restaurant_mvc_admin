@@ -45,4 +45,14 @@ public class SubcategoryService {
         log.info("getSubcategories() -> exit");
         return subcategoryDTOPage;
     }
+
+    public boolean deleteSubcategoryById(Long subcategoryId) {
+        if (subcategoryId != null) {
+            if (subcategoryRepo.existsById(subcategoryId)) {
+                subcategoryRepo.deleteById(subcategoryId);
+                return true;
+            }
+        }
+        return false;
+    }
 }

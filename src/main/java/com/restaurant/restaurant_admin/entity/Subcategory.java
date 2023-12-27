@@ -17,4 +17,6 @@ public class Subcategory {
     private MainCategory parentCategory;
     @OneToMany(mappedBy = "subcategory")
     private List<Product> products;
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Promotion> promotions;
 }

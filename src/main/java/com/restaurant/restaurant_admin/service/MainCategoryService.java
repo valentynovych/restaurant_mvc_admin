@@ -73,6 +73,8 @@ public class MainCategoryService {
         MainCategory mainCategory = MainCategoryMapper.MAPPER.mainCategoryDtoToMainCategory(mainCategoryDTO);
         mainCategory.setDateOfCreate(new Date());
         mainCategory.setCountChildProduct(0);
+        mainCategory.getSubcategories()
+                .forEach(subcategory -> subcategory.setParentCategory(mainCategory));
 
         if (previewIconFile != null && !previewIconFile.isEmpty()) {
             log.info("method updateMainCategory -> start update previewIcon on entity");

@@ -4,6 +4,8 @@ import com.restaurant.restaurant_admin.entity.enums.PromotionCondition;
 import com.restaurant.restaurant_admin.entity.enums.PromotionType;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
@@ -27,6 +29,7 @@ public class Promotion {
     @Column(nullable = false)
     private PromotionType promotionType;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Subcategory subcategory;
     @ManyToOne
     private MainCategory forCategory;
