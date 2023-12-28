@@ -8,22 +8,23 @@ jobs:
   build-deploy:
     name: Build and Deploy spring boot application
     runs-on: ubuntu-latest
-#    services:
-#      mysql-master:
-#        image: mysql:8.2
-#        ports:
-#          - 3306/tcp
-#        env:
+    services:
+      mysql-master:
+        image: mysql:8.2.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: avada_slj_retl02
+          MYSQL_ROOT_PASSWORD: GKoTVw1cVs
 #          MYSQL_DATABASE: avada_slj_retl02
 #          MYSQL_USER: avada_slj_retl02
 #          MYSQL_PASSWORD: GKoTVw1cVs
-#          MYSQL_HOST: localhost
 #          MYSQL_ROOT_PASSWORD: GKoTVw1cVs
-#        options: >-
-#          --name=localhost
-#          --health-cmd="mysqladmin ping"
-#          --health-timeout=5s
-#          --health-retries=3
+        options:
+          --name=localhost
+          --health-cmd="mysqladmin ping"
+          --health-timeout=5s
+          --health-retries=3
 
     steps:
       - name: Checkout code
@@ -35,18 +36,23 @@ jobs:
           distribution: 'corretto'
           java-version: 19
 
-      - name: Set up Database
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          host port: 3306
-          container port: 3307
-          mysql version: '8.2.0'
-          mysql database: 'avada_slj_retl02'
-          mysql root password: GKoTVw1cVs # Required if "mysql user" is empty, default is empty. The root superuser password
-          mysql user: 'avada_slj_retl02' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
-          mysql password: GKoTVw1cVs # Required if "mysql user" exists. The password for the "mysql user"
+#      - name: Set up Database
+#        uses: mirromutth/mysql-action@v1.1
+#        with:
+#          host port: 3306
+#          container port: 3307
+#          mysql version: '8.2.0'
+#          mysql database: 'avada_slj_retl02'
+#          mysql root password: GKoTVw1cVs
+#          mysql user: 'avada_slj_retl02'
+#          mysql password: GKoTVw1cVs
 
       - name: Unit Tests
+        env:
+          DATABASE_NAME: avada_slj_retl02
+          DATABASE_USERNAME: avada_slj_retl02
+          DATABASE_PASSWORD: GKoTVw1cVs
+          DATABASE_ENDPOINT: 127.0.0.1
         run: mvn -B test --file pom.xml
 
       - name: Build application
