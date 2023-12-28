@@ -4,9 +4,9 @@ server:
     context-path: /Restaurant_Admin_O_Lesyk
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/restaurant?createDatabaseIfNotExist=true
-    username: root
-    password: root
+    url: jdbc:mysql://localhost:3306/avada_slj_retl02?createDatabaseIfNotExist=true
+    username: avada_slj_retl02
+    password: G03Hxdk0EU
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     properties:

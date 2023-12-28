@@ -19,10 +19,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SubcategoryServiceTest {
@@ -79,7 +77,26 @@ class SubcategoryServiceTest {
             assertEquals(subcategory.getId(), subcategoryDTO.getSubcategoryId());
             assertEquals(subcategory.getSubcategoryName(), subcategoryDTO.getSubcategoryName());
         }
+    }
 
+    @Test
+    void deleteSubcategoryById_Success() {
+        Subcategory subcategory = new Subcategory();
+        subcategory.setId(1L);
 
+        when(subcategoryRepo.existsById(subcategory.getId())).thenReturn(true);
+        boolean isDeleted = subcategoryService.deleteSubcategoryById(subcategory.getId());
+        assertTrue(isDeleted);
+        verify(subcategoryRepo).deleteById(subcategory.getId());
+    }
+
+    @Test
+    void deleteSubcategoryById_ErrorDeleting() {
+        Subcategory subcategory = new Subcategory();
+        subcategory.setId(1L);
+
+        when(subcategoryRepo.existsById(subcategory.getId())).thenReturn(false);
+        boolean isDeleted = subcategoryService.deleteSubcategoryById(subcategory.getId());
+        assertFalse(isDeleted);
     }
 }

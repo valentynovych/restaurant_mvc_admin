@@ -49,6 +49,7 @@ class MainCategoryServiceTest {
         mainCategory.setDateOfCreate(new Date());
         mainCategory.setIsActive(Boolean.TRUE);
         mainCategories = new ArrayList<>();
+        mainCategory.setSubcategories(new ArrayList<>());
 
         for (int i = 0; i < 10; i++) {
             MainCategory category = new MainCategory();
@@ -134,7 +135,8 @@ class MainCategoryServiceTest {
     void createMainCategory_ifCategoryWithFileAndIOException() throws IOException {
         when(fileUtil.saveImage(any(MultipartFile.class))).thenThrow(IOException.class);
         MainCategoryDTO mainCategoryDTO = MainCategoryMapper.MAPPER.mainCategoryToMainCategoryDto(mainCategory);
-        MultipartFile file = new MockMultipartFile("image", "This is content on new file for test".getBytes());
+        MultipartFile file = new MockMultipartFile(
+                "image", "image","image/png", "This is content on new file for test".getBytes());
         assertThrows(RuntimeException.class, () -> categoryService.createMainCategory(mainCategoryDTO, file));
     }
 
