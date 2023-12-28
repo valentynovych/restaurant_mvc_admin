@@ -26,15 +26,18 @@ jobs:
       - name: Set up MySQL 8.2.0
         uses: mirromutth/mysql-action@master
         with:
-          host port: 3306
-          container port: 3307
+#          host port: 3306
+#          container port: 3307
           mysql version: 8.2.0
           mysql database: 'avada_slj_retl02'
           mysql root password: root
           mysql user: 'avada_slj_retl02'
           mysql password: GKoTVw1cVs
 
-      - name: Build with Maven
+      - name: Wait for MySQL
+        run: sleep 15
+
+      - name: Maven clean / install
         run: mvn clean install
 
       - name: Run tests with Maven
