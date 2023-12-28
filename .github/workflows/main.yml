@@ -24,25 +24,38 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - uses: actions/checkout@v1
+      - name: Shutdown Ubuntu MySQL (SUDO)
+        run: sudo service mysql stop
+
       - name: Setup Java 19
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
           java-version: '19'
 
+      - name: Set up MySQL 8.2.0
+        uses: mirromutth/mysql-action@master
+        with:
+          mysql version: 8.2.0
+          mysql database: avada_slj_retl02
+          mysql root password: root
+          mysql user: avada_slj_retl02
+          mysql user password: GKoTVw1cVs
+
       - name: Build with Maven
         run: mvn clean install
 
-#      - name: Start MySQL
-#        run: |
-#          sudo /etc/init.d/mysql start
-#          mysql -e "CREATE DATABASE IF NOT EXISTS avada_slj_retl02;" -u root -proot
-#
-#      - name: Grant privileges and flush
-#        run: |
-#          mysql -u root -proot -e "SHOW GRANTS FOR root@localhost;"
-#          mysql -u root -proot -e "GRANT ALL PRIVILEGES ON avada_slj_retl02.* TO 'avada_slj_retl02'@'127.0.0.1';"
-#          mysql -u root -proot -e "FLUSH PRIVILEGES;"
+      - name: Start MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e "CREATE DATABASE IF NOT EXISTS avada_slj_retl02;" -u root -proot
+
+      - name: Grant privileges and flush
+        run: |
+          mysql -u root -proot -e "SHOW GRANTS FOR root@localhost;"
+          mysql -u root -proot -e "GRANT ALL PRIVILEGES ON avada_slj_retl02.* TO 'avada_slj_retl02'@'127.0.0.1';"
+          mysql -u root -proot -e "FLUSH PRIVILEGES;"
 
       - name: Run tests with Maven
         run: mvn test
