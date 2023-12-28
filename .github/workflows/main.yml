@@ -8,22 +8,22 @@ jobs:
   build-deploy:
     name: Build and Deploy spring boot application
     runs-on: ubuntu-latest
-    services:
-      mysql-master:
-        image: mysql:8.2
-        ports:
-          - 3306/tcp
-        env:
-          MYSQL_DATABASE: avada_slj_retl02
-          MYSQL_USER: avada_slj_retl02
-          MYSQL_PASSWORD: GKoTVw1cVs
-          MYSQL_HOST: localhost
-          MYSQL_ROOT_PASSWORD: GKoTVw1cVs
-        options: >-
-          --name=localhost
-          --health-cmd="mysqladmin ping"
-          --health-timeout=5s
-          --health-retries=3
+#    services:
+#      mysql-master:
+#        image: mysql:8.2
+#        ports:
+#          - 3306/tcp
+#        env:
+#          MYSQL_DATABASE: avada_slj_retl02
+#          MYSQL_USER: avada_slj_retl02
+#          MYSQL_PASSWORD: GKoTVw1cVs
+#          MYSQL_HOST: localhost
+#          MYSQL_ROOT_PASSWORD: GKoTVw1cVs
+#        options: >-
+#          --name=localhost
+#          --health-cmd="mysqladmin ping"
+#          --health-timeout=5s
+#          --health-retries=3
 
     steps:
       - name: Checkout code
@@ -34,6 +34,15 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: 19
+
+      - name: Set up Database
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql version: '8.2.0' # Optional, default value is "latest". The version of the MySQL
+          mysql database: 'avada_slj_retl02' # Optional, default value is "test". The specified database which will be create
+          mysql root password: GKoTVw1cVs # Required if "mysql user" is empty, default is empty. The root superuser password
+          mysql user: 'avada_slj_retl02' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+          mysql password: GKoTVw1cVs # Required if "mysql user" exists. The password for the "mysql user"
 
       - name: Unit Tests
         run: mvn -B test --file pom.xml
