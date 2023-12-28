@@ -41,7 +41,7 @@ jobs:
           mysql database: avada_slj_retl02
           mysql root password: root
           mysql user: avada_slj_retl02
-          mysql user password: GKoTVw1cVs
+          mysql password: GKoTVw1cVs
 
 #      - name: Start MySQL
 #        run: |
