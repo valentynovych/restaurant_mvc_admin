@@ -16,15 +16,7 @@ jobs:
         env:
           MYSQL_DATABASE: avada_slj_retl02
           MYSQL_ROOT_PASSWORD: GKoTVw1cVs
-#          MYSQL_DATABASE: avada_slj_retl02
-#          MYSQL_USER: avada_slj_retl02
-#          MYSQL_PASSWORD: GKoTVw1cVs
-#          MYSQL_ROOT_PASSWORD: GKoTVw1cVs
-        options:
-          --name=localhost
-          --health-cmd="mysqladmin ping"
-          --health-timeout=5s
-          --health-retries=3
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout code
@@ -36,23 +28,12 @@ jobs:
           distribution: 'corretto'
           java-version: 19
 
-#      - name: Set up Database
-#        uses: mirromutth/mysql-action@v1.1
-#        with:
-#          host port: 3306
-#          container port: 3307
-#          mysql version: '8.2.0'
-#          mysql database: 'avada_slj_retl02'
-#          mysql root password: GKoTVw1cVs
-#          mysql user: 'avada_slj_retl02'
-#          mysql password: GKoTVw1cVs
-
       - name: Unit Tests
         env:
           DATABASE_NAME: avada_slj_retl02
           DATABASE_USERNAME: avada_slj_retl02
           DATABASE_PASSWORD: GKoTVw1cVs
-          DATABASE_ENDPOINT: 127.0.0.1
+#          DATABASE_ENDPOINT: 127.0.0.1
         run: mvn -B test --file pom.xml
 
       - name: Build application
