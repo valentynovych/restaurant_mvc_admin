@@ -8,17 +8,6 @@ jobs:
   build-and-deploy:
     name: Build and Deploy spring boot application
     runs-on: ubuntu-latest
-#    services:
-#      mysql-master:
-#        image: mysql:8.2.0
-#        ports:
-#          - 3306:3306
-#        env:
-#          MYSQL_DATABASE: avada_slj_retl02
-#          MYSQL_ROOT_PASSWORD: root
-#          DATABASE_USERNAME: avada_slj_retl02
-#          DATABASE_PASSWORD: GKoTVw1cVs
-#        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout code
@@ -37,22 +26,13 @@ jobs:
       - name: Set up MySQL 8.2.0
         uses: mirromutth/mysql-action@master
         with:
+          host port: 3307
+          container port: 3306
           mysql version: 8.2.0
-          mysql database: avada_slj_retl02
+          mysql database: 'avada_slj_retl02'
           mysql root password: root
-          mysql user: avada_slj_retl02
+          mysql user: 'avada_slj_retl02'
           mysql password: GKoTVw1cVs
-
-#      - name: Start MySQL
-#        run: |
-#          sudo /etc/init.d/mysql start
-#          mysql -e "CREATE DATABASE IF NOT EXISTS avada_slj_retl02;" -u root -proot
-#
-#      - name: Grant privileges and flush
-#        run: |
-#          mysql -u root -proot -e "SHOW GRANTS FOR root@localhost;"
-#          mysql -u root -proot -e "GRANT ALL PRIVILEGES ON avada_slj_retl02.* TO 'avada_slj_retl02'@'127.0.0.1';"
-#          mysql -u root -proot -e "FLUSH PRIVILEGES;"
 
       - name: Build with Maven
         run: mvn clean install
