@@ -38,8 +38,10 @@ jobs:
       - name: Set up Database
         uses: mirromutth/mysql-action@v1.1
         with:
-          mysql version: '8.2.0' # Optional, default value is "latest". The version of the MySQL
-          mysql database: 'avada_slj_retl02' # Optional, default value is "test". The specified database which will be create
+          host port: 3306
+          container port: 3307
+          mysql version: '8.2.0'
+          mysql database: 'avada_slj_retl02'
           mysql root password: GKoTVw1cVs # Required if "mysql user" is empty, default is empty. The root superuser password
           mysql user: 'avada_slj_retl02' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
           mysql password: GKoTVw1cVs # Required if "mysql user" exists. The password for the "mysql user"
