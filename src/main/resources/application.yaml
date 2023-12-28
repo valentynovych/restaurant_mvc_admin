@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/avada_slj_retl02?createDatabaseIfNotExist=true
     username: avada_slj_retl02
-    password: G03Hxdk0EU
+    password: GKoTVw1cVs
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     properties:
