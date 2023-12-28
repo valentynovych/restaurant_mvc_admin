@@ -16,6 +16,8 @@ jobs:
         env:
           MYSQL_DATABASE: avada_slj_retl02
           MYSQL_ROOT_PASSWORD: root
+          DATABASE_USERNAME: avada_slj_retl02
+          DATABASE_PASSWORD: GKoTVw1cVs
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -34,14 +36,14 @@ jobs:
 
       - name: Grant privileges and flush
         run: |
-          mysql -u root -proot -e "GRANT ALL PRIVILEGES ON avada_slj_retl02.* TO 'avada_slj_retl02'@'%';"
+          mysql -u root -proot -e "GRANT ALL PRIVILEGES ON avada_slj_retl02.* TO 'avada_slj_retl02'@'172.18.0.1';"
           mysql -u root -proot -e "FLUSH PRIVILEGES;"
 
       - name: Unit Tests
         env:
           DATABASE_NAME: avada_slj_retl02
-          DATABASE_USERNAME: avada_slj_retl02
           DATABASE_PASSWORD: GKoTVw1cVs
+          DATABASE_USERNAME: avada_slj_retl02
           DATABASE_ENDPOINT: 127.0.0.1
         run: mvn -B test --file pom.xml
 
