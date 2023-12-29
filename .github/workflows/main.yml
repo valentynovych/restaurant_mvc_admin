@@ -8,8 +8,20 @@ jobs:
   build-and-deploy:
     name: Build and Deploy spring boot application
     runs-on: ubuntu-latest
-
+    services:
+      mysql:
+        image: mysql:8.2.0
+        env:
+          MYSQL_ROOT_PASSWORD: GKoTVw1cVs
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
+      - name: Verify MySQL connection from host
+        run: |
+          sudo apt-get install -y mysql-client
+          mysql --host 127.0.0.1 --port 3306 -uroot -pGKoTVw1cVs -e "SHOW DATABASES"
+
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -23,17 +35,17 @@ jobs:
           distribution: 'temurin'
           java-version: '19'
 
-      - name: Set up MySQL 8.2.0
-        uses: mirromutth/mysql-action@master
-        with:
-          mysql version: 8.2.0
-          mysql database: 'avada_slj_retl02'
-          mysql root password: root
-          mysql user: 'avada_slj_retl02'
-          mysql password: GKoTVw1cVs
+#      - name: Set up MySQL 8.2.0
+#        uses: mirromutth/mysql-action@master
+#        with:
+#          mysql version: 8.2.0
+#          mysql database: 'avada_slj_retl02'
+#          mysql root password: root
+#          mysql user: 'avada_slj_retl02'
+#          mysql password: GKoTVw1cVs
 
-      - name: Startup Ubuntu MySQL (SUDO)
-        run: sudo service mysql start
+#      - name: Startup Ubuntu MySQL (SUDO)
+#        run: sudo service mysql start
 
       - name: Wait for MySQL
         run: sleep 15
