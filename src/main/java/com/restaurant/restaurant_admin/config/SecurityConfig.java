@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +23,7 @@ import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 public class SecurityConfig {
 
     private final StaffService staffService;
+    private final HandlerMappingIntrospector introspector;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,9 +32,9 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/admin/staff/**").hasRole("ADMIN")
-                                .requestMatchers("/admin/auth/**").permitAll()
-                                .requestMatchers("/assets/**").permitAll()
+                                .requestMatchers(mvc().pattern("/admin/staff/**")).hasRole("ADMIN")
+                                .requestMatchers(mvc().pattern("/admin/auth/**")).permitAll()
+                                .requestMatchers(mvc().pattern("/assets/**")).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -74,5 +76,10 @@ public class SecurityConfig {
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return new CustomAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    MvcRequestMatcher.Builder mvc() {
+        return new MvcRequestMatcher.Builder(introspector);
     }
 }
