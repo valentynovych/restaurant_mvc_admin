@@ -37,16 +37,13 @@ jobs:
       - name: Wait for MySQL
         run: sleep 15
 
-      - name: Maven clean / install
-        run: mvn clean install
-
       - name: Run tests with Maven
         run: mvn test
 
       - name: Build application
         run: |
           mvn clean
-          mvn -B package --file pom.xml
+          mvn package
 
       - name: Tomcat Deploy
         run: curl -v -u robot:K4QU@mJ!djX4D8X2 -T /home/runner/work/restaurant_mvc_admin/restaurant_mvc_admin/target/Restaurant_Admin_O_Lesyk.war 'https://slj.avada-media-dev1.od.ua/manager/text/deploy?path=/Restaurant_Admin_O_Lesyk&update=true'
