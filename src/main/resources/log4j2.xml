@@ -24,13 +24,13 @@
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
         </Root>
-<!--        <Logger name="org.hibernate.SQL" level="debug" additivity="false">-->
-<!--            <AppenderRef ref="Console"/>-->
-<!--            <AppenderRef ref="File"/>-->
-<!--        </Logger>-->
-<!--        <Logger name="serviceLogger" level="info" additivity="false">-->
-<!--            <AppenderRef ref="Console"/>-->
-<!--            <AppenderRef ref="File"/>-->
-<!--        </Logger>-->
+        <Logger name="org.hibernate.SQL" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Logger>
+        <Logger name="serviceLogger" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Logger>
     </Loggers>
 </Configuration>
