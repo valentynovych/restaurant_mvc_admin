@@ -33,7 +33,7 @@ public class SecurityConfig {
                                 .requestMatchers("/admin/**").authenticated()
                                 .requestMatchers("/admin/staff/**").hasRole("ADMIN")
                                 .requestMatchers("/admin/auth/**").permitAll()
-                                .anyRequest().permitAll()
+                                .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/admin/auth/login")
