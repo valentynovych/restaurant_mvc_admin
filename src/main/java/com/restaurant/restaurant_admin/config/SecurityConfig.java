@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -26,17 +27,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth
+                                .requestMatchers("/admin/**").authenticated()
                                 .requestMatchers("/admin/staff/**").hasRole("ADMIN")
                                 .requestMatchers("/admin/auth/**").permitAll()
-                                .requestMatchers("/admin/**").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/admin/auth/login")
                         .permitAll()
-                        .successHandler(new CustomAuthenticationSuccessHandler())
+                        .successHandler(authenticationSuccessHandler())
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -67,5 +69,10 @@ public class SecurityConfig {
         authenticationProvider.setUserDetailsService(staffService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
     }
 }
