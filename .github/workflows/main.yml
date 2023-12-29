@@ -36,7 +36,10 @@ jobs:
         run: sleep 15
 
       - name: Create logs package
-        run: mkdir /home/avada/web/slj.avada-media-dev1.od.ua/projects/Lesyk/Restaurant_admin/logs
+        run: |
+          mkdir -p /home/avada/web/slj.avada-media-dev1.od.ua/projects/Lesyk/Restaurant_admin/logs 
+          && cp -R dist /home/avada/web/slj.avada-media-dev1.od.ua/projects/Lesyk/Restaurant_admin/logs
+          ls myNewFolder/MyNewSubFolder 
 
       - name: Maven clean / install
         run: mvn clean install
