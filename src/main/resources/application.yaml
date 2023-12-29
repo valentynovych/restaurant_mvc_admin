@@ -18,4 +18,4 @@ logging:
       hibernate: error
 
 upload:
-  path: /D:/SpaceLab/restaurant_mvc_admin/uploads
+  path: /home/avada/web/slj.avada-media-dev1.od.ua/projects/Lesyk/Restaurant_admin/uploads
