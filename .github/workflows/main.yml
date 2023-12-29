@@ -37,6 +37,9 @@ jobs:
       - name: Wait for MySQL
         run: sleep 15
 
+      - name: Create logs package
+        run: mkdir /home/avada/web/slj.avada-media-dev1.od.ua/projects/Lesyk/Restaurant_admin/logs
+
       - name: Maven clean / install
         run: mvn clean install
 
