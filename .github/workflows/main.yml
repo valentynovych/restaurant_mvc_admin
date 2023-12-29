@@ -32,14 +32,17 @@ jobs:
           mysql user: 'avada_slj_retl02'
           mysql password: GKoTVw1cVs
 
+      - name: Startup Ubuntu MySQL (SUDO)
+        run: sudo service mysql start
+
       - name: Wait for MySQL
         run: sleep 15
 
-      - name: Create logs package
-        run: |
-          mkdir -p /home/avada/web/slj.avada-media-dev1.od.ua/projects/Lesyk/Restaurant_admin/logs 
-          && cp -R dist /home/avada/web/slj.avada-media-dev1.od.ua/projects/Lesyk/Restaurant_admin/logs
-          ls myNewFolder/MyNewSubFolder 
+#      - name: Create logs package
+#        run: |
+#          mkdir -p /home/avada/web/slj.avada-media-dev1.od.ua/projects/Lesyk/Restaurant_admin/logs
+#          && cp -R dist /home/avada/web/slj.avada-media-dev1.od.ua/projects/Lesyk/Restaurant_admin/logs
+#          ls myNewFolder/MyNewSubFolder
 
       - name: Maven clean / install
         run: mvn clean install
