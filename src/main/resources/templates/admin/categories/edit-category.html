@@ -190,6 +190,8 @@
 </script>
 <script th:inline="javascript">
 
+    var mainCategory;
+
     $('#add-subcategory').on("click", function () {
         const lastSubcategory = $(".subcategory-item").last();
         const item = lastSubcategory.find(".subcategory-id")
@@ -211,13 +213,14 @@
     function getMainCategory() {
         const fullPath = window.location.pathname;
         const mainCategoryId = Number(fullPath.substring(fullPath.lastIndexOf('/') + 1, fullPath.length));
+
         if (mainCategoryId) {
             $.ajax({
                 type: "GET",
                 url: '../category/' + mainCategoryId,
                 dataType: 'JSON',
                 success: function (result) {
-
+                    mainCategory = result;
                     $("#id").attr("value", result.id);
                     $("#category-status").prop("checked", result.isActive);
                     if (result.previewIcon) $("#previewIcon").attr("src", '../../../uploads/' + result.previewIcon);
@@ -291,6 +294,7 @@
         if (!$("#category-status").is(":checked")) {
             formData.set("isActive", 'false');
         }
+        formData.append("countChildProduct", mainCategory.countChildProduct)
 
         $.ajax({
             type: 'POST',
