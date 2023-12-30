@@ -223,7 +223,12 @@
                 return xhr;
             },
             success: function () {
-                window.location = xhr.responseURL;
+                const url = new URL(xhr.responseURL);
+                if (url.host !== 'localhost:8080') {
+                    url.protocol = 'https:'
+                }
+
+                window.location = url.href;
             },
             error: function (error) {
                 const errors = JSON.parse(error.responseText);
