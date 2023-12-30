@@ -30,16 +30,15 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth ->
-                        auth
-                                .requestMatchers(mvc().pattern("/admin/staff/**")).hasRole("ADMIN")
-                                .requestMatchers(mvc().pattern("/admin/auth/**")).permitAll()
-                                .requestMatchers(mvc().pattern("/assets/**")).permitAll()
-                                .anyRequest().authenticated()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(mvc().pattern("/admin/staff/**")).hasRole("ADMIN")
+                        .requestMatchers(mvc().pattern("/admin/auth/**")).permitAll()
+                        .requestMatchers(mvc().pattern("/assets/**")).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/admin/auth/login")
-                        .permitAll()
+                        .loginProcessingUrl("/admin/auth/signin")
                         .successHandler(authenticationSuccessHandler())
                 )
                 .logout(logout -> logout
@@ -49,8 +48,6 @@ public class SecurityConfig {
                         .clearAuthentication(true)
                         .logoutSuccessUrl("/admin/auth/login")
                 );
-//                .sessionManagement(session -> session
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 

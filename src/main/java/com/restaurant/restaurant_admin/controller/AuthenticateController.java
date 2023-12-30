@@ -1,31 +1,22 @@
 package com.restaurant.restaurant_admin.controller;
 
-import com.restaurant.restaurant_admin.config.CustomAuthenticationSuccessHandler;
 import com.restaurant.restaurant_admin.model.StaffLoginRequest;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.io.IOException;
 
 @Controller
 @RequestMapping("/admin/auth")
@@ -33,8 +24,6 @@ import java.io.IOException;
 public class AuthenticateController {
 
     private final AuthenticationManager authManager;
-    private final CustomAuthenticationSuccessHandler successHandler;
-
 
     @GetMapping("/login")
     public ModelAndView showLoginPage() {
@@ -42,13 +31,7 @@ public class AuthenticateController {
     }
 
     @PostMapping("/signin")
-    public @ResponseBody ResponseEntity<?> login(@Valid @ModelAttribute StaffLoginRequest loginRequest,
-                                                 BindingResult result,
-                                                 HttpServletRequest request,
-                                                 HttpServletResponse response) {
-        if (result.hasErrors()) {
-            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
-        }
+    public void login(@Valid @ModelAttribute StaffLoginRequest loginRequest, HttpServletRequest request) {
         Authentication authentication;
         try {
             authentication = authManager
@@ -59,15 +42,13 @@ public class AuthenticateController {
             context.setAuthentication(authentication);
             HttpSession session = request.getSession(true);
             session.setAttribute("SPRING_SECURITY_CONTEXT", context);
-            successHandler.onAuthenticationSuccess(request, response, authentication);
-
+            System.out.println("==========================================================");
+            System.out.println("Login Success");
+            System.out.println("==========================================================");
         } catch (BadCredentialsException e) {
-            result.addError(new FieldError("loginRequest", "password", "Не правильний логін або пароль"));
-            result.addError(new FieldError("loginRequest", "username", ""));
-            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("==========================================================");
+            System.err.println("Login Error");
+            System.err.println("==========================================================");
         }
-        return null;
     }
 }

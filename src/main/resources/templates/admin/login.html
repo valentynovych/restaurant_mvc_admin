@@ -126,14 +126,14 @@
                 <h3 class="mb-2 fw-bold text-center">Restaurant<br/>NomNon Nuw</h3>
                 <p class="mb-4">Увійти до панелі адміністратора</p>
 
-                <form id="loginForm" class="mb-3" onsubmit="sendLoginRequest()">
+                <form id="loginForm" class="mb-3" method="post" th:action="@{/admin/auth/signin}">
                     <div class="mb-3">
                         <label for="username" class="form-label">Email</label>
                         <input
                                 type="text"
                                 class="form-control"
                                 id="username"
-                                name="username"
+                                th:name="username"
                                 placeholder="E-Mail"
                                 autofocus
                         />
@@ -145,7 +145,7 @@
                                     type="password"
                                     id="password"
                                     class="form-control"
-                                    name="password"
+                                    th:name="password"
                                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                     aria-describedby="basic-default-password"
                             />
@@ -155,7 +155,7 @@
                     </div>
                     <div class="mb-3">
                     </div>
-                    <button type="button" class="btn btn-primary d-grid w-100 login-btn">Sign in</button>
+                    <button type="submit" class="btn btn-primary d-grid w-100 login-btn">Sign in</button>
                 </form>
             </div>
             <!-- /Login -->
@@ -190,9 +190,7 @@
 <script th:src="@{/assets/js/pages-auth.js}"></script>
 
 <script th:inline="javascript">
-    $(".login-btn").on("click", function () {
-        sendLoginRequest()
-    })
+
     $('#basic-default-password').on("click", function () {
         var find = $(this).parent().find("input[name='password']");
         var type = find.attr('type');
@@ -205,41 +203,15 @@
         }
     })
 
-    function sendLoginRequest() {
-        $(".invalid-feedback").remove();
-        $(".is-invalid").removeClass("is-invalid")
-
-        var formData = new FormData(loginForm);
-
-        var xhr = new XMLHttpRequest();
-        $.ajax({
-            url: /*[[@{/admin/auth/signin}]]*/ 'default',
-            type: "POST",
-            data: formData,
-            dataType: "text",
-            processData: false,
-            contentType: false,
-            xhr: function () {
-                return xhr;
-            },
-            success: function () {
-                const url = new URL(xhr.responseURL);
-                if (url.host !== 'localhost:8080') {
-                    url.protocol = 'https:'
-                }
-
-                window.location = url.href;
-            },
-            error: function (error) {
-                const errors = JSON.parse(error.responseText);
-                for (let error of errors) {
-                    $(document).find("#" + error.field).addClass("is-invalid").after($(
-                        '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
-                    ))
-                }
-            }
-        })
-    }
+    $(document).ready(function () {
+        const params = new URLSearchParams(window.location.search);
+        if (params.size > 0) {
+            $(document).find("#username").addClass('is-invalid');
+            var find = $(document).find("#password");
+            find.addClass('is-invalid');
+            find.parent().append($('<p class="error-message invalid-feedback m-0">Не правильний логін або пароль</p>'));
+        }
+    });
 </script>
 </body>
 </html>

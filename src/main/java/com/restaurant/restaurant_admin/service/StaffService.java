@@ -10,6 +10,7 @@ import com.restaurant.restaurant_admin.repository.specification.SearchCriteria;
 import com.restaurant.restaurant_admin.repository.specification.StaffSpecification;
 import com.restaurant.restaurant_admin.utils.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Lazy;
@@ -168,6 +169,7 @@ public class StaffService implements UserDetailsService {
         return false;
     }
 
+    @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("method loadUserByUsername -> find user by email: " + username);

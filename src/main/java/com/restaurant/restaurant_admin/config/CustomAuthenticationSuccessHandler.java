@@ -3,6 +3,7 @@ package com.restaurant.restaurant_admin.config;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 
 @Component
+@Log4j2
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     protected final Log logger = LogFactory.getLog(this.getClass());
     private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -42,6 +44,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             return;
         }
         redirectStrategy.sendRedirect(request, response, targetUrl);
+        log.info("redirect to: " + targetUrl);
     }
 
     protected String determineTargetUrl(final Authentication authentication) {
@@ -56,6 +59,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
             String authorityName = grantedAuthority.getAuthority();
             if (roleTargetUrlMap.containsKey(authorityName)) {
+                log.info("Return url after login: " + authorityName);
                 return roleTargetUrlMap.get(authorityName);
             }
         }
