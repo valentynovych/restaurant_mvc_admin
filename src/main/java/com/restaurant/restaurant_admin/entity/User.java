@@ -16,7 +16,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, length = 100, nullable = false)
+    @Column(unique = true, length = 100)
     private String email;
     private Instant dateTimeOfLastLogin;
     private Integer bonuses;

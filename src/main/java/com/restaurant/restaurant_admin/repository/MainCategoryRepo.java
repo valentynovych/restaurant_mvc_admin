@@ -10,5 +10,4 @@ import java.util.Optional;
 @Repository
 public interface MainCategoryRepo extends JpaRepository<MainCategory, Long>, JpaSpecificationExecutor<MainCategory> {
 
-    Optional<MainCategory> findById(Long id);
 }

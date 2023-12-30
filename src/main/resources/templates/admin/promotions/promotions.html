@@ -233,10 +233,6 @@
                 '     <a class="dropdown-item" href="promotions/edit-promotion/' + data.id + '">\n' +
                 '     <i class="ti ti-pencil me-1"></i>Редагувати\n' +
                 '     </a>\n' +
-                '     <button type="button" class="dropdown-item btn justify-content-start" data-bs-toggle="modal" data-bs-target="#modalCenter"' +
-                '     onclick="addDeleteLink(' + data.id + ')">\n' +
-                '     <i class="ti ti-trash me-1"></i>Видалити\n' +
-                '     </button>\n' +
                 '     </div>\n' +
                 '     </div>\n' +
                 '</td>\n' +
@@ -307,67 +303,6 @@
             this.remove();
         });
         $(".card-footer").children().remove();
-    }
-
-    // add attr to modal button from delete function
-    function addDeleteLink(id) {
-        $('#delete-staff').attr('onClick', 'deleteStaff(' + id + ')');
-    }
-
-    function blockStaffById(id) {
-        $.ajax({
-            type: "POST",
-            url: "staff/blockStaff/" + id,
-            success: function () {
-                $('<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Статус користувача змінено !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper")
-                autoCloseAlert();
-                getPromotionPage(currentPage)
-            },
-            error: function () {
-                $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Ой.. Щось пішло не так !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper")
-                autoCloseAlert();
-
-            }
-        })
-    }
-
-    // delete
-    function deleteStaff(id) {
-        $.ajax({
-            type: "DELETE",
-            url: 'staff/delete/' + id,
-            success: function (response) {
-                $('.btn-close').click();
-
-                $('<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Користувач з ID:' + id + ' видалений !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper")
-                autoCloseAlert();
-                getPromotionPage(currentPage)
-            },
-            error: function (error) {
-                $('.btn-close').click();
-
-                $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Ой.. Щось пішло не так !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
-                autoCloseAlert();
-            }
-        });
-    }
-
-    function autoCloseAlert() {
-        $(".alert").fadeTo(2000, 500).slideUp(500, function () {
-            $("#success-alert").slideUp(500);
-        });
     }
 </script>
 <!-- Core JS -->

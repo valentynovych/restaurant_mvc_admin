@@ -1,11 +1,13 @@
 package com.restaurant.restaurant_admin.service;
 
 import com.restaurant.restaurant_admin.entity.MainCategory;
+import com.restaurant.restaurant_admin.entity.Product;
 import com.restaurant.restaurant_admin.entity.Subcategory;
 import com.restaurant.restaurant_admin.mapper.MainCategoryMapper;
 import com.restaurant.restaurant_admin.model.MainCategoryDTO;
 import com.restaurant.restaurant_admin.model.MainCategoryShortResponse;
 import com.restaurant.restaurant_admin.repository.MainCategoryRepo;
+import com.restaurant.restaurant_admin.repository.ProductRepo;
 import com.restaurant.restaurant_admin.repository.specification.MainCategorySpecification;
 import com.restaurant.restaurant_admin.utils.UploadFileUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,13 +21,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -34,6 +34,8 @@ import static org.mockito.Mockito.*;
 class MainCategoryServiceTest {
     @Mock
     private MainCategoryRepo categoryRepo;
+    @Mock
+    private ProductRepo productRepo;
     @Mock
     private UploadFileUtil fileUtil;
     @InjectMocks
@@ -100,9 +102,12 @@ class MainCategoryServiceTest {
 
     @Test
     void deleteCategoryById_ifCategoryIsPresent() {
+        Product product = new Product();
+        product.setMainCategory(mainCategory);
         when(categoryRepo.findById(mainCategory.getId())).thenReturn(Optional.of(mainCategory));
+        when(productRepo.findAllByForMainCategoryIn(Set.of(mainCategory))).thenReturn(List.of(product));
         Boolean isDeleted = categoryService.deleteCategoryById(mainCategory.getId());
-        verify(categoryRepo).deleteById(mainCategory.getId());
+        verify(categoryRepo).delete(mainCategory);
         assertTrue(isDeleted);
     }
 

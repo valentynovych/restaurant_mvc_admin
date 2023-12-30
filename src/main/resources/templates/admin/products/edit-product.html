@@ -824,6 +824,7 @@
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
                     '</div>').appendTo(".content-wrapper");
                 autoCloseAlert();
+                window.history.back();
             }, error: function () {
                 $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
                     'Ой.. Щось пішло не так :)' +

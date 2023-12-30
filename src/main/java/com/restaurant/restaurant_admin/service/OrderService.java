@@ -267,6 +267,8 @@ public class OrderService {
             user = orderByDb.getUser();
         } else {
             user = request.getUser();
+            user.getUserDetails().setRegistrationDate(new Date());
+            user.setIsActive(Boolean.FALSE);
         }
 
         UserDetails userDetails = user.getUserDetails();

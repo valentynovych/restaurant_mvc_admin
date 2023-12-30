@@ -1,10 +1,12 @@
 package com.restaurant.restaurant_admin.service;
 
 import com.restaurant.restaurant_admin.entity.MainCategory;
+import com.restaurant.restaurant_admin.entity.Product;
 import com.restaurant.restaurant_admin.mapper.MainCategoryMapper;
 import com.restaurant.restaurant_admin.model.MainCategoryDTO;
 import com.restaurant.restaurant_admin.model.MainCategoryShortResponse;
 import com.restaurant.restaurant_admin.repository.MainCategoryRepo;
+import com.restaurant.restaurant_admin.repository.ProductRepo;
 import com.restaurant.restaurant_admin.repository.specification.MainCategorySpecification;
 import com.restaurant.restaurant_admin.repository.specification.SearchCriteria;
 import com.restaurant.restaurant_admin.utils.UploadFileUtil;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +24,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -29,6 +33,7 @@ import java.util.Optional;
 public class MainCategoryService {
 
     private final MainCategoryRepo mainCategoryRepo;
+    private final ProductRepo productRepo;
     private final UploadFileUtil fileUtil;
 
     public MainCategoryDTO getMainCategoryById(Long id) {
@@ -63,7 +68,14 @@ public class MainCategoryService {
             log.info("MainCategory not found, return false");
             return false;
         }
-        mainCategoryRepo.deleteById(categoryId);
+        MainCategory mainCategory = byId.get();
+        List<Product> allByForMainCategory =
+                productRepo.findAllByForMainCategoryIn(Set.of(mainCategory));
+        for (Product product : allByForMainCategory) {
+            product.getForMainCategory().remove(mainCategory);
+            productRepo.save(product);
+        }
+        mainCategoryRepo.delete(mainCategory);
         log.info("MainCategory has been deleted, return true");
         return true;
     }

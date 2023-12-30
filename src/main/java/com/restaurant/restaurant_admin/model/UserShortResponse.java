@@ -12,7 +12,7 @@ public class UserShortResponse {
 
     private Long userId;
     @Size(max = 100, message = "Не довше 100 символів")
-    @Pattern(regexp = "^[a-zA-Z0-9+._-]+@([a-zA-z]{2,10}\\.){1,}[a-zA-z]{2,5}$",
+    @Pattern(regexp = "^[a-zA-Z0-9+._-]+@([a-zA-z]{2,10}\\.)+[a-zA-z]{2,5}$",
             message = "Пошта не відповідає фомату example@com.ua")
     private String email;
     @Size(max = 50, message = "Не довше 50 символів")
