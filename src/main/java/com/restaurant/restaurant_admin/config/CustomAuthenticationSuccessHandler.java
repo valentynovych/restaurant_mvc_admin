@@ -53,6 +53,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         roleTargetUrlMap.put("ROLE_COURIER", "/admin/orders");
         roleTargetUrlMap.put("ROLE_MANAGER", "/admin/orders");
         roleTargetUrlMap.put("ROLE_ADMIN", "/admin/statistic");
+        roleTargetUrlMap.put("ROLE_ACCOUNTANT", "/admin/statistic");
 
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority grantedAuthority : authorities) {

@@ -10,10 +10,7 @@ import com.restaurant.restaurant_admin.utils.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,7 +30,7 @@ public class ProductService {
 
     public Page<ProductShortResponse> getProductPage(int page, int pageSize) {
         log.info("method getProductPage -> start");
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.ASC, "isIngredient"));
         log.info("method getProductPage -> get products by pageable - page: " + page + " pageSize: " + pageSize);
         Page<Product> productPage = productRepo.findAll(pageable);
         List<ProductShortResponse> shortResponses =
