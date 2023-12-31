@@ -190,7 +190,9 @@
 </script>
 <script th:inline="javascript">
 
-    var mainCategory;
+    var mainCategory = {
+        countChildProduct: 0
+    };
 
     $('#add-subcategory').on("click", function () {
         const lastSubcategory = $(".subcategory-item").last();
