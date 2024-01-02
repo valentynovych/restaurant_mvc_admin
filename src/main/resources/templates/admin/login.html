@@ -153,7 +153,7 @@
                                     class="ti ti-eye-off"></i></span>
                         </div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 error-message">
                     </div>
                     <button type="submit" class="btn btn-primary d-grid w-100 login-btn">Sign in</button>
                 </form>
@@ -207,9 +207,11 @@
         const params = new URLSearchParams(window.location.search);
         if (params.size > 0) {
             $(document).find("#username").addClass('is-invalid');
-            var find = $(document).find("#password");
-            find.addClass('is-invalid');
-            find.parent().append($('<p class="error-message invalid-feedback m-0">Не правильний логін або пароль</p>'));
+            $(document).find("#password").addClass('is-invalid');
+            $('.form-password-toggle').append($('' +
+                '<p class="error-message invalid-feedback m-0" ' +
+                'style="display: block">Не правильний логін або пароль' +
+                '</p>'));
         }
     });
 </script>
