@@ -22,10 +22,16 @@
             </a>
         </div>
 
-        <ul class="navbar-nav flex-row align-items-center ms-auto">
+        <ul class="navbar-nav flex-row align-items-center ms-auto" style="user-select: none">
             <li class="nav-item me-5">
-                <i class="ti ti-bell ti-md"></i>
-                <span class="badge bg-danger rounded-pill badge-notifications" id="countOrdersNew"></span>
+                <div class="btn-group">
+                    <button class="btn btn-icon dropdown-toggle hide-arrow" type="button" id="dropdownMenuClickable" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        <i class="ti ti-bell ti-md"></i>
+                        <span class="badge bg-danger rounded-pill badge-notifications" id="countOrdersNew"></span>
+                    </button>
+                    <ul class="dropdown-menu list-orders" aria-labelledby="dropdownMenuClickableInside">
+                    </ul>
+                </div>
             </li>
             <!-- User -->
             <li class="nav-item me-3">
@@ -50,11 +56,34 @@
     </div>
 
     <script th:inline="javascript">
-        const path = /*[[@{/admin/statistic}]]*/ 'default';
+        const path = /*[[@{/admin/}]]*/ 'default';
+        const pathToOrder = path + 'orders/getOrdersByFilters?page=0&status=NEW';
+
+        $.ajax({
+            type: 'GET',
+            url: pathToOrder,
+            dataType: 'JSON',
+            success: function (result) {
+                drawOrderList(result.content);
+            }
+        });
+
+        function drawOrderList(orderList) {
+            let $list = $('.list-orders');
+            if (orderList.length === 0) {
+                $list.append('<li><a class="dropdown-item" href="javascript:void(0);">Нових замовлень немає</a></li>')
+            } else if (orderList.length >= 1) {
+                for (let order of orderList) {
+                    const text = order.user.firstName + ' - ' + order.totalAmount + ' грн.';
+                    const editUrl = path + 'orders/edit-order/' + order.orderId;
+                    $list.append('<li><a class="dropdown-item" href="' + editUrl + '">' + text + '</a></li>')
+                }
+            }
+        }
 
         $.ajax({
             type: "GET",
-            url: path + '/getGlobalStatistic',
+            url: path + 'statistic/getGlobalStatistic',
             success: function (response) {
                 $('#countOrdersNew').html(response.activeOrders);
             },
@@ -64,7 +93,7 @@
 
         $.ajax({
             type: "GET",
-            url: path + '/getCurrentStaff',
+            url: path + 'statistic/getCurrentStaff',
             success: function (response) {
                 $('#activeStaffName').html(response.firstName + ' ' + response.lastName);
                 $('#activeStaffRole').html(role(response));
