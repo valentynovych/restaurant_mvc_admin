@@ -48,6 +48,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/animate-css/animate.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/flatpickr/flatpickr.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
 
 
     <!-- Page CSS -->
@@ -209,6 +210,7 @@
         integrity="sha512-TDV/1TfxlJAwv/y8HVjHO/AbxfEi3JzUJhQ9HL8GqMprZTcgRggSavorvX2bYzpWyJLrav/Ub/ikmK1sd3eyTw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script th:src="@{/assets/vendor/libs/autosize/autosize.js}"></script>
+<script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
 
 <!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
@@ -278,11 +280,7 @@
                 afterLoad();
             },
             error: function (error) {
-                $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem; z-index: 1100"> \n' +
-                    'Ой.. Щось пішло не так :)' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
-                autoCloseAlert();
+                toastr.error('Упс... Виникла помилка !');
             }
         });
     } else {
@@ -702,12 +700,12 @@
             processData: false,
             contentType: false,
             success: function (response) {
+                toastr.success('Оновлення успішне !');
                 $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem; z-index: 1150"> \n' +
                     'Оновлення успішне !' +
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
                     '</div>').appendTo(".content-wrapper");
                 promotionObject = response;
-                autoCloseAlert();
             },
             error: function (error) {
                 const errors = error.responseJSON;
@@ -716,11 +714,7 @@
                         '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
                     ))
                 }
-                $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Ой.. Щось пішло не так :)' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
-                autoCloseAlert();
+                toastr.error('Упс... Виникла помилка !');
             }
         })
     });
@@ -743,12 +737,6 @@
             };
             reader.readAsDataURL(this.files[0]);
         }
-    }
-
-    function autoCloseAlert() {
-        $(".alert").fadeTo(2000, 500).slideUp(500, function () {
-            $("#success-alert").slideUp(500);
-        });
     }
 
 </script>

@@ -46,6 +46,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/typeahead-js/typeahead.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/animate-css/animate.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
 
     <!-- Page CSS -->
 
@@ -149,6 +150,28 @@
     <div class="drag-target"></div>
 </div>
 <!-- / Layout wrapper -->
+
+
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
+
+<script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
+
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+<script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+<!-- Page JS -->
 <script th:inline="javascript">
     let src = /*[[@{/assets/img/placeholder-image.png}]]*/ 'default';
     $(window).on('load', function () {
@@ -186,6 +209,9 @@
             success: function (result) {
                 clearTableLine();
                 drawTable(result, page)
+            },
+            error: function () {
+                toastr.success('Упс... Виникла помилка !');
             }
         });
 
@@ -273,57 +299,6 @@
         $(".product-items").children().remove();
         $(".card-footer").children().remove();
     }
-
-    function blockUserById(id) {
-        $.ajax({
-            type: "POST",
-            url: "users/blockUser/" + id,
-            success: function () {
-                $('<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Статус користувача змінено !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper")
-                autoCloseAlert();
-                getProducts(currentPage)
-            },
-            error: function () {
-                $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Ой.. Щось пішло не так !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper")
-                autoCloseAlert();
-
-            }
-        })
-    }
-
-    // delete
-
-    function autoCloseAlert() {
-        $(".alert").fadeTo(2000, 500).slideUp(500, function () {
-            $("#success-alert").slideUp(500);
-        });
-    }
 </script>
-
-<!-- Core JS -->
-<!-- build:js assets/vendor/js/core.js -->
-<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
-<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
-<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
-<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
-<script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
-
-<script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
-
-<script th:src="@{/assets/vendor/js/menu.js}"></script>
-<!-- endbuild -->
-
-<!-- Vendors JS -->
-
-<!-- Main JS -->
-<script th:src="@{/assets/js/main.js}"></script>
-
-<!-- Page JS -->
 </body>
 </html>

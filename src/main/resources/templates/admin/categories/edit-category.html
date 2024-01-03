@@ -44,6 +44,8 @@
     <!-- Vendors CSS -->
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
+
 
     <!-- Page CSS -->
 
@@ -177,6 +179,29 @@
 <!-- Drag Target Area To SlideIn Menu On Small Screens -->
 <div class="drag-target"></div>
 <!-- / Layout wrapper -->
+
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
+
+<script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
+
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+<script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/preview-image.js}"></script>
+
+<!-- Page JS -->
+
 <script th:inline="javascript">
     let src = /*[[@{/assets/img/placeholder-image.png}]]*/ 'default';
     window.onload = function () {
@@ -187,6 +212,14 @@
             }
         }
     };
+
+    toastr.options = {
+        maxOpened: 1,
+        newestOnTop: true,
+        progressBar: true,
+        preventDuplicates: true,
+    };
+
 </script>
 <script th:inline="javascript">
 
@@ -232,6 +265,7 @@
                     $("#previewIconName").attr("value", result.previewIcon);
                 },
                 error: function (error) {
+                    toastr.error("Помилка під час отримання категорії")
                 }
             });
 
@@ -256,6 +290,9 @@
                             'value="' + listSubcategories[i].subcategoryId + '">\n' +
                             closeButton + '</div>').appendTo(".subcategory-items");
                     }
+                },
+                error: function () {
+                    toastr.error("Помилка під час отримання підкатегорій")
                 }
             })
         }
@@ -268,17 +305,10 @@
             type: "DELETE",
             url: '../delete-subcategory/' + subcategoryId,
             success: function () {
-                $('<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Підкатегорія успішно видалена !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
-                $parent.remove();
+                toastr.success("Підкатегорія видалена");
             },
             error: function () {
-                $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Помилка під час видалення :)' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
+                toastr.error("Помилка під час видалення підкатегорії");
             }
         });
 
@@ -305,23 +335,16 @@
             processData: false,
             contentType: false,
             success: function (response) {
-
-                $('<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Категорія успішно оновленна !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
+                toastr.success("Категорія успішно оновленна !")
             },
             error: function (error) {
                 const errors = error.responseJSON;
                 for (let error of errors) {
-                    $("input[name='"+ error.field +"']").addClass("is-invalid").after($(
+                    $("input[name='" + error.field + "']").addClass("is-invalid").after($(
                         '<p class="error-message text-danger m-0">' + error.defaultMessage + '</p>'
                     ));
                 }
-                $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Категорія успішно не оновленна :)' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
+                toastr.error("Помилка під час оновлення категорії");
             }
         })
     });
@@ -335,33 +358,14 @@
                 method: 'DELETE',
                 url: '../delete-image/' + filename,
                 success: function (response) {
-                    $("#previewIconName").removeAttr("value");
+                    toastr.success("Фото видалене !");
                 },
                 error: function (response) {
+                    toastr.error("Помилка під час видалення фото");
                 }
             })
         }
     })
 </script>
-<!-- Core JS -->
-<!-- build:js assets/vendor/js/core.js -->
-<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
-<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
-<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
-<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
-<script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
-
-<script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
-
-<script th:src="@{/assets/vendor/js/menu.js}"></script>
-<!-- endbuild -->
-
-<!-- Vendors JS -->
-
-<!-- Main JS -->
-<script th:src="@{/assets/js/main.js}"></script>
-<script th:src="@{/assets/js/preview-image.js}"></script>
-
-<!-- Page JS -->
 </body>
 </html>

@@ -46,6 +46,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/flatpickr/flatpickr.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
 
     <!-- Page CSS -->
 
@@ -206,6 +207,7 @@
 <script th:src="@{/assets/vendor/libs/flatpickr/flatpickr.js}"></script>
 <script th:src="@{https://npmcdn.com/flatpickr/dist/l10n/uk.js}"></script>
 <script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
+<script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
 
 
 <!-- Main JS -->
@@ -324,7 +326,8 @@
                         $('<option value="' + role + '">' + roleLabel(role) + '</option>'));
                 }
             },
-            error: function (error) {
+            error: function () {
+                toastr.error('Упс.. Виникла помилка');
             }
         });
 
@@ -369,7 +372,8 @@
                     $("#staffRole").val(result.staffRole).trigger('change');
 
                 },
-                error: function (error) {
+                error: function () {
+                    toastr.error('Упс.. Виникла помилка');
                 }
             });
         }
@@ -400,11 +404,7 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Оновлення успішне !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
-                autoCloseAlert();
+                toastr.success('Оновлення успішне');
             },
             error: function (error) {
                 const errors = error.responseJSON;
@@ -413,11 +413,8 @@
                         '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
                     ))
                 }
-                $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Ой.. Щось пішло не так :)' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
-                autoCloseAlert();
+
+                toastr.error('Упс.. Виникла помилка');
             }
         })
     }
@@ -454,18 +451,10 @@
                     $("#photo").removeAttr("value");
                     $("#photoName").removeAttr("value");
                     $("#photoFile").val('');
-                    $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                        'Фото видалено !' +
-                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                        '</div>').appendTo(".content-wrapper");
-                    autoCloseAlert();
+                    toastr.success('Фото видалено');
                 },
                 error: function (error) {
-                    $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                        'Ой.. Щось пішло не так :)' +
-                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                        '</div>').appendTo(".content-wrapper");
-                    autoCloseAlert();
+                    toastr.error('Упс.. Виникла помилка');
                 }
             })
         }

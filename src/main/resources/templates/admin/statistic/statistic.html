@@ -46,6 +46,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/typeahead-js/typeahead.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/apex-charts/apex-charts.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
 
     <!-- Page CSS -->
 
@@ -191,6 +192,7 @@
 
 <!-- Vendors JS -->
 <script th:src="@{/assets/vendor/libs/apex-charts/apexcharts.js}"></script>
+<script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
 
 <!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
@@ -206,13 +208,7 @@
                 drawChartOrders(response);
             },
             error: function (error) {
-                $('<div class="bs-toast toast fade show" role="alert" aria-live="assertive" aria-atomic="true" ' +
-                    'style="position: absolute; top: 3rem; right: 1.5rem">\n' +
-                    '    <div class="toast-body d-flex flex-row justify-content-between">\n' +
-                    '      <span class="text-danger">Не вдалось оновити статистику замовлень</span>\n' +
-                    '      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>\n' +
-                    '    </div>' +
-                    '  </div>').appendTo('.content-wrapper');
+                toastr.error('Упс.. Виникла помилка', 'Не вдалось оновити статистику замовлень');
             }
         });
 
@@ -304,13 +300,7 @@
                 fillGeneralStatistic(response);
             },
             error: function (error) {
-                $('<div class="bs-toast toast fade show" role="alert" aria-live="assertive" aria-atomic="true" ' +
-                    'style="position: absolute; top: 3rem; right: 1.5rem">\n' +
-                    '    <div class="toast-body d-flex flex-row justify-content-between">\n' +
-                    '      <span class="text-danger">Не вдалось оновити основну статистику</span>\n' +
-                    '      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>\n' +
-                    '    </div>' +
-                    '  </div>').appendTo('.content-wrapper');
+                toastr.error('Упс.. Виникла помилка', 'Не вдалось оновити статистику');
             }
         });
 
@@ -329,7 +319,7 @@
                 drawUsersAge(response);
             },
             error: function (err) {
-                drawUsersAge(err);
+                toastr.error('Упс.. Виникла помилка', 'Не вдалось оновити статистику користувачів');
             }
         })
 
@@ -410,13 +400,7 @@
                 drawPopularCategory(response);
             },
             error: function (error) {
-                $('<div class="bs-toast toast fade show" role="alert" aria-live="assertive" aria-atomic="true" ' +
-                    'style="position: absolute; top: 3rem; right: 1.5rem">\n' +
-                    '    <div class="toast-body d-flex flex-row justify-content-between">\n' +
-                    '      <span class="text-danger">Не вдалось оновити популярні категорії</span>\n' +
-                    '      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>\n' +
-                    '    </div>' +
-                    '  </div>').appendTo('.content-wrapper');
+                toastr.error('Упс.. Виникла помилка', 'Не вдалось оновити популярні категорії');
             }
         });
 
@@ -431,12 +415,6 @@
                     },
                     labels: Array.from(categoriesMap.keys()),
                     series: Array.from(categoriesMap.values()),
-                    // colors: [
-                    //     chartColors.donut.series1,
-                    //     chartColors.donut.series4,
-                    //     chartColors.donut.series3,
-                    //     chartColors.donut.series2
-                    // ],
                     stroke: {
                         show: false,
                         curve: 'straight'

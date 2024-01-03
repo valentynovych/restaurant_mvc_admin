@@ -102,7 +102,12 @@ public class StatisticService {
         List<User> userList = userRepo.findAll();
         ZonedDateTime today = ZonedDateTime.now(ZoneId.systemDefault());
 
-        userList = userList.stream().filter(user -> user.getUserDetails().getDateOfBirth() != null).toList();
+        userList = userList
+                .stream()
+                .filter(user -> user.getUserDetails() != null)
+                .filter(user -> user.getUserDetails().getDateOfBirth() != null)
+                .toList();
+
         usersAgeMap.put("Більше 50 років", (int) userList
                 .stream()
                 .filter(user -> user.getUserDetails().getDateOfBirth().toInstant()

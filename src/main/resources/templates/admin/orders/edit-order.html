@@ -49,6 +49,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/flatpickr/flatpickr.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/jquery-timepicker/jquery-timepicker.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
 
     <!-- Page CSS -->
 
@@ -391,6 +392,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script th:src="@{/assets/vendor/libs/jquery-timepicker/jquery-timepicker.js}"></script>
 <script th:src="@{/assets/vendor/libs/autosize/autosize.js}"></script>
+<script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
 
 <!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
@@ -440,11 +442,7 @@
                 order = response;
             },
             error: function (error) {
-                $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Ой.. Щось пішло не так :)' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
-                autoCloseAlert();
+                toastr.error("Упс... Виникла помилка");
             }
         });
     } else {
@@ -502,7 +500,6 @@
                 type: "GET",
                 url: contextPath + 'getOrderItemIngredients/' + orderItem.product.productId,
                 processResults: function (response) {
-                    // console.log(response)
                     return {
                         results: $.map(response, function (prod) {
                             return {
@@ -554,8 +551,6 @@
 
     function drawProductsTable(order) {
         $('tbody').children().remove();
-        // console.log('drawProductsTable -> ')
-        // console.log(order)
 
         for (let item of order.orderItems) {
             let productName = item.product.name;
@@ -655,7 +650,6 @@
 
     function fillInputs(order) {
         $.fn.select2.defaults.set("language", "uk");
-        // console.log(order)
 
         $('#order-number').html("Замовлення №: " + order.orderId)
         drawProductsTable(order);
@@ -801,19 +795,16 @@
 
     $('#save-new-promotion').on('click', function () {
         const newPromotion = $newPromotion.select2('data')[0];
-        // console.log(newPromotion);
         order.usedPromotion.push({
             id: newPromotion.id,
             name: newPromotion.text
         });
-        // console.log(order.usedPromotion)
 
         $('#modal-add-promotion').find('.btn-close').click();
         $('#save-order').click();
     });
 
     function addNewOrderItem(select) {
-        // console.log(select)
         var newProduct = select[0];
         var newOrderItem = {
             id: 0,
@@ -842,17 +833,12 @@
             success: function (response) {
                 $('#modal-add-orderItem').find('button.btn-close').click();
                 drawProductsTable(response);
-                $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Товар ' + newProduct.text + ' успішно доданий ' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
-                autoCloseAlert();
+                toastr.success('Товар ' + newProduct.text + ' успішно доданий');
                 order = response;
-                // console.log(order);
             },
             error: function (error) {
                 $('#modal-add-orderItem').find('button.btn-close').click();
-                // console.log(error)
+                toastr.error("Упс... Виникла помилка");
             }
 
         })
@@ -864,7 +850,6 @@
         const newAdditional = $('#additionalIngredients').select2('data');
 
         var orderItem = order.orderItems.find(x => x.id === Number(orderItemId));
-        // console.log(orderItem)
 
         var newOrderItem = {
             id: orderItemId,
@@ -931,15 +916,12 @@
             success: function (response) {
                 $('#modal-change-product').find('button.btn-close').click();
                 drawProductsTable(response);
-                $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Оновлення успішне !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
-                autoCloseAlert();
+                toastr.success('Оновлення успішне !');
                 order = response;
             },
             error: function (error) {
                 $('#modal-change-product').find('button.btn-close').click();
+                toastr.error('Упс... Виникла помилка ');
             }
 
         })
@@ -978,11 +960,7 @@
             contentType: false,
             success: function (response) {
                 fillInputs(response)
-                $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Оновлення успішне !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
-                autoCloseAlert();
+                toastr.success('Оновлення успішне !');
             },
             error: function (error) {
                 const errors = error.responseJSON;
@@ -993,11 +971,7 @@
                         ))
                     }
                 }
-                $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Ой.. Щось пішло не так :)' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
-                autoCloseAlert();
+                toastr.error('Упс... Виникла помилка ');
             }
         })
     });
@@ -1014,29 +988,15 @@
             type: "DELETE",
             url: contextPath + "delete-orderItem/" + orderItemId,
             success: function (response) {
-                $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Продукт успішно видалено !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
-                autoCloseAlert();
+                toastr.success('Продукт успішно видалено !');
 
                 $('tbody').find("[onclick='addDeleteLink(" + orderItemId + ")']").parent().parent().remove();
                 $('#save-order').click();
 
             }, error: function () {
-                $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Ой.. Щось пішло не так :)' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
-                autoCloseAlert();
+                toastr.error('Упс... Виникла помилка ');
             }
         })
-    }
-
-    function autoCloseAlert() {
-        $(".alert").fadeTo(2000, 500).slideUp(500, function () {
-            $(".alert").slideUp(500);
-        });
     }
 
 </script>
