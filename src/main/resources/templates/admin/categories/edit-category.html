@@ -299,18 +299,25 @@
     }
 
     function removeSubcategory(el) {
+        console.log('to delete: ' + el)
         var $parent = $(el).parent();
         var subcategoryId = $($parent).find('input[type=hidden]').val();
-        $.ajax({
-            type: "DELETE",
-            url: '../delete-subcategory/' + subcategoryId,
-            success: function () {
-                toastr.success("Підкатегорія видалена");
-            },
-            error: function () {
-                toastr.error("Помилка під час видалення підкатегорії");
-            }
-        });
+        console.log('id: ' + subcategoryId)
+        if (subcategoryId) {
+            $.ajax({
+                type: "DELETE",
+                url: '../delete-subcategory/' + subcategoryId,
+                success: function () {
+                    toastr.success("Підкатегорія видалена");
+                    $parent.remove();
+                },
+                error: function () {
+                    toastr.error("Помилка під час видалення підкатегорії");
+                }
+            });
+        } else {
+            $parent.remove();
+        }
 
     }
 
