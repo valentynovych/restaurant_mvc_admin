@@ -125,12 +125,13 @@
                                                 <label class="form-label-sm" for="categoryName">Назва</label>
                                                 <input type="text" class="form-control" id="categoryName"
                                                        name="categoryName"
-                                                       placeholder="Піца / Бургер / Шаурма"/>
+                                                       placeholder="Піца / Бургер / Шаурма"
+                                                       oninput="catMaxLength(this, 50)"/>
                                             </div>
                                             <div class="mb-4">
                                                 <label class="form-label-sm" for="topPosition">Позиція</label>
                                                 <input type="number" class="form-control" id="topPosition"
-                                                       name="topPosition"/>
+                                                       name="topPosition" oninput="catMaxLength(this, 3)"/>
                                             </div>
 
                                             <div>
@@ -146,7 +147,8 @@
                                                     <input type="text" class="form-control"
                                                            name="subcategories[0].subcategoryName"
                                                            id="subcategories[0].subcategoryName"
-                                                           placeholder="Назва підкатегорії"/>
+                                                           placeholder="Назва підкатегорії"
+                                                           oninput="catMaxLength(this, 50)"/>
                                                     <input type="hidden" class="subcategory-id"
                                                            name="subcategories[0].subcategoryId"
                                                            value="">
@@ -219,6 +221,14 @@
         progressBar: true,
         preventDuplicates: true,
     };
+
+    function catMaxLength(el, maxLength) {
+
+        var val = $(el).val();
+        if (val.length > maxLength) {
+            $(el).val(val.substring(0, maxLength));
+        }
+    }
 
 </script>
 <script th:inline="javascript">
@@ -349,10 +359,8 @@
                 if (error.status === 409) {
                     $("input[name='categoryName']").addClass("is-invalid").after($(
                         '<p class="error-message text-danger m-0">Категорія з такою назвою вже створена</p>'));
-                } else {
-
+                } else if (error.status === 400){
                     const errors = error.responseJSON;
-                    console.log(error)
                     for (let error of errors) {
                         $("input[name='" + error.field + "']").addClass("is-invalid").after($(
                             '<p class="error-message text-danger m-0">' + error.defaultMessage + '</p>'
@@ -366,19 +374,26 @@
 
     $("label.delete-image-button").on("click", function () {
 
+        const imagePlaceholder = /*[[@{/assets/img/placeholder-image.png}]]*/ 'default';
         const filename = $("#previewIconName").attr("value");
-
         if (filename) {
             $.ajax({
                 method: 'DELETE',
                 url: '../delete-image/' + filename,
                 success: function (response) {
+                    $("#previewIcon").attr("src", imagePlaceholder);
+                    $("#previewIconName").removeAttr("value");
+                    $("#previewIconFile").val('');
                     toastr.success("Фото видалене !");
                 },
                 error: function (response) {
                     toastr.error("Помилка під час видалення фото");
                 }
             })
+        } else if ($("#previewIconFile").val()) {
+            $("#previewIconFile").val('');
+            $("#previewIcon").attr("src", imagePlaceholder);
+            $("#previewIconName").removeAttr("value");
         }
     })
 </script>
