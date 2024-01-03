@@ -622,7 +622,8 @@
     }
 
     $('.send-product').on("click", function () {
-        blockButton($(this));
+        const button1 = $(this);
+        blockButton(button1);
         var formData = new FormData($('#productForm')[0]);
         $('.invalid-feedback').remove();
         $('.is-invalid').removeClass('is-invalid');
@@ -655,7 +656,7 @@
             contentType: false,
             success: function (response) {
                 toastr.success('Продукт створено !');
-                unblockButton($(this));
+                unblockButton(button1);
                 window.history.back();
             },
             error: function (error) {
@@ -666,13 +667,14 @@
                     ))
                 }
                 toastr.error('Упс.. Виникла помилка !');
-                unblockButton($(this));
+                unblockButton(button1);
             }
         })
     });
 
     $('.send-ingredient').on("click", function () {
-        blockButton($(this));
+        const button  = $(this);
+        blockButton(button);
         var formData = new FormData($('#ingredientForm')[0]);
 
         $('.invalid-feedback').remove();
@@ -694,7 +696,7 @@
             contentType: false,
             success: function (response) {
                 toastr.success('Інгредієнт створено !');
-                unblockButton($(this));
+                unblockButton(button);
                 window.history.back();
             },
             error: function (error) {
@@ -709,7 +711,7 @@
                     ))
                 }
                 toastr.error('Упс.. Виникла помилка !');
-                unblockButton($(this));
+                unblockButton(button);
             }
         })
     });

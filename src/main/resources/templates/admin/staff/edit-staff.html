@@ -393,6 +393,8 @@
     $("#post-form").on("click", postForm)
 
     function postForm() {
+        const postBtn = $('#post-form');
+        blockButton(postBtn);
         $(".error-message").remove();
         $("input, select").removeClass("is-invalid");
 
@@ -414,6 +416,7 @@
             contentType: false,
             success: function (response) {
                 toastr.success('Оновлення успішне');
+                unblockButton(postBtn);
             },
             error: function (error) {
                 const errors = error.responseJSON;
@@ -424,6 +427,7 @@
                 }
 
                 toastr.error('Упс.. Виникла помилка');
+                unblockButton(postBtn);
             }
         })
     }
@@ -449,7 +453,8 @@
     }
 
     $("label.delete-image-button").on("click", function () {
-
+        const delBtn = $(this);
+        blockButton(delBtn);
         const filename = $("#photoName").attr("value");
         if (filename) {
             $.ajax({
@@ -461,9 +466,11 @@
                     $("#photoName").removeAttr("value");
                     $("#photoFile").val('');
                     toastr.success('Фото видалено');
+                    unblockButton(delBtn);
                 },
                 error: function (error) {
                     toastr.error('Упс.. Виникла помилка');
+                    unblockButton(delBtn)
                 }
             })
         }

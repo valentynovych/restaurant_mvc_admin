@@ -267,7 +267,7 @@
                 '     <a class="dropdown-item" href="users/user-details/' + data.userId + '">\n' +
                 '     <i class="ti ti-eye me-1"></i>Перегляд\n' +
                 '     </a>\n' +
-                '     <button class="dropdown-item btn" onclick="blockUserById(' + data.userId + ')">' +
+                '     <button class="dropdown-item btn" id="block-user-btn" onclick="blockUserById(' + data.userId + ')">' +
                 '     <i class="ti ti-lock-open-off me-1"></i>Заблокувати</button>' +
                 '     </div>\n' +
                 '     </div>\n' +
@@ -342,16 +342,19 @@
     }
 
     function blockUserById(id) {
+        const blockUser = $('#block-user-btn');
+        blockButton(blockUser);
         $.ajax({
             type: "POST",
             url: "users/blockUser/" + id,
             success: function () {
                 toastr.success('Статус користувача змінено !');
                 getUsers(currentPage)
+                unblockButton(blockUser);
             },
             error: function () {
                 toastr.error('Упс.. Виникла помилка');
-
+                unblockButton(blockUser);
             }
         })
     }

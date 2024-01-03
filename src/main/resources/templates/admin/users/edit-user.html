@@ -232,6 +232,8 @@
     }
 
     $('.send-user').on("click", function () {
+        const sendUserBtn = $(this);
+        blockButton(sendUserBtn);
         var formData = new FormData($('#userForm')[0]);
         $('.invalid-feedback').remove();
         $('.is-invalid').removeClass('is-invalid');
@@ -247,6 +249,7 @@
             contentType: false,
             success: function (response) {
                 toastr.success('Оновлення успішне !');
+                unblockButton(sendUserBtn);
             },
             error: function (error) {
                 const errors = error.responseJSON;
@@ -256,6 +259,7 @@
                     ))
                 }
                 toastr.error('Упс.. Виникла помилка');
+                unblockButton(sendUserBtn);
             }
         })
     });

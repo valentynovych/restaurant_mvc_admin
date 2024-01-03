@@ -686,7 +686,8 @@
     }
 
     $('.save-promotion').on("click", function () {
-        blockButton($(this));
+        var button = $(this);
+        blockButton(button);
         var formData = new FormData($('#promotion-form')[0]);
         $('.invalid-feedback').remove();
         $('.is-invalid').removeClass('is-invalid');
@@ -716,17 +717,19 @@
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
                     '</div>').appendTo(".content-wrapper");
                 promotionObject = response;
-                unblockButton($(this));
+                unblockButton(button);
             },
             error: function (error) {
                 const errors = error.responseJSON;
                 for (let error of errors) {
-                    $(document).find("select[name='" + error.field + "'], input[name='" + error.field + "']").addClass("is-invalid").parent().append($(
-                        '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
+                    $(document).find("select[name='" + error.field + "'], " +
+                        "input[name='" + error.field + "'], " +
+                        "textarea[name='" + error.field + "']")
+                        .addClass("is-invalid").parent().append($('<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
                     ))
                 }
                 toastr.error('Упс... Виникла помилка !');
-                unblockButton($(this));
+                unblockButton(button);
             }
         })
     });

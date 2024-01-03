@@ -722,7 +722,8 @@
     }
 
     $('.send-product').on("click", function () {
-        blockButton($(this));
+        const button1 = $(this);
+        blockButton(button1);
         var formData = new FormData($('#productForm')[0]);
         $('.invalid-feedback').remove();
         $('.is-invalid').removeClass('is-invalid');
@@ -755,7 +756,7 @@
             contentType: false,
             success: function (response) {
                 toastr.success('Оновлення успішне !');
-                unblockButton($(this));
+                unblockButton(button1);
             },
             error: function (error) {
                 const errors = error.responseJSON;
@@ -765,13 +766,14 @@
                     ))
                 }
                 toastr.error('Упс... Виникла помилка !');
-                unblockButton($(this));
+                unblockButton(button1);
             }
         })
     });
 
     $('.send-ingredient').on("click", function () {
-        blockButton($(this));
+        const sendButton = $(this);
+        blockButton(sendButton);
         var formData = new FormData($('#ingredientForm')[0]);
 
         $('.invalid-feedback').remove();
@@ -793,7 +795,7 @@
             contentType: false,
             success: function (response) {
                 toastr.success('Оновлення успішне !');
-                unblockButton($(this));
+                unblockButton(sendButton);
             },
             error: function (error) {
                 const errors = error.responseJSON;
@@ -806,23 +808,24 @@
                     ))
                 }
                 toastr.error('Упс... Виникла помилка !');
-                unblockButton($(this));
+                unblockButton(sendButton);
             }
         })
     });
 
     $('#delete-product').on('click', function () {
-        blockButton($(this));
+        const button = $(this);
+        blockButton(button);
         $.ajax({
             type: "DELETE",
             url: "../delete-product/" + productId,
             success: function (response) {
                 toastr.success('Продукт успішно видалено !');
-                unblockButton($(this));
+                unblockButton(button);
                 window.history.back();
             }, error: function () {
                 toastr.error('Упс... Виникла помилка !');
-                unblockButton($(this));
+                unblockButton(button);
             }
         })
     });

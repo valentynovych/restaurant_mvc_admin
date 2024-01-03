@@ -936,7 +936,8 @@
     })
 
     $('#save-order').on("click", function () {
-        blockButton($(this));
+        var button = $(this);
+        blockButton(button);
         var formData = new FormData($('#orderForm')[0]);
         $('.invalid-feedback').remove();
         $('.is-invalid').removeClass('is-invalid');
@@ -970,7 +971,7 @@
             success: function (response) {
                 fillInputs(response)
                 toastr.success('Оновлення успішне !');
-                unblockButton($(this));
+                unblockButton(button);
             },
             error: function (error) {
                 const errors = error.responseJSON;
@@ -982,7 +983,7 @@
                     }
                 }
                 toastr.error('Упс... Виникла помилка ');
-                unblockButton($(this));
+                unblockButton(button);
             }
         })
     });
