@@ -182,6 +182,13 @@
             }
         }
     });
+
+    toastr.options = {
+        maxOpened: 1,
+        newestOnTop: true,
+        progressBar: true,
+        preventDuplicates: true,
+    };
 </script>
 <!--AJAX requests-->
 <script th:inline="javascript">

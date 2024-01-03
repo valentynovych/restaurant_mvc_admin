@@ -184,6 +184,14 @@
 
 <!-- Page JS -->
 <script>
+
+    toastr.options = {
+        maxOpened: 1,
+        newestOnTop: true,
+        progressBar: true,
+        preventDuplicates: true,
+    };
+
     $(document).ready(function () {
         getStaff(0)
     });

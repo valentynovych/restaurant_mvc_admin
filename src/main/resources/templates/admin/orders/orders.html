@@ -188,6 +188,13 @@
         orientation: "auto right"
     });
 
+    toastr.options = {
+        maxOpened: 1,
+        newestOnTop: true,
+        progressBar: true,
+        preventDuplicates: true,
+    };
+
 
     function parseMapToRes(data) {
         const mapResponse = new Map(data);

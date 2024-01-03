@@ -179,6 +179,13 @@
 <!-- Page JS -->
 <!--AJAX requests-->
 <script>
+    toastr.options = {
+        maxOpened: 1,
+        newestOnTop: true,
+        progressBar: true,
+        preventDuplicates: true,
+    };
+
     $(document).ready(function () {
         getCategories(0)
 

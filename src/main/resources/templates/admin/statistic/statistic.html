@@ -212,6 +212,13 @@
             }
         });
 
+        toastr.options = {
+            maxOpened: 1,
+            newestOnTop: true,
+            progressBar: true,
+            preventDuplicates: true,
+        };
+
         function drawChartOrders(data) {
             const map = new Map(Object.entries(data))
 

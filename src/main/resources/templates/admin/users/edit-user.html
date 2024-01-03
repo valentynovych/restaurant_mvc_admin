@@ -194,6 +194,14 @@
 
 </script>
 <script th:inline="javascript">
+
+    toastr.options = {
+        maxOpened: 1,
+        newestOnTop: true,
+        progressBar: true,
+        preventDuplicates: true,
+    };
+
     const fullPath = window.location.pathname;
     const userId = Number(fullPath.substring(fullPath.lastIndexOf('/') + 1, fullPath.length));
     $.ajax({

@@ -288,6 +288,13 @@
 
 <script th:inline="javascript">
 
+    toastr.options = {
+        maxOpened: 1,
+        newestOnTop: true,
+        progressBar: true,
+        preventDuplicates: true,
+    };
+
     function checkPassword() {
         $(".is-invalid").removeClass("is-invalid");
         $(".invalid-feedback").remove();
