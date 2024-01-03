@@ -250,7 +250,7 @@
         for (const data of result.content) {
 
             const date = new Date(data.dateOfCreate);
-            const dateOfCreate = date.getDay() + '.' + date.getMonth() + '.' + date.getFullYear();
+            const dateOfCreate = date.toLocaleDateString("uk");
 
             const badge = data.isActive ? '<span class="badge bg-label-primary me-1">Активна</span>'
                 : '<span class="badge bg-label-dark me-1">Вимкнена</span>';
