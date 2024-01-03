@@ -195,10 +195,11 @@
     let currentPage;
     let searchText;
     let timer;
-    $("input[type='search']").on("input", function () {
+    $("input[type='search']").keyup(function () {
+        let keyPause = 400;
         searchText = this.value;
         clearTimeout(timer);
-        timer = setTimeout(getUsers(0), 300);
+        timer = setTimeout( function () {getUsers(0)}, keyPause);
     });
 
     function getUsers(page) {

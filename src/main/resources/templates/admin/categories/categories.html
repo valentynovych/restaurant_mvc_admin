@@ -190,13 +190,15 @@
         getCategories(0)
 
     });
+
     let currentPage;
     let searchText;
     let timer;
-    $("input[type='search']").on("input", function () {
+    $("input[type='search']").keyup(function () {
+        let keyPause = 400;
         searchText = this.value;
         clearTimeout(timer);
-        timer = setTimeout(getCategories(0), 300);
+        timer = setTimeout( function () {getCategories(0)}, keyPause);
     });
 
     function getCategories(page) {

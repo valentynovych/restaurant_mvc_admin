@@ -239,9 +239,11 @@
     let byDate;
     let byStatus;
     let timer;
-    $("input[type='search']").on("input", function () {
+    $("input[type='search']").keyup(function () {
+        let keyPause = 400;
         searchText = this.value;
-        getOrdersByFilter(0);
+        clearTimeout(timer);
+        timer = setTimeout( function () {getOrdersByFilter(0)}, keyPause);
     });
     $('#filter-by-date').on('change', function () {
         byDate = this.value;

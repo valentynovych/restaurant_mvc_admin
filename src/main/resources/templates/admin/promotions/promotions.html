@@ -196,9 +196,11 @@
 
     let currentPage;
     let searchText;
-    $("input[type='search']").on("input", function () {
+    $("input[type='search']").keyup(function () {
+        let keyPause = 400;
         searchText = this.value;
-        getPromotionPage(0);
+        clearTimeout(timer);
+        timer = setTimeout( function () {getPromotionPage(0)}, keyPause);
     });
 
     function getPromotionPage(page) {
