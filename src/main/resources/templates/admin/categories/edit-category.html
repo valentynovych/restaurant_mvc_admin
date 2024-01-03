@@ -299,10 +299,8 @@
     }
 
     function removeSubcategory(el) {
-        console.log('to delete: ' + el)
         var $parent = $(el).parent();
         var subcategoryId = $($parent).find('input[type=hidden]').val();
-        console.log('id: ' + subcategoryId)
         if (subcategoryId) {
             $.ajax({
                 type: "DELETE",
@@ -342,14 +340,24 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                toastr.success("Категорія успішно оновленна !")
+                toastr.success("Категорія успішно оновленна !");
+                setTimeout(function () {
+                    window.history.back()
+                }, 3000);
             },
             error: function (error) {
-                const errors = error.responseJSON;
-                for (let error of errors) {
-                    $("input[name='" + error.field + "']").addClass("is-invalid").after($(
-                        '<p class="error-message text-danger m-0">' + error.defaultMessage + '</p>'
-                    ));
+                if (error.status === 409) {
+                    $("input[name='categoryName']").addClass("is-invalid").after($(
+                        '<p class="error-message text-danger m-0">Категорія з такою назвою вже створена</p>'));
+                } else {
+
+                    const errors = error.responseJSON;
+                    console.log(error)
+                    for (let error of errors) {
+                        $("input[name='" + error.field + "']").addClass("is-invalid").after($(
+                            '<p class="error-message text-danger m-0">' + error.defaultMessage + '</p>'
+                        ));
+                    }
                 }
                 toastr.error("Помилка під час оновлення категорії");
             }
