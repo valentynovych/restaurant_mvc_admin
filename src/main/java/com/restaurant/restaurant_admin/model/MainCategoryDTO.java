@@ -2,10 +2,7 @@ package com.restaurant.restaurant_admin.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -24,6 +21,7 @@ public class MainCategoryDTO {
     @Size(max = 200, message = "Може містити не більше 200 символів")
     private String previewIcon;
     @Max(value = 999, message = "Не більше 3-х значного числа")
+    @Min(value = 1, message = "Число має бути більше 0")
     private Integer topPosition;
     private Date dateOfCreate;
     @Max(value = 9999, message = "Не більше 4-х значного числа")
