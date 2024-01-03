@@ -50,6 +50,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/jquery-timepicker/jquery-timepicker.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}"/>
 
     <!-- Page CSS -->
 
@@ -393,6 +394,7 @@
 <script th:src="@{/assets/vendor/libs/jquery-timepicker/jquery-timepicker.js}"></script>
 <script th:src="@{/assets/vendor/libs/autosize/autosize.js}"></script>
 <script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
+<script th:src="@{/assets/vendor/libs/block-ui/block-ui.js}"></script>
 
 <!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
@@ -934,6 +936,7 @@
     })
 
     $('#save-order').on("click", function () {
+        blockButton($(this));
         var formData = new FormData($('#orderForm')[0]);
         $('.invalid-feedback').remove();
         $('.is-invalid').removeClass('is-invalid');
@@ -967,6 +970,7 @@
             success: function (response) {
                 fillInputs(response)
                 toastr.success('Оновлення успішне !');
+                unblockButton($(this));
             },
             error: function (error) {
                 const errors = error.responseJSON;
@@ -978,6 +982,7 @@
                     }
                 }
                 toastr.error('Упс... Виникла помилка ');
+                unblockButton($(this));
             }
         })
     });
@@ -988,7 +993,6 @@
 
     function deleteOrderItem(orderItemId) {
         $('#modal-delete-product').find('.btn-close').click();
-
 
         $.ajax({
             type: "DELETE",
@@ -1003,6 +1007,27 @@
                 toastr.error('Упс... Виникла помилка ');
             }
         })
+    }
+
+    function blockButton(button) {
+        button.addClass("disabled")
+
+        button.block({
+            message: '<div class="spinner-border text-primary" role="status"></div>',
+            css: {
+                backgroundColor: "transparent",
+                border: "0"
+            },
+            overlayCSS: {
+                backgroundColor: "#000",
+                opacity: 0.25
+            }
+        });
+    }
+
+    function unblockButton(button) {
+        button.removeClass("disabled")
+        button.unblock();
     }
 
 </script>

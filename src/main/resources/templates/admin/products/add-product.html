@@ -49,6 +49,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/flatpickr/flatpickr.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}"/>
 
     <!-- Page CSS -->
 
@@ -322,6 +323,7 @@
         integrity="sha512-TDV/1TfxlJAwv/y8HVjHO/AbxfEi3JzUJhQ9HL8GqMprZTcgRggSavorvX2bYzpWyJLrav/Ub/ikmK1sd3eyTw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
+<script th:src="@{/assets/vendor/libs/block-ui/block-ui.js}"></script>
 
 <!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
@@ -620,6 +622,7 @@
     }
 
     $('.send-product').on("click", function () {
+        blockButton($(this));
         var formData = new FormData($('#productForm')[0]);
         $('.invalid-feedback').remove();
         $('.is-invalid').removeClass('is-invalid');
@@ -652,6 +655,8 @@
             contentType: false,
             success: function (response) {
                 toastr.success('Продукт створено !');
+                unblockButton($(this));
+                window.history.back();
             },
             error: function (error) {
                 const errors = error.responseJSON;
@@ -661,11 +666,13 @@
                     ))
                 }
                 toastr.error('Упс.. Виникла помилка !');
+                unblockButton($(this));
             }
         })
     });
 
     $('.send-ingredient').on("click", function () {
+        blockButton($(this));
         var formData = new FormData($('#ingredientForm')[0]);
 
         $('.invalid-feedback').remove();
@@ -687,6 +694,8 @@
             contentType: false,
             success: function (response) {
                 toastr.success('Інгредієнт створено !');
+                unblockButton($(this));
+                window.history.back();
             },
             error: function (error) {
                 const errors = error.responseJSON;
@@ -700,6 +709,7 @@
                     ))
                 }
                 toastr.error('Упс.. Виникла помилка !');
+                unblockButton($(this));
             }
         })
     });
@@ -742,6 +752,27 @@
             };
             reader.readAsDataURL(this.files[0]);
         }
+    }
+
+    function blockButton(button) {
+        button.addClass("disabled")
+
+        button.block({
+            message: '<div class="spinner-border text-primary" role="status"></div>',
+            css: {
+                backgroundColor: "transparent",
+                border: "0"
+            },
+            overlayCSS: {
+                backgroundColor: "#000",
+                opacity: 0.25
+            }
+        });
+    }
+
+    function unblockButton(button) {
+        button.removeClass("disabled")
+        button.unblock();
     }
 
 </script>

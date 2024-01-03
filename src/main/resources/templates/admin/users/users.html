@@ -356,7 +356,26 @@
         })
     }
 
-    // delete
+    function blockButton(button) {
+        button.addClass("disabled")
+
+        button.block({
+            message: '<div class="spinner-border text-primary" role="status"></div>',
+            css: {
+                backgroundColor: "transparent",
+                border: "0"
+            },
+            overlayCSS: {
+                backgroundColor: "#000",
+                opacity: 0.25
+            }
+        });
+    }
+
+    function unblockButton(button) {
+        button.removeClass("disabled")
+        button.unblock();
+    }
 
     function autoCloseAlert() {
         $(".alert").fadeTo(2000, 500).slideUp(500, function () {

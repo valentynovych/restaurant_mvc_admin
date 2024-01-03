@@ -45,6 +45,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}"/>
 
 
     <!-- Page CSS -->
@@ -197,6 +198,7 @@
 
 <!-- Vendors JS -->
 <script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
+<script th:src="@{/assets/vendor/libs/block-ui/block-ui.js}"></script>
 
 <!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
@@ -329,7 +331,31 @@
 
     }
 
+    function blockButton(button) {
+        button.addClass("disabled")
+
+        button.block({
+            message: '<div class="spinner-border text-primary" role="status"></div>',
+            css: {
+                backgroundColor: "transparent",
+                border: "0"
+            },
+            overlayCSS: {
+                backgroundColor: "#000",
+                opacity: 0.25
+            }
+        });
+    }
+
+    function unblockButton(button) {
+        button.removeClass("disabled")
+        button.unblock();
+    }
+
     $("#post-form").on("click", function () {
+        var button = $(this);
+        blockButton(button);
+
         $(".error-message").remove();
 
         var formData = new FormData();
@@ -343,6 +369,7 @@
         }
         formData.append("countChildProduct", mainCategory.countChildProduct)
 
+
         $.ajax({
             type: 'POST',
             data: formData,
@@ -351,15 +378,17 @@
             contentType: false,
             success: function (response) {
                 toastr.success("Категорія успішно оновленна !");
+                unblockButton(button);
                 setTimeout(function () {
                     window.history.back()
                 }, 3000);
             },
             error: function (error) {
+                unblockButton(button);
                 if (error.status === 409) {
                     $("input[name='categoryName']").addClass("is-invalid").after($(
                         '<p class="error-message text-danger m-0">Категорія з такою назвою вже створена</p>'));
-                } else if (error.status === 400){
+                } else if (error.status === 400) {
                     const errors = error.responseJSON;
                     for (let error of errors) {
                         $("input[name='" + error.field + "']").addClass("is-invalid").after($(
@@ -370,7 +399,8 @@
                 toastr.error("Помилка під час оновлення категорії");
             }
         })
-    });
+    })
+    ;
 
     $("label.delete-image-button").on("click", function () {
 

@@ -47,6 +47,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/typeahead-js/typeahead.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/animate-css/animate.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}"/>
 
     <!-- Page CSS -->
 
@@ -170,6 +171,7 @@
 <script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
 <script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
 <script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
+<script th:src="@{/assets/vendor/libs/block-ui/block-ui.js}"></script>
 
 <script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
 
@@ -203,7 +205,9 @@
         let keyPause = 400;
         searchText = this.value;
         clearTimeout(timer);
-        timer = setTimeout( function () {getStaff(0)}, keyPause);
+        timer = setTimeout(function () {
+            getStaff(0)
+        }, keyPause);
     });
 
     function getStaff(page) {
@@ -287,7 +291,7 @@
                 '     <a class="dropdown-item" href="staff/edit-staff/' + data.staffId + '">\n' +
                 '     <i class="ti ti-pencil me-1"></i>Редагувати\n' +
                 '     </a>\n' +
-                '     <button class="dropdown-item btn" onclick="blockStaffById(' + data.staffId + ')">' +
+                '     <button class="dropdown-item btn" id="block-staff" onclick="blockStaffById(' + data.staffId + ')">' +
                 '     <i class="ti ti-lock-open-off me-1"></i>Заблокувати</button>' +
                 '     <button type="button" class="dropdown-item btn justify-content-start" data-bs-toggle="modal" data-bs-target="#modalCenter"' +
                 '     onclick="addDeleteLink(' + data.staffId + ')">\n' +
@@ -354,7 +358,6 @@
 
             $(paginationList).appendTo(".card-footer");
         }
-
     }
 
     //clear table before getAll
@@ -371,22 +374,26 @@
     }
 
     function blockStaffById(id) {
+
+        blockButton($('#block-staff'))
         $.ajax({
             type: "POST",
             url: "staff/blockStaff/" + id,
             success: function () {
                 toastr.success('Статус користувача змінено');
                 getStaff(currentPage)
+                unblockButton($('#block-staff'));
             },
             error: function () {
                 toastr.error('Упс.. Виникла помилка');
-
+                unblockButton($('#block-staff'));
             }
         })
     }
 
     // delete
     function deleteStaff(id) {
+        blockButton($('#delete-staff'));
         $.ajax({
             type: "DELETE",
             url: 'staff/delete/' + id,
@@ -394,19 +401,35 @@
                 $('.btn-close').click();
                 toastr.success('Користувач з ID:\' + id + \' видалений !');
                 getStaff(currentPage)
+                unblockButton($('#delete-staff'))
             },
             error: function (error) {
                 $('.btn-close').click();
-
+                unblockButton($('#delete-staff'));
                 toastr.error('Упс.. Виникла помилка', error.resposeText);
             }
         });
     }
 
-    function autoCloseAlert() {
-        $(".alert").fadeTo(2000, 500).slideUp(500, function () {
-            $("#success-alert").slideUp(500);
+    function blockButton(button) {
+        button.addClass("disabled")
+
+        button.block({
+            message: '<div class="spinner-border text-primary" role="status"></div>',
+            css: {
+                backgroundColor: "transparent",
+                border: "0"
+            },
+            overlayCSS: {
+                backgroundColor: "#000",
+                opacity: 0.25
+            }
         });
+    }
+
+    function unblockButton(button) {
+        button.removeClass("disabled")
+        button.unblock();
     }
 </script>
 </body>

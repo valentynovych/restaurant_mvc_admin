@@ -47,6 +47,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/flatpickr/flatpickr.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}"/>
 
     <!-- Page CSS -->
 
@@ -208,6 +209,7 @@
 <script th:src="@{https://npmcdn.com/flatpickr/dist/l10n/uk.js}"></script>
 <script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
 <script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
+<script th:src="@{/assets/vendor/libs/block-ui/block-ui.js}"></script>
 
 
 <!-- Main JS -->
@@ -466,11 +468,25 @@
             })
         }
     });
+    function blockButton(button) {
+        button.addClass("disabled")
 
-    function autoCloseAlert() {
-        $(".alert").fadeTo(2000, 500).slideUp(500, function () {
-            $("#success-alert").slideUp(500);
+        button.block({
+            message: '<div class="spinner-border text-primary" role="status"></div>',
+            css: {
+                backgroundColor: "transparent",
+                border: "0"
+            },
+            overlayCSS: {
+                backgroundColor: "#000",
+                opacity: 0.25
+            }
         });
+    }
+
+    function unblockButton(button) {
+        button.removeClass("disabled")
+        button.unblock();
     }
 </script>
 

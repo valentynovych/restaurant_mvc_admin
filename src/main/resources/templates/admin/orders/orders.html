@@ -50,6 +50,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}"/>
 
     <!-- Page CSS -->
 
@@ -167,6 +168,7 @@
 <script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
 <script th:src="@{/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js}"></script>
 <script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
+<script th:src="@{/assets/vendor/libs/block-ui/block-ui.js}"></script>
 
 <!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
@@ -407,37 +409,6 @@
             this.remove();
         });
         $(".card-footer").children().remove();
-    }
-
-    function blockUserById(id) {
-        $.ajax({
-            type: "POST",
-            url: "users/blockUser/" + id,
-            success: function () {
-                $('<div class="alert alert-success alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Статус користувача змінено !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper")
-                autoCloseAlert();
-                getOrders(currentPage)
-            },
-            error: function () {
-                $('<div class="alert alert-danger alert-dismissible" role="alert" style="position: absolute; top: 6rem; right: 1rem"> \n' +
-                    'Ой.. Щось пішло не так !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper")
-                autoCloseAlert();
-
-            }
-        })
-    }
-
-    // delete
-
-    function autoCloseAlert() {
-        $(".alert").fadeTo(2000, 500).slideUp(500, function () {
-            $("#success-alert").slideUp(500);
-        });
     }
 </script>
 </body>
