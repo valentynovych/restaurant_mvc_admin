@@ -3,7 +3,12 @@ package com.restaurant.restaurant_admin.service;
 import com.restaurant.restaurant_admin.entity.Promotion;
 import com.restaurant.restaurant_admin.entity.enums.PromotionCondition;
 import com.restaurant.restaurant_admin.entity.enums.PromotionType;
-import com.restaurant.restaurant_admin.model.*;
+import com.restaurant.restaurant_admin.model.category.CategoryCriteria;
+import com.restaurant.restaurant_admin.model.category.MainCategoryDTO;
+import com.restaurant.restaurant_admin.model.category.SubcategoryDTO;
+import com.restaurant.restaurant_admin.model.product.ProductShortResponse;
+import com.restaurant.restaurant_admin.model.promotion.PromotionRequest;
+import com.restaurant.restaurant_admin.model.promotion.PromotionResponse;
 import com.restaurant.restaurant_admin.repository.PromotionRepo;
 import com.restaurant.restaurant_admin.repository.specification.PromotionSpecification;
 import com.restaurant.restaurant_admin.utils.UploadFileUtil;
@@ -149,7 +154,8 @@ class PromotionServiceTest {
         Page<MainCategoryDTO> mainCategoryDTOPage = new PageImpl<>(
                 List.of(new MainCategoryDTO(), new MainCategoryDTO(), new MainCategoryDTO(), new MainCategoryDTO()),
                 pageable, 4);
-        when(mainCategoryService.getMainCategoriesBySearch("", pageable.getPageNumber(), pageable.getPageSize()))
+        when(mainCategoryService.getMainCategoriesBySearch(
+                any(CategoryCriteria.class), anyInt(), anyInt()))
                 .thenReturn(mainCategoryDTOPage);
         Page<MainCategoryDTO> categoriesForPromo =
                 promotionService.getCategoriesForPromo("", pageable.getPageNumber(), pageable.getPageSize());

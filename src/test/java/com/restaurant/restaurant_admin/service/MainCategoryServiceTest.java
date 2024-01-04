@@ -4,8 +4,9 @@ import com.restaurant.restaurant_admin.entity.MainCategory;
 import com.restaurant.restaurant_admin.entity.Product;
 import com.restaurant.restaurant_admin.entity.Subcategory;
 import com.restaurant.restaurant_admin.mapper.MainCategoryMapper;
-import com.restaurant.restaurant_admin.model.MainCategoryDTO;
-import com.restaurant.restaurant_admin.model.MainCategoryShortResponse;
+import com.restaurant.restaurant_admin.model.category.CategoryCriteria;
+import com.restaurant.restaurant_admin.model.category.MainCategoryDTO;
+import com.restaurant.restaurant_admin.model.category.MainCategoryShortResponse;
 import com.restaurant.restaurant_admin.repository.MainCategoryRepo;
 import com.restaurant.restaurant_admin.repository.ProductRepo;
 import com.restaurant.restaurant_admin.repository.specification.MainCategorySpecification;
@@ -21,7 +22,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -197,7 +197,8 @@ class MainCategoryServiceTest {
         String search = "";
         when(categoryRepo.findAll(any(MainCategorySpecification.class), any(Pageable.class))).thenReturn(categoryPage);
         Page<MainCategoryDTO> mainCategoriesByPage =
-                categoryService.getMainCategoriesBySearch(search, pageable.getPageNumber(), pageable.getPageSize());
+                categoryService.getMainCategoriesBySearch(
+                        CategoryCriteria.builder().search(search).build(), pageable.getPageNumber(), pageable.getPageSize());
         List<MainCategoryDTO> content = mainCategoriesByPage.getContent();
 
         assertNotNull(content);

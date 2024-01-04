@@ -2,7 +2,7 @@ package com.restaurant.restaurant_admin.service;
 
 import com.restaurant.restaurant_admin.entity.MainCategory;
 import com.restaurant.restaurant_admin.entity.Subcategory;
-import com.restaurant.restaurant_admin.model.SubcategoryDTO;
+import com.restaurant.restaurant_admin.model.category.SubcategoryDTO;
 import com.restaurant.restaurant_admin.repository.SubcategoryRepo;
 import com.restaurant.restaurant_admin.repository.specification.SubcategorySpecification;
 import org.junit.jupiter.api.BeforeEach;

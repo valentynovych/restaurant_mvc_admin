@@ -2,8 +2,8 @@ package com.restaurant.restaurant_admin.service;
 
 import com.restaurant.restaurant_admin.entity.Staff;
 import com.restaurant.restaurant_admin.entity.enums.Role;
-import com.restaurant.restaurant_admin.model.StaffRequest;
-import com.restaurant.restaurant_admin.model.StaffResponse;
+import com.restaurant.restaurant_admin.model.staff.StaffRequest;
+import com.restaurant.restaurant_admin.model.staff.StaffResponse;
 import com.restaurant.restaurant_admin.repository.StaffRepo;
 import com.restaurant.restaurant_admin.utils.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;

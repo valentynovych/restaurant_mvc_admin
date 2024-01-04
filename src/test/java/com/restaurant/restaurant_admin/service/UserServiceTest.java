@@ -2,9 +2,9 @@ package com.restaurant.restaurant_admin.service;
 
 import com.restaurant.restaurant_admin.entity.User;
 import com.restaurant.restaurant_admin.entity.UserDetails;
-import com.restaurant.restaurant_admin.model.UserRequest;
-import com.restaurant.restaurant_admin.model.UserShortDetails;
-import com.restaurant.restaurant_admin.model.UserShortResponse;
+import com.restaurant.restaurant_admin.model.user.UserRequest;
+import com.restaurant.restaurant_admin.model.user.UserShortDetails;
+import com.restaurant.restaurant_admin.model.user.UserShortResponse;
 import com.restaurant.restaurant_admin.repository.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,7 +1,13 @@
 package com.restaurant.restaurant_admin.service;
 
 import com.restaurant.restaurant_admin.entity.Product;
-import com.restaurant.restaurant_admin.model.*;
+import com.restaurant.restaurant_admin.model.category.CategoryCriteria;
+import com.restaurant.restaurant_admin.model.category.MainCategoryDTO;
+import com.restaurant.restaurant_admin.model.category.SubcategoryDTO;
+import com.restaurant.restaurant_admin.model.product.IngredientRequest;
+import com.restaurant.restaurant_admin.model.product.ProductRequest;
+import com.restaurant.restaurant_admin.model.product.ProductResponse;
+import com.restaurant.restaurant_admin.model.product.ProductShortResponse;
 import com.restaurant.restaurant_admin.repository.ProductRepo;
 import com.restaurant.restaurant_admin.repository.specification.ProductSpecification;
 import com.restaurant.restaurant_admin.utils.UploadFileUtil;
@@ -117,7 +123,8 @@ class ProductServiceTest {
         Pageable pageable = PageRequest.ofSize(10);
         List<MainCategoryDTO> mainCategories = List.of(new MainCategoryDTO(), new MainCategoryDTO(), new MainCategoryDTO());
         Page<MainCategoryDTO> categoryPage = new PageImpl<>(mainCategories, pageable, mainCategories.size());
-        when(mainCategoryService.getMainCategoriesBySearch("", pageable.getPageNumber(), pageable.getPageSize())).thenReturn(categoryPage);
+        when(mainCategoryService.getMainCategoriesBySearch(
+                any(CategoryCriteria.class), any(int.class), any(int.class))).thenReturn(categoryPage);
         Page<MainCategoryDTO> mainCategoriesByPage =
                 productService.getCategories(pageable.getPageNumber(), pageable.getPageSize(), "");
         List<MainCategoryDTO> content = mainCategoriesByPage.getContent();
