@@ -361,6 +361,18 @@
     });
 
     var $select = $("select[name='isIngredient']");
+
+    function swapImage(product) {
+
+        if (product.isIngredient) {
+            $('#photoI').attr('src', $('#photo').attr('src'));
+            $('#photoFileI').prop('files', $('#photoFile').prop('files'));
+        } else {
+            $('#photo').attr('src', $('#photoI').attr('src'));
+            $('#photoFile').prop('files', $('#photoFileI').prop('files'));
+        }
+    }
+
     $select.each(function () {
         $(this).on("select2:select", function (e) {
             if (e.params.data.id === 'true') {
@@ -372,6 +384,7 @@
                 $('#ingredientForm').css('display', 'none')
                 product.isIngredient = false;
             }
+            swapImage(product);
             fillInputs(product);
         })
     });
@@ -725,6 +738,7 @@
             reader.onload = function (e) {
                 if (type === "image/jpeg" || type === "image/jpg" || type === "image/png") {
                     $("#photo").attr("src", e.target.result);
+                    // $("#photoI").attr("src", e.target.result);
                 } else {
                     $("#photoFile").addClass("is-invalid")
                         .after($('<p class="error-message text-center text-danger m-0">' +
@@ -745,6 +759,7 @@
             reader.onload = function (e) {
                 if (type === "image/jpeg" || type === "image/jpg" || type === "image/png") {
                     $("#photoI").attr("src", e.target.result);
+                    // $("#photo").attr("src", e.target.result);
                 } else {
                     $("#photoFileI").addClass("is-invalid")
                         .after($('<p class="error-message text-center text-danger m-0">' +
