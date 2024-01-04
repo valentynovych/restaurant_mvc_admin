@@ -1,6 +1,9 @@
-package com.restaurant.restaurant_admin.model;
+package com.restaurant.restaurant_admin.model.product;
 
 import com.restaurant.restaurant_admin.entity.enums.IngredientCategory;
+import com.restaurant.restaurant_admin.model.promotion.PromotionShort;
+import com.restaurant.restaurant_admin.model.category.MainCategoryShortResponse;
+import com.restaurant.restaurant_admin.model.category.SubcategoryDTO;
 import lombok.Data;
 
 import java.math.BigDecimal;

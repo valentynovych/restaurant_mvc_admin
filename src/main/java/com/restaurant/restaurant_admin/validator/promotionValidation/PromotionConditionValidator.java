@@ -1,9 +1,5 @@
 package com.restaurant.restaurant_admin.validator.promotionValidation;
 
-import com.restaurant.restaurant_admin.model.PromotionRequest;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-
 public class PromotionConditionValidator
 //        implements ConstraintValidator<PromotionValidation, PromotionRequest>
 {

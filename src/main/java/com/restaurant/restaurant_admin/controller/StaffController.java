@@ -1,8 +1,8 @@
 package com.restaurant.restaurant_admin.controller;
 
 import com.restaurant.restaurant_admin.entity.enums.Role;
-import com.restaurant.restaurant_admin.model.StaffRequest;
-import com.restaurant.restaurant_admin.model.StaffResponse;
+import com.restaurant.restaurant_admin.model.staff.StaffRequest;
+import com.restaurant.restaurant_admin.model.staff.StaffResponse;
 import com.restaurant.restaurant_admin.service.StaffService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

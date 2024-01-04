@@ -2,7 +2,12 @@ package com.restaurant.restaurant_admin.service;
 
 import com.restaurant.restaurant_admin.entity.Product;
 import com.restaurant.restaurant_admin.mapper.ProductMapper;
-import com.restaurant.restaurant_admin.model.*;
+import com.restaurant.restaurant_admin.model.category.MainCategoryDTO;
+import com.restaurant.restaurant_admin.model.category.SubcategoryDTO;
+import com.restaurant.restaurant_admin.model.product.IngredientRequest;
+import com.restaurant.restaurant_admin.model.product.ProductRequest;
+import com.restaurant.restaurant_admin.model.product.ProductResponse;
+import com.restaurant.restaurant_admin.model.product.ProductShortResponse;
 import com.restaurant.restaurant_admin.repository.ProductRepo;
 import com.restaurant.restaurant_admin.repository.specification.ProductSpecification;
 import com.restaurant.restaurant_admin.repository.specification.SearchCriteria;

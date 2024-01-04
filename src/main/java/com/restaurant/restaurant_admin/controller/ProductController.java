@@ -1,9 +1,9 @@
 package com.restaurant.restaurant_admin.controller;
 
 import com.restaurant.restaurant_admin.entity.enums.IngredientCategory;
-import com.restaurant.restaurant_admin.model.IngredientRequest;
-import com.restaurant.restaurant_admin.model.ProductRequest;
-import com.restaurant.restaurant_admin.model.ProductShortResponse;
+import com.restaurant.restaurant_admin.model.product.IngredientRequest;
+import com.restaurant.restaurant_admin.model.product.ProductRequest;
+import com.restaurant.restaurant_admin.model.product.ProductShortResponse;
 import com.restaurant.restaurant_admin.service.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

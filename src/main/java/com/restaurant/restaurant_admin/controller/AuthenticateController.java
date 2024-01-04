@@ -1,6 +1,6 @@
 package com.restaurant.restaurant_admin.controller;
 
-import com.restaurant.restaurant_admin.model.StaffLoginRequest;
+import com.restaurant.restaurant_admin.model.staff.StaffLoginRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

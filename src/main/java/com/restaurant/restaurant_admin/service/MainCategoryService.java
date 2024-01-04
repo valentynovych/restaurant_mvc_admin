@@ -3,8 +3,8 @@ package com.restaurant.restaurant_admin.service;
 import com.restaurant.restaurant_admin.entity.MainCategory;
 import com.restaurant.restaurant_admin.entity.Product;
 import com.restaurant.restaurant_admin.mapper.MainCategoryMapper;
-import com.restaurant.restaurant_admin.model.MainCategoryDTO;
-import com.restaurant.restaurant_admin.model.MainCategoryShortResponse;
+import com.restaurant.restaurant_admin.model.category.MainCategoryDTO;
+import com.restaurant.restaurant_admin.model.category.MainCategoryShortResponse;
 import com.restaurant.restaurant_admin.repository.MainCategoryRepo;
 import com.restaurant.restaurant_admin.repository.ProductRepo;
 import com.restaurant.restaurant_admin.repository.specification.MainCategorySpecification;
@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -1,8 +1,8 @@
 package com.restaurant.restaurant_admin.controller;
 
-import com.restaurant.restaurant_admin.model.MainCategoryDTO;
-import com.restaurant.restaurant_admin.model.MainCategoryShortResponse;
-import com.restaurant.restaurant_admin.model.SubcategoryDTO;
+import com.restaurant.restaurant_admin.model.category.MainCategoryDTO;
+import com.restaurant.restaurant_admin.model.category.MainCategoryShortResponse;
+import com.restaurant.restaurant_admin.model.category.SubcategoryDTO;
 import com.restaurant.restaurant_admin.service.MainCategoryService;
 import com.restaurant.restaurant_admin.service.SubcategoryService;
 import com.restaurant.restaurant_admin.utils.UploadFileUtil;

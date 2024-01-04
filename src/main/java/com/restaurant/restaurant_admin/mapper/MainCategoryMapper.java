@@ -1,7 +1,7 @@
 package com.restaurant.restaurant_admin.mapper;
 
-import com.restaurant.restaurant_admin.model.MainCategoryDTO;
-import com.restaurant.restaurant_admin.model.MainCategoryShortResponse;
+import com.restaurant.restaurant_admin.model.category.MainCategoryDTO;
+import com.restaurant.restaurant_admin.model.category.MainCategoryShortResponse;
 import com.restaurant.restaurant_admin.entity.MainCategory;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

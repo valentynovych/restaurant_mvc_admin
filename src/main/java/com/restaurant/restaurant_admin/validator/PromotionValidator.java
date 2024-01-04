@@ -1,9 +1,9 @@
 package com.restaurant.restaurant_admin.validator;
 
-import com.restaurant.restaurant_admin.model.MainCategoryDTO;
-import com.restaurant.restaurant_admin.model.ProductShortResponse;
-import com.restaurant.restaurant_admin.model.PromotionRequest;
-import com.restaurant.restaurant_admin.model.SubcategoryDTO;
+import com.restaurant.restaurant_admin.model.category.MainCategoryDTO;
+import com.restaurant.restaurant_admin.model.product.ProductShortResponse;
+import com.restaurant.restaurant_admin.model.promotion.PromotionRequest;
+import com.restaurant.restaurant_admin.model.category.SubcategoryDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

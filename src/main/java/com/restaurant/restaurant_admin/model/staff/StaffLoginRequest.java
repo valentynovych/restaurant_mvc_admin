@@ -1,4 +1,4 @@
-package com.restaurant.restaurant_admin.model;
+package com.restaurant.restaurant_admin.model.staff;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

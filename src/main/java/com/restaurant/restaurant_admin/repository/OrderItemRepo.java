@@ -1,7 +1,7 @@
 package com.restaurant.restaurant_admin.repository;
 
 import com.restaurant.restaurant_admin.entity.OrderItem;
-import com.restaurant.restaurant_admin.model.PopularCategory;
+import com.restaurant.restaurant_admin.model.category.PopularCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

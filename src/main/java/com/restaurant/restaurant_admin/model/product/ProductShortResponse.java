@@ -1,4 +1,4 @@
-package com.restaurant.restaurant_admin.model;
+package com.restaurant.restaurant_admin.model.product;
 
 import lombok.Data;
 

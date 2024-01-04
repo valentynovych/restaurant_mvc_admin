@@ -1,4 +1,4 @@
-package com.restaurant.restaurant_admin.model;
+package com.restaurant.restaurant_admin.model.staff;
 
 import com.restaurant.restaurant_admin.entity.enums.Role;
 import jakarta.validation.constraints.*;

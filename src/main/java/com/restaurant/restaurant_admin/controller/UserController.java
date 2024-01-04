@@ -1,8 +1,8 @@
 package com.restaurant.restaurant_admin.controller;
 
-import com.restaurant.restaurant_admin.model.UserRequest;
-import com.restaurant.restaurant_admin.model.UserShortDetails;
-import com.restaurant.restaurant_admin.model.UserShortResponse;
+import com.restaurant.restaurant_admin.model.user.UserRequest;
+import com.restaurant.restaurant_admin.model.user.UserShortDetails;
+import com.restaurant.restaurant_admin.model.user.UserShortResponse;
 import com.restaurant.restaurant_admin.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

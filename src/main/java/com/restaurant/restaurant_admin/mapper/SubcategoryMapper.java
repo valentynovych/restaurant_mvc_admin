@@ -1,6 +1,6 @@
 package com.restaurant.restaurant_admin.mapper;
 
-import com.restaurant.restaurant_admin.model.SubcategoryDTO;
+import com.restaurant.restaurant_admin.model.category.SubcategoryDTO;
 import com.restaurant.restaurant_admin.entity.Subcategory;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,5 +1,6 @@
 package com.restaurant.restaurant_admin.model;
 
+import com.restaurant.restaurant_admin.model.user.UserShortResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;

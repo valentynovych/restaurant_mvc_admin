@@ -4,7 +4,12 @@ import com.restaurant.restaurant_admin.entity.MainCategory;
 import com.restaurant.restaurant_admin.entity.Product;
 import com.restaurant.restaurant_admin.entity.Promotion;
 import com.restaurant.restaurant_admin.entity.Subcategory;
-import com.restaurant.restaurant_admin.model.*;
+import com.restaurant.restaurant_admin.model.category.MainCategoryDTO;
+import com.restaurant.restaurant_admin.model.category.SubcategoryDTO;
+import com.restaurant.restaurant_admin.model.product.ProductShortResponse;
+import com.restaurant.restaurant_admin.model.promotion.PromotionRequest;
+import com.restaurant.restaurant_admin.model.promotion.PromotionResponse;
+import com.restaurant.restaurant_admin.model.promotion.PromotionShort;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

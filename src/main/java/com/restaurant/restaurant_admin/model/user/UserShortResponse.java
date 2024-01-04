@@ -1,4 +1,4 @@
-package com.restaurant.restaurant_admin.model;
+package com.restaurant.restaurant_admin.model.user;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;

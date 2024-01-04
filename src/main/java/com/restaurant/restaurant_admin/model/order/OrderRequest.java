@@ -1,8 +1,10 @@
-package com.restaurant.restaurant_admin.model;
+package com.restaurant.restaurant_admin.model.order;
 
-import com.restaurant.restaurant_admin.entity.Address;
-import com.restaurant.restaurant_admin.entity.Promotion;
 import com.restaurant.restaurant_admin.entity.enums.OrderStatus;
+import com.restaurant.restaurant_admin.model.AddressDTO;
+import com.restaurant.restaurant_admin.model.promotion.PromotionResponse;
+import com.restaurant.restaurant_admin.model.staff.StaffResponse;
+import com.restaurant.restaurant_admin.model.user.UserShortResponse;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.Valid;
@@ -14,7 +16,6 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 @Data
 public class OrderRequest {

@@ -1,4 +1,4 @@
-package com.restaurant.restaurant_admin.model;
+package com.restaurant.restaurant_admin.model.category;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.Valid;

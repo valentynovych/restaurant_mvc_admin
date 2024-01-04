@@ -3,7 +3,7 @@ package com.restaurant.restaurant_admin.repository.specification;
 import com.restaurant.restaurant_admin.entity.Order;
 import com.restaurant.restaurant_admin.entity.User;
 import com.restaurant.restaurant_admin.entity.UserDetails;
-import com.restaurant.restaurant_admin.model.OrderCriteria;
+import com.restaurant.restaurant_admin.model.order.OrderCriteria;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;

@@ -2,10 +2,10 @@ package com.restaurant.restaurant_admin.mapper;
 
 import com.restaurant.restaurant_admin.entity.MainCategory;
 import com.restaurant.restaurant_admin.entity.Product;
-import com.restaurant.restaurant_admin.model.IngredientRequest;
-import com.restaurant.restaurant_admin.model.ProductRequest;
-import com.restaurant.restaurant_admin.model.ProductResponse;
-import com.restaurant.restaurant_admin.model.ProductShortResponse;
+import com.restaurant.restaurant_admin.model.product.IngredientRequest;
+import com.restaurant.restaurant_admin.model.product.ProductRequest;
+import com.restaurant.restaurant_admin.model.product.ProductResponse;
+import com.restaurant.restaurant_admin.model.product.ProductShortResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

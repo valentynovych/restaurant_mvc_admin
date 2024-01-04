@@ -1,7 +1,13 @@
 package com.restaurant.restaurant_admin.mapper;
 
 import com.restaurant.restaurant_admin.entity.*;
-import com.restaurant.restaurant_admin.model.*;
+import com.restaurant.restaurant_admin.model.order.OrderItemRequest;
+import com.restaurant.restaurant_admin.model.order.OrderRequest;
+import com.restaurant.restaurant_admin.model.order.OrderResponse;
+import com.restaurant.restaurant_admin.model.order.OrderShortResponse;
+import com.restaurant.restaurant_admin.model.promotion.PromotionResponse;
+import com.restaurant.restaurant_admin.model.staff.StaffResponse;
+import com.restaurant.restaurant_admin.model.user.UserShortResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

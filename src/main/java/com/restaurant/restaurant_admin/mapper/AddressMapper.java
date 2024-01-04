@@ -3,7 +3,7 @@ package com.restaurant.restaurant_admin.mapper;
 import com.restaurant.restaurant_admin.entity.Address;
 import com.restaurant.restaurant_admin.entity.User;
 import com.restaurant.restaurant_admin.model.AddressDTO;
-import com.restaurant.restaurant_admin.model.UserShortResponse;
+import com.restaurant.restaurant_admin.model.user.UserShortResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

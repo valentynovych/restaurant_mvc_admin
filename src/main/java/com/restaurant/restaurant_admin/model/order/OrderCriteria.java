@@ -1,4 +1,4 @@
-package com.restaurant.restaurant_admin.model;
+package com.restaurant.restaurant_admin.model.order;
 
 import com.restaurant.restaurant_admin.entity.enums.OrderStatus;
 import lombok.Builder;

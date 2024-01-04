@@ -1,7 +1,7 @@
 package com.restaurant.restaurant_admin.controller;
 
-import com.restaurant.restaurant_admin.model.PromotionRequest;
-import com.restaurant.restaurant_admin.model.PromotionResponse;
+import com.restaurant.restaurant_admin.model.promotion.PromotionRequest;
+import com.restaurant.restaurant_admin.model.promotion.PromotionResponse;
 import com.restaurant.restaurant_admin.service.PromotionService;
 import com.restaurant.restaurant_admin.validator.PromotionValidator;
 import jakarta.validation.Valid;
