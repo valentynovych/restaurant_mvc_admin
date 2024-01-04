@@ -3,6 +3,7 @@ package com.restaurant.restaurant_admin.service;
 import com.restaurant.restaurant_admin.entity.MainCategory;
 import com.restaurant.restaurant_admin.entity.Product;
 import com.restaurant.restaurant_admin.mapper.MainCategoryMapper;
+import com.restaurant.restaurant_admin.model.category.CategoryCriteria;
 import com.restaurant.restaurant_admin.model.category.MainCategoryDTO;
 import com.restaurant.restaurant_admin.model.category.MainCategoryShortResponse;
 import com.restaurant.restaurant_admin.repository.MainCategoryRepo;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -138,13 +140,12 @@ public class MainCategoryService {
         return mainCategoriesDTOPage;
     }
 
-    public Page<MainCategoryDTO> getMainCategoriesBySearch(String search, int page, int pageSize) {
+    public Page<MainCategoryDTO> getMainCategoriesBySearch(CategoryCriteria categoryCriteria, int page, int pageSize) {
         log.info("method getMainCategoriesBySearch -> start getting categories by page");
         Pageable pageable = PageRequest.of(page, pageSize);
-        MainCategorySpecification spec =
-                new MainCategorySpecification(
-                        new SearchCriteria("categoryName", ":", search));
-        Page<MainCategory> mainCategoryPage = mainCategoryRepo.findAll(spec, pageable);
+        MainCategorySpecification specification = new MainCategorySpecification(categoryCriteria);
+
+        Page<MainCategory> mainCategoryPage = mainCategoryRepo.findAll(Specification.where(specification), pageable);
         List<MainCategoryDTO> mainCategoryDTOS = MainCategoryMapper.MAPPER.listMainCategoryToDtoList(mainCategoryPage.getContent());
         Page<MainCategoryDTO> mainCategoriesDTOPage =
                 new PageImpl<>(mainCategoryDTOS, pageable, mainCategoryPage.getTotalElements());

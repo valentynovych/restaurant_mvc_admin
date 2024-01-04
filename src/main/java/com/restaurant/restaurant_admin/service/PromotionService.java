@@ -4,6 +4,7 @@ import com.restaurant.restaurant_admin.entity.Promotion;
 import com.restaurant.restaurant_admin.entity.enums.PromotionCondition;
 import com.restaurant.restaurant_admin.entity.enums.PromotionType;
 import com.restaurant.restaurant_admin.mapper.PromotionMapper;
+import com.restaurant.restaurant_admin.model.category.CategoryCriteria;
 import com.restaurant.restaurant_admin.model.category.MainCategoryDTO;
 import com.restaurant.restaurant_admin.model.category.SubcategoryDTO;
 import com.restaurant.restaurant_admin.model.product.ProductShortResponse;
@@ -89,7 +90,8 @@ public class PromotionService {
 
     public Page<MainCategoryDTO> getCategoriesForPromo(String search, int page, int pageSize) {
         log.info(String.format("getCategoriesForPromo() -> start, with page: %s, pageSize: %s, by search: %s", page, pageSize, search));
-        Page<MainCategoryDTO> mainCategoriesBySearch = mainCategoryService.getMainCategoriesBySearch(search, page, pageSize);
+        Page<MainCategoryDTO> mainCategoriesBySearch = mainCategoryService.getMainCategoriesBySearch(
+                CategoryCriteria.builder().search(search).build(), page, pageSize);
         log.info("getCategoriesForPromo() -> exit");
         return mainCategoriesBySearch;
     }

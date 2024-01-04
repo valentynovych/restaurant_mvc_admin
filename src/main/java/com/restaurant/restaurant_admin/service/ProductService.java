@@ -2,6 +2,7 @@ package com.restaurant.restaurant_admin.service;
 
 import com.restaurant.restaurant_admin.entity.Product;
 import com.restaurant.restaurant_admin.mapper.ProductMapper;
+import com.restaurant.restaurant_admin.model.category.CategoryCriteria;
 import com.restaurant.restaurant_admin.model.category.MainCategoryDTO;
 import com.restaurant.restaurant_admin.model.category.SubcategoryDTO;
 import com.restaurant.restaurant_admin.model.product.IngredientRequest;
@@ -73,7 +74,7 @@ public class ProductService {
 
     public Page<MainCategoryDTO> getCategories(int page, int pageSize, String search) {
         log.info("method getCategories -> start");
-        return categoryService.getMainCategoriesBySearch(search, page, pageSize);
+        return categoryService.getMainCategoriesBySearch(CategoryCriteria.builder().search(search).build(), page, pageSize);
     }
 
     public Page<SubcategoryDTO> getSubcategories(int page, int pageSize, String search) {

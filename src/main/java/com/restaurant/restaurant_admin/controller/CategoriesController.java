@@ -1,5 +1,6 @@
 package com.restaurant.restaurant_admin.controller;
 
+import com.restaurant.restaurant_admin.model.category.CategoryCriteria;
 import com.restaurant.restaurant_admin.model.category.MainCategoryDTO;
 import com.restaurant.restaurant_admin.model.category.MainCategoryShortResponse;
 import com.restaurant.restaurant_admin.model.category.SubcategoryDTO;
@@ -99,8 +100,16 @@ public class CategoriesController {
     }
 
     @GetMapping("/getPageSearch")
-    public @ResponseBody Page<MainCategoryDTO> getCategoriesOnPage(@RequestParam int page, @RequestParam(required = false) String search) {
-        return categoryService.getMainCategoriesBySearch(search, page, pageSize);
+    public @ResponseBody Page<MainCategoryDTO> getCategoriesOnPage(@RequestParam int page,
+                                                                   @RequestParam(required = false) String search,
+                                                                   @RequestParam(required = false) Boolean status,
+                                                                   @RequestParam(required = false) String date) {
+        return categoryService.getMainCategoriesBySearch(CategoryCriteria
+                .builder()
+                .status(status)
+                .date(date)
+                .search(search)
+                .build(), page, pageSize);
     }
 
     @DeleteMapping("delete-image/{filename}")
