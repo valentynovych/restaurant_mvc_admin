@@ -712,12 +712,7 @@
             contentType: false,
             success: function (response) {
                 toastr.success('Оновлення успішне !');
-                $('<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 6rem; right: 1rem; z-index: 1150"> \n' +
-                    'Оновлення успішне !' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>').appendTo(".content-wrapper");
                 promotionObject = response;
-                unblockButton(button);
             },
             error: function (error) {
                 const errors = error.responseJSON;
@@ -729,9 +724,9 @@
                     ))
                 }
                 toastr.error('Упс... Виникла помилка !');
-                unblockButton(button);
             }
         })
+        unblockButton(button);
     });
 
     $("#photoFile").on("change", previewImage);

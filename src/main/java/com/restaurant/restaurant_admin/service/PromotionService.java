@@ -135,6 +135,9 @@ public class PromotionService {
         Promotion promotion = byId.orElseThrow(EntityNotFoundException::new);
         request.setDateOfCreate(promotion.getDateOfCreate());
         request.setUsedCount(promotion.getUsedCount());
+        if (request.getPromoCode().isEmpty()) {
+            request.setPromoCode(null);
+        }
 
         if (promotionRequest.getPhotoFile() != null) {
             request.setPhoto(savePhotoFile(promotionRequest.getPhotoFile()));
@@ -151,6 +154,9 @@ public class PromotionService {
         Promotion request = PromotionMapper.MAPPER.promotionRequestToPromotion(promotionRequest);
         request.setDateOfCreate(Instant.now());
         request.setUsedCount(0);
+        if (request.getPromoCode().isEmpty()) {
+            request.setPromoCode(null);
+        }
 
         if (promotionRequest.getPhotoFile() != null) {
             request.setPhoto(savePhotoFile(promotionRequest.getPhotoFile()));
