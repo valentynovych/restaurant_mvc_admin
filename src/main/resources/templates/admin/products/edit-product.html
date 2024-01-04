@@ -225,11 +225,11 @@
                                         </label>
                                     </div>
                                     <div class="mb-2">
-                                        <label class="form-label" for="isIngredient">Тип</label>
+                                        <label class="form-label" for="isIngredientI">Тип</label>
                                         <select class="form-select" id="isIngredientI" name="isIngredient"></select>
                                     </div>
                                     <div class="mb-2">
-                                        <label class="form-label" for="name">Назва</label>
+                                        <label class="form-label" for="nameI">Назва</label>
                                         <input type="text" class="form-control" id="nameI" name="name"
                                                placeholder="Назва товару">
                                     </div>
@@ -237,7 +237,7 @@
                                         <label class="form-label badge bg-label-secondary text-black"
                                                for="forMainCategory">Для товарів категорій</label>
                                         <select class="form-select select2" id="forMainCategory"
-                                                name="forMainCategory" multiple></select>
+                                                name="forMainCategory"></select>
                                     </div>
                                     <div class="mb-2">
                                         <label class="form-label" for="ingredientCategory">Категорія</label>
@@ -245,12 +245,12 @@
                                                 name="ingredientCategory"></select>
                                     </div>
                                     <div class="mb-2">
-                                        <label class="form-label" for="price">Ціна, грн</label>
+                                        <label class="form-label" for="priceI">Ціна, грн</label>
                                         <input type="text" class="form-control" id="priceI" name="price"
                                                placeholder="Ціна, грн">
                                     </div>
                                     <div class="mb-2">
-                                        <label class="form-label" for="weight">Вага, гр</label>
+                                        <label class="form-label" for="weightI">Вага, гр</label>
                                         <input type="text" class="form-control" id="weightI" name="weight"
                                                placeholder="Вага, гр.">
                                     </div>
@@ -611,7 +611,9 @@
     }
 
     function fillIngredientInputs(product) {
+        console.log(product);
         $.fn.select2.defaults.set("language", "uk");
+
         $('#isActiveI').prop("checked", product.isActive);
         $('#productIdI').val(product.productId);
         var $isIngredient = $('#isIngredientI');
@@ -651,16 +653,19 @@
             }
         }
 
+        function generateOptionsIngredientCategory(category) {
+            if (category)
+                return [{
+                    id: category,
+                    text: getCategoryLabel(category)
+                }]
+        }
+
         $('#ingredientCategory').select2({
             placeholder: 'Виберіть категорію продукту',
             allowClear: true,
             maximumInputLength: 100,
-            data: function () {
-                if (product.ingredientCategory) return [{
-                    "id": product.ingredientCategory,
-                    "text": getCategoryLabel(product.ingredientCategory)
-                }]
-            },
+            data: generateOptionsIngredientCategory(product.ingredientCategory),
             ajax: {
                 type: "GET",
                 url: '../getIngredientCategories',
@@ -680,18 +685,19 @@
         $('#nameI').val(product.name);
         $('#priceI').val(product.price);
         $('#weightI').val(product.weight);
+
         $('#forMainCategory').select2({
             placeholder: 'Для категорій',
             allowClear: true,
             maximumInputLength: 100,
-            data: function () {
-                $.map(product.forMainCategory, function (category) {
-                    if (category) return {
-                        id: category.id,
-                        text: category.name
-                    }
-                });
-            },
+            multiple: true,
+            data: $.map(product.forMainCategory, function (category) {
+                return {
+                    id: category.id,
+                    text: category.categoryName,
+                    selected: true
+                }
+            }),
             ajax: {
                 type: "GET",
                 url: '../getCategories',
