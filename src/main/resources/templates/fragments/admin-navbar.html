@@ -57,6 +57,7 @@
 
     <script th:inline="javascript">
         const path = /*[[@{/admin/}]]*/ 'default';
+        const logoutPath = /*[[@{/logout}]]*/ 'default';
         const pathToOrder = path + 'orders/getOrdersByFilters?page=0&status=NEW';
 
         $.ajax({
@@ -138,7 +139,7 @@
             '                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">\n' +
             '                        Скасувати\n' +
             '                    </button>\n' +
-            '                    <a href="' + path + '../../../logout" class="btn btn-danger" >Вийти</a>\n' +
+            '                    <a href="' + logoutPath + '" class="btn btn-danger" >Вийти</a>\n' +
             '                </div>\n' +
             '            </div>\n' +
             '        </div>\n' +
