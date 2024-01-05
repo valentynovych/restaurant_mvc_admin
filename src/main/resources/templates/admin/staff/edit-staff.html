@@ -177,6 +177,9 @@
                     </form>
                 </div>
             </div>
+            <div>
+
+            </div>
             <!-- / Content -->
             <div class="content-backdrop fade"></div>
         </div>
@@ -231,14 +234,24 @@
     var datapikr = document.querySelector("#dateOfBirth");
     flatpickr.localize(flatpickr.l10ns.uk);
 
+    let date = new Date();
+    const minDate = new Date().setFullYear((date.getFullYear() - 70));
+    const maxDate = new Date().setFullYear((date.getFullYear() - 14));
+    const defaultDate = new Date().setFullYear((date.getFullYear() - 18));
     flatpickr(datapikr, {
         dateFormat: 'd-m-Y',
         monthSelectorType: "static",
+        minDate: minDate,
+        maxDate: maxDate,
+        defaultDate: defaultDate
     });
+
     $("#staffRole").select2({
         placeholder: 'Виберіть роль',
         minimumResultsForSearch: -1
     })
+
+
 
 </script>
 <script th:inline="javascript">
@@ -249,42 +262,70 @@
             var password = $(".password-block");
             password.children().remove();
             password.addClass("mt-4").addClass("d-flex").addClass("justify-content-center")
-            password.append($(
-                '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePassworModal">\n' +
-                '  Змінити пароль\n' +
-                '</button>\n' +
-                '\n' +
-                '<!-- Modal -->\n' +
-                '<div class="modal fade" id="changePassworModal" tabindex="-1" aria-hidden="true">\n' +
-                '  <div class="modal-dialog modal-dialog-centered" role="document">\n' +
-                '    <div class="modal-content">\n' +
-                '      <div class="modal-header">\n' +
-                '        <h5 class="modal-title">Змінити пароль</h5>\n' +
-                '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити"></button>\n' +
-                '      </div>\n' +
-                '      <div class="modal-body">\n' +
-                '        <div class="row">\n' +
-                '          <div class="col mb-3">\n' +
-                '            <label for="nameBasic" class="form-label">Пароль</label>\n' +
-                '            <input type="password" id="password" name="password" class="form-control" placeholder="">\n' +
-                '          </div>\n' +
-                '        </div>\n' +
-                '        <div class="row g-2">\n' +
-                '          <div class="col mb-0">\n' +
-                '            <label for="emailBasic" class="form-label">Підтвердіть пароль</label>\n' +
-                '            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Підтвердіть пароль">\n' +
-                '          </div>\n' +
-                '        </div>\n' +
-                '      </div>\n' +
-                '      <div class="modal-footer">\n' +
-                '        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>\n' +
-                '        <button type="button" class="btn btn-primary" onclick="checkPassword()">Зберегти</button>\n' +
-                '      </div>\n' +
-                '    </div>\n' +
-                '  </div>\n' +
-                '</div>'))
+            password.append($('<button type="button" class="btn btn-primary" data-bs-toggle="modal"\n' +
+                '                        data-bs-target="#changePasswordModal">\n' +
+                '                    Змінити пароль\n' +
+                '                </button>\n' +
+                '                <!-- Modal -->\n' +
+                '                <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-hidden="true">\n' +
+                '                    <div class="modal-dialog modal-dialog-centered" role="document">\n' +
+                '                        <div class="modal-content">\n' +
+                '                            <div class="modal-header">\n' +
+                '                                <h5 class="modal-title">Змінити пароль</h5>\n' +
+                '                                <button type="button" class="btn-close" data-bs-dismiss="modal"\n' +
+                '                                        aria-label="Закрити"></button>\n' +
+                '                            </div>\n' +
+                '                            <div class="modal-body">\n' +
+                '                                <div class="row">\n' +
+                '                                    <div class="col mb-3">\n' +
+                '                                        <label for="password" class="form-label">Пароль</label>\n' +
+                '                                        <div class="input-group input-group-merge">\n' +
+                '                                            <input type="password" id="password" name="password"\n' +
+                '                                                   class="form-control password" placeholder="Введіть пароль">\n' +
+                '                                            <span class="input-group-text cursor-pointer show-password"><i\n' +
+                '                                                    class="ti ti-eye-off"></i></span>\n' +
+                '                                        </div>\n' +
+                '                                    </div>\n' +
+                '                                </div>\n' +
+                '                                <div class="row g-2">\n' +
+                '                                    <div class="col mb-0">\n' +
+                '                                        <label for="confirmPassword" class="form-label">Підтвердіть пароль</label>\n' +
+                '                                        <div class="input-group input-group-merge">\n' +
+                '                                            <input type="password" id="confirmPassword" name="confirmPassword"\n' +
+                '                                                   class="form-control password" placeholder="Підтвердіть пароль">\n' +
+                '                                            <span class="input-group-text cursor-pointer show-password"><i\n' +
+                '                                                    class="ti ti-eye-off"></i></span>\n' +
+                '                                        </div>\n' +
+                '                                    </div>\n' +
+                '                                </div>\n' +
+                '                            </div>\n' +
+                '                            <div class="modal-footer">\n' +
+                '                                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Закрити\n' +
+                '                                </button>\n' +
+                '                                <button type="button" class="btn btn-primary" onclick="checkPassword()">Зберегти\n' +
+                '                                </button>\n' +
+                '                            </div>\n' +
+                '                        </div>\n' +
+                '                    </div>\n' +
+                '                </div>'))
         }
     });
+
+    $(document).ready( (function () {
+        console.log('add listener show pass')
+        $('.show-password').on('click', function () {
+            console.log('on click')
+            var find = $(this).parent().find("input.password");
+            var type = find.attr('type');
+            if (type === 'password') {
+                find.attr('type', 'text');
+                $(this).html('<i class="ti ti-eye"></i>');
+            } else if (type === 'text') {
+                find.attr('type', 'password');
+                $(this).html('<i class="ti ti-eye-off"></i>');
+            }
+        })
+    }));
 
 </script>
 
@@ -307,8 +348,9 @@
         const confirmPass = passInConfirm.val();
 
         if (!pass || pass !== confirmPass || !confirmPass) {
-            passInConfirm.addClass("is-invalid").after($(
-                '<p class="error-message invalid-feedback m-0">Паролі не співпадають</p>'
+            passInConfirm.addClass("is-invalid");
+            $('#changePasswordModal .modal-body').append($(
+                '<p class="error-message invalid-feedback m-0" style="display: block">Паролі не співпадають</p>'
             ));
         } else if (pass && confirmPass && pass === confirmPass) {
             $(".btn-close").click();
@@ -475,6 +517,7 @@
             })
         }
     });
+
     function blockButton(button) {
         button.addClass("disabled")
 
