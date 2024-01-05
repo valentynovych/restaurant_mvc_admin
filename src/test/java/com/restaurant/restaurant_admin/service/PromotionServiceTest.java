@@ -224,6 +224,7 @@ class PromotionServiceTest {
         promotionRequest.setId(1L);
         promotionRequest.setPromotionType(PromotionType.FOR_PRODUCT);
         promotionRequest.setName("Promotion");
+        promotionRequest.setPromoCode("");
         promotionRequest.setPhotoFile(new MockMultipartFile("file", "fileContent".getBytes()));
         promotion.setDateOfCreate(Instant.now());
         promotion.setUsedCount(12);
@@ -243,6 +244,7 @@ class PromotionServiceTest {
         promotionRequest.setId(1L);
         promotionRequest.setPromotionType(PromotionType.FOR_PRODUCT);
         promotionRequest.setName("Promotion");
+        promotionRequest.setPromoCode("");
         promotionRequest.setPhotoFile(new MockMultipartFile("file", "fileContent".getBytes()));
 
         ArgumentCaptor<Promotion> promotionArgumentCaptor = ArgumentCaptor.forClass(Promotion.class);
@@ -261,6 +263,7 @@ class PromotionServiceTest {
         promotionRequest.setId(1L);
         promotionRequest.setPromotionType(PromotionType.FOR_PRODUCT);
         promotionRequest.setName("Promotion");
+        promotionRequest.setPromoCode("");
         promotionRequest.setPhotoFile(new MockMultipartFile("file", "fileContent".getBytes()));
 
         when(fileUtil.saveImage(any(MultipartFile.class))).thenThrow(IOException.class);

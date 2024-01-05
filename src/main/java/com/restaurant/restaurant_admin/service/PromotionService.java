@@ -154,7 +154,7 @@ public class PromotionService {
         Promotion request = PromotionMapper.MAPPER.promotionRequestToPromotion(promotionRequest);
         request.setDateOfCreate(Instant.now());
         request.setUsedCount(0);
-        if (request.getPromoCode().isEmpty()) {
+        if (request.getPromoCode() != null && request.getPromoCode().isEmpty()) {
             request.setPromoCode(null);
         }
 
