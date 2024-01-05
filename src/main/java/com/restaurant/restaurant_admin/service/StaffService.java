@@ -36,8 +36,6 @@ import java.util.Optional;
 @Log4j2
 public class StaffService implements UserDetailsService {
 
-
-    //private final ApplicationContext context;
     private final StaffRepo staffRepo;
     private final UploadFileUtil fileUtil;
     private final PasswordEncoder passwordEncoder;
@@ -87,7 +85,6 @@ public class StaffService implements UserDetailsService {
     }
 
     public void updateStaff(StaffRequest staffRequest) {
-        //passwordEncoder = context.getBean(PasswordEncoder.class);
         log.info("method updateStaff -> start update Staff");
         if (staffRequest != null) {
             log.info("method updateStaff -> staffRequest isPresent");
@@ -120,7 +117,6 @@ public class StaffService implements UserDetailsService {
     }
 
     public void createStaff(StaffRequest staffRequest) {
-        //passwordEncoder = context.getBean(PasswordEncoder.class);
         log.info("method createStaff -> start update Staff");
         if (staffRequest != null) {
             log.info("method createStaff -> staffRequest isPresent");

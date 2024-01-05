@@ -13,4 +13,6 @@ public interface StaffRepo extends JpaRepository<Staff, Long>, JpaSpecificationE
     @Query("SELECT s.password FROM Staff s WHERE s.id=:id")
     String getPasswordById(Long id);
 
+    boolean existsStaffByEmail(String email);
+    boolean existsStaffByPhone(String phone);
 }
