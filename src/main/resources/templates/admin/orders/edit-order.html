@@ -345,7 +345,7 @@
                         <div class="modal-body">
                             <div class="mb-2">
                                 <label class="form-label badge bg-label-secondary text-black"
-                                       for="new-orderItem">Виберіть знижку</label>
+                                       for="new-promotion">Виберіть знижку</label>
                                 <select class="form-select select2" id="new-promotion"
                                         name="new-promotion"></select>
                             </div>
@@ -897,7 +897,7 @@
         formData.append("product.productId", newOrderItem.product.productId);
         formData.append("itemPrice", newOrderItem.itemPrice);
         if (newOrderItem.itemSalePrice) formData.append("itemSalePrice", newOrderItem.itemSalePrice);
-        if (newOrderItem.isGiftProduct) formData.append("isGiftProduct", newOrderItem.isGiftProduct);
+        formData.append("isGiftProduct", !!newOrderItem.isGiftProduct);
         if (newOrderItem.promotionName) formData.append("promotionName", newOrderItem.promotionName);
         if (newOrderItem.promotionCondition) formData.append("promotionCondition", newOrderItem.promotionCondition);
         if (newOrderItem.promotionType) formData.append("promotionType", newOrderItem.promotionType);

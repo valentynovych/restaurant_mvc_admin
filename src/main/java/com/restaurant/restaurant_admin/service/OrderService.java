@@ -337,7 +337,7 @@ public class OrderService {
             if (item.getIsGiftProduct() != null && item.getIsGiftProduct()) break;
             List<OrderItem> giftsProduct = orderItems.stream().filter(OrderItem::getIsGiftProduct).toList();
             if (!giftsProduct.isEmpty() &&
-                    giftsProduct.stream().anyMatch(orderItem ->
+                    giftsProduct.stream().anyMatch(orderItem -> promotion.getGiftProduct() != null &&
                             orderItem.getProduct().getId().equals(promotion.getGiftProduct().getId()))) {
                 break;
             }
