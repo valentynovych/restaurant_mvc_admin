@@ -106,7 +106,7 @@ class StaffServiceTest {
         Page<Staff> staffPage = new PageImpl<>(staffList, pageable, staffList.size());
         when(staffRepo.findAll(ArgumentMatchers.<Specification>any(Specification.class), any(Pageable.class))).thenReturn(staffPage);
         Page<StaffResponse> staffOnPage =
-                staffService.getStaffPageOnSearch("", pageable.getPageNumber(), pageable.getPageSize());
+                staffService.getStaffPageOnSearch("", Role.ROLE_ADMIN ,pageable.getPageNumber(), pageable.getPageSize());
         List<StaffResponse> content = staffOnPage.getContent();
         assertFalse(content.isEmpty());
         assertEquals(staffList.size(), content.size());
