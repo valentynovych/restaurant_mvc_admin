@@ -54,8 +54,9 @@ public class StaffController {
 
     @GetMapping("/getPageSearch")
     public @ResponseBody Page<StaffResponse> getStaffOnPage(@RequestParam int page,
-                                                            @RequestParam String search) {
-        return staffService.getStaffPageOnSearch(search, page, pageSize);
+                                                            @RequestParam(required = false) String search,
+                                                            @RequestParam(required = false) Role role) {
+        return staffService.getStaffPageOnSearch(search, role, page, pageSize);
     }
 
     @GetMapping("/get-staff/{staffId}")

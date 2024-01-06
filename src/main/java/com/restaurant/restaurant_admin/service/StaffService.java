@@ -55,19 +55,13 @@ public class StaffService implements UserDetailsService {
         return new PageImpl<>(staffResponses, pageable, staffPage.getTotalElements());
     }
 
-    public Page<StaffResponse> getStaffPageOnSearch(String search, int page, int pageSize) {
+    public Page<StaffResponse> getStaffPageOnSearch(String search, Role role, int page, int pageSize) {
         log.info(String.format("getStaffPageOnSearch() -> start, with page: %s, pageSize: %s, by search: %s",
                 page, pageSize, search));
         Pageable pageable = PageRequest.of(page, pageSize);
         StaffSpecification spec1 =
-                new StaffSpecification(new SearchCriteria("email", ":", search));
-        StaffSpecification spec2 =
-                new StaffSpecification(new SearchCriteria("firstName", ":", search));
-        StaffSpecification spec3 =
-                new StaffSpecification(new SearchCriteria("lastName", ":", search));
-        StaffSpecification spec4 =
-                new StaffSpecification(new SearchCriteria("phone", ":", search));
-        Page<Staff> staffPage = staffRepo.findAll(spec1.or(spec2).or(spec3).or(spec4), pageable);
+                new StaffSpecification(role, search);
+        Page<Staff> staffPage = staffRepo.findAll(spec1, pageable);
         List<StaffResponse> staffResponses = StaffMapper.MAPPER.staffListToModelResponseList(staffPage.getContent());
         Page<StaffResponse> staffResponses1 = new PageImpl<>(staffResponses, pageable, staffPage.getTotalElements());
         log.info("getStaffPageOnSearch() -> exit");
