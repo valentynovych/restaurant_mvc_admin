@@ -16,7 +16,7 @@
             content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Деталі користувача</title>
+    <title>Редагування користувача</title>
 
     <meta name="description" content=""/>
 
@@ -48,6 +48,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/animate-css/animate.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/flatpickr/flatpickr.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}"/>
 
     <!-- Page CSS -->
 
@@ -101,24 +102,29 @@
                                         </label>
                                     </div>
                                     <div class="mb-2">
-                                        <label class="form-label" for="firstName">Прізвище:</label>
-                                        <input type="text" class="form-control" id="firstName" name="firstName">
+                                        <label class="form-label" for="firstName">Ім'я:</label>
+                                        <input type="text" class="form-control" id="firstName" name="firstName"
+                                               placeholder="Ім'я">
                                     </div>
                                     <div class="mb-2">
-                                        <label class="form-label" for="lastName">Ім'я:</label>
-                                        <input type="text" class="form-control" id="lastName" name="lastName">
+                                        <label class="form-label" for="lastName">Приізвище:</label>
+                                        <input type="text" class="form-control" id="lastName" name="lastName"
+                                               placeholder="Приізвище">
                                     </div>
                                     <div class="mb-2">
                                         <label class="form-label" for="phone">Телефон:</label>
-                                        <input type="text" class="form-control" id="phone" name="phone">
+                                        <input type="text" class="form-control" id="phone" name="phone"
+                                               placeholder="Телефон">
                                     </div>
                                     <div class="mb-2">
                                         <label class="form-label" for="email">E-Mail:</label>
-                                        <input type="text" class="form-control" id="email" name="email">
+                                        <input type="text" class="form-control" id="email" name="email"
+                                               placeholder="Email">
                                     </div>
                                     <div class="mb-2">
                                         <label class="form-label" for="dateOfBirth">Дата народження:</label>
-                                        <input type="text" class="form-control" id="dateOfBirth" name="dateOfBirth">
+                                        <input type="text" class="form-control" id="dateOfBirth" name="dateOfBirth"
+                                               placeholder="Дата народження">
                                     </div>
                                 </div>
                                 <div class="col-md-2 mt-4">
@@ -168,6 +174,7 @@
 
 <!-- Vendors JS -->
 <script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
+<script th:src="@{/assets/vendor/libs/block-ui/block-ui.js}"></script>
 
 <!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
@@ -187,9 +194,16 @@
     var datapikr = document.querySelector("#dateOfBirth");
     flatpickr.localize(flatpickr.l10ns.uk);
 
+    let date = new Date();
+    const minDate = new Date().setFullYear((date.getFullYear() - 70));
+    const maxDate = new Date().setFullYear((date.getFullYear() - 14));
+    const defaultDate = new Date().setFullYear((date.getFullYear() - 18));
     flatpickr(datapikr, {
         dateFormat: 'd-m-Y',
         monthSelectorType: "static",
+        minDate: minDate,
+        maxDate: maxDate,
+        //defaultDate: defaultDate
     });
 
 </script>
@@ -222,10 +236,12 @@
         $('#firstName').val(details.firstName);
         $('#lastName').val(details.lastName);
         $('#phone').val(details.phone);
-        flatpickr("#dateOfBirth", {
-            dateFormat: 'd-m-Y',
-            defaultDate: new Date(details.dateOfBirth)
-        });
+        if (details.dateOfBirth) {
+            flatpickr("#dateOfBirth", {
+                dateFormat: 'd-m-Y',
+                defaultDate: new Date(details.dateOfBirth)
+            });
+        }
 
         $('#email').val(details.email);
         if (details.photo) $("#photo").attr("src", '../../../uploads/' + details.photo);
