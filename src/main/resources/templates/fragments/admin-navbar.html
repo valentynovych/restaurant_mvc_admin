@@ -75,7 +75,8 @@
                 $list.append('<li><a class="dropdown-item" href="javascript:void(0);">Нових замовлень немає</a></li>')
             } else if (orderList.length >= 1) {
                 for (let order of orderList) {
-                    const text = order.user.firstName + ' - ' + order.totalAmount + ' грн.';
+                    const date = new Date(order.datetimeOfCreate * 1000);
+                    const text = date.toLocaleDateString("uk").slice(0, 5) + ' ' + date.toLocaleTimeString("uk") + ' - ' + order.totalAmount + ' грн.';
                     const editUrl = path + 'orders/edit-order/' + order.orderId;
                     $list.append('<li><a class="dropdown-item" href="' + editUrl + '">' + text + '</a></li>')
                 }

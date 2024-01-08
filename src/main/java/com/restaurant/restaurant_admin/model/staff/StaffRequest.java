@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Date;
 
 @Data
+@StaffEmailExists
+@StaffPhoneExists
 public class StaffRequest {
 
     private Long staffId;
@@ -24,12 +26,10 @@ public class StaffRequest {
     @Size(max = 50, message = "Довжина поля не більше 50 символів")
     private String lastName;
     @Email(regexp = "^[a-zA-Z0-9+._-]+@([a-zA-z]{2,10}\\.)+[a-zA-z]{2,5}$", message = "Email не відповідає формату mail@mail.com")
-    @StaffEmailExists
     private String email;
     @NotNull(message = "Обов'язкове поле")
     private Boolean status;
     @Pattern(regexp = "^380(50|66|95|99|67|68|96|97|98|63|93|73)[0-9]{7}", message = "Телефон не відповідає формату")
-    @StaffPhoneExists
     private String phone;
     @NotNull(message = "Обов'язкове поле")
     @DateTimeFormat(pattern = "dd-MM-yyyy")

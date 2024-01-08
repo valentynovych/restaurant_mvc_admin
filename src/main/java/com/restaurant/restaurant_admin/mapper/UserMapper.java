@@ -18,6 +18,7 @@ public interface UserMapper {
     @Mapping(target = "lastName", source = "userDetails.lastName")
     @Mapping(target = "phone", source = "userDetails.phone")
     @Mapping(target = "registrationDate", source = "userDetails.registrationDate")
+    @Mapping(target = "fullName", source = "userDetails.fullName")
     UserShortResponse userToShortRequest(User user);
 
     List<UserShortResponse> userListToShortResponceList(List<User> users);

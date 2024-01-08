@@ -245,7 +245,9 @@
         let keyPause = 400;
         searchText = this.value;
         clearTimeout(timer);
-        timer = setTimeout( function () {getOrdersByFilter(0)}, keyPause);
+        timer = setTimeout(function () {
+            getOrdersByFilter(0)
+        }, keyPause);
     });
     $('#filter-by-date').on('change', function () {
         byDate = this.value;
@@ -330,13 +332,17 @@
 
             let listProducts = getProductsWithCount(data.orderItems);
             const badge = getStatusLabel(data.status);
+            const userName = data.user.fullName
+                ? data.user.fullName :
+                data.user.firstName ? data.user.firstName : '' + ' ' +
+                data.user.lastName ? data.user.lastName : '';
 
             $('<tr>\n' +
                 '<td><i class="ti ti-number"></i>' + data.orderId + '</td>\n' +
                 '<td>' + dateString + '</td>\n' +
                 '<td>' + listProducts + '</td>\n' +
                 '<td>' + (data.user ? data.user.phone : '') + '</td>\n' +
-                '<td>' + (data.user ? data.user.firstName : '') + ' ' + (data.user ? data.user.lastName : '') + '</td>\n' +
+                '<td>' + userName + '</td>\n' +
                 '<td><span class="badge ' + badge[0] + '">' + badge[1] + '</span></td>\n' +
                 '<td>' + data.totalAmount + '</td>\n' +
                 '<td> <a href="orders/edit-order/' + data.orderId + '">\n' +

@@ -270,9 +270,21 @@
             error: function (error) {
                 const errors = error.responseJSON;
                 for (let error of errors) {
-                    $(document).find("#" + error.field).addClass("is-invalid").after($(
-                        '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
-                    ))
+                    if (error.field) {
+                        $(document).find("#" + error.field).addClass("is-invalid").after($(
+                            '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
+                        ));
+                    } else if (error.arguments) {
+                        for (let argument of error.arguments) {
+                            if (argument.defaultMessage) {
+                                var defaultMessage = argument.defaultMessage;
+                                $(document).find("#" + defaultMessage).addClass("is-invalid").after($(
+                                    '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
+                                ));
+                            }
+
+                        }
+                    }
                 }
                 toastr.error('Упс.. Виникла помилка');
                 unblockButton(sendUserBtn);

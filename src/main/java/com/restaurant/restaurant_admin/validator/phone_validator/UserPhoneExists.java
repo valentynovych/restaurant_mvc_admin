@@ -9,9 +9,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Constraint(validatedBy = {UserPhoneExistsValidator.class})
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UserPhoneExists {
+    String phone() default "phone";
     String message() default "Номер вже використовується";
 
     Class<?>[] groups() default {};

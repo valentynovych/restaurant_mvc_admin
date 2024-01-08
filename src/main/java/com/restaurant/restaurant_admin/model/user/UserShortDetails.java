@@ -19,4 +19,5 @@ public class UserShortDetails {
     private Double totalAmount;
     private String email;
     private Boolean isActive;
+    private String fullName;
 }

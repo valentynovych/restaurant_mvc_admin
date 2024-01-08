@@ -8,9 +8,10 @@ import java.lang.annotation.*;
 
 @Documented
 @Constraint(validatedBy = {StaffPhoneNumberExistValidator.class})
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface StaffPhoneExists {
+    String phone() default "phone";
     String message() default "Номер вже використовується";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

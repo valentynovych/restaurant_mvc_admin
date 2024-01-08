@@ -25,4 +25,5 @@ public class UserShortResponse {
     private String phone;
     private Date registrationDate;
     private Integer totalOrders;
+    private String fullName;
 }

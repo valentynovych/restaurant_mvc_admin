@@ -686,7 +686,8 @@
         $('#datetimeOfCreate').val(dateOfCreate.toLocaleDateString("uk") + ' ' + dateOfCreate.toLocaleTimeString("uk"));
 
         if (order.user) {
-            $('#fullName').val(order.user.firstName + ' ' + order.user.lastName);
+            const fullName = order.user.fullName ? order.user.fullName : order.user.firstName + ' ' + order.user.lastName
+            $('#fullName').val(fullName);
             $('#phone').val(order.user.phone);
         }
 
