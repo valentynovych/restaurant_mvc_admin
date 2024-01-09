@@ -47,7 +47,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/typeahead-js/typeahead.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/animate-css/animate.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}">
-
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
     <!-- Page CSS -->
 
     <!-- Helpers -->
@@ -83,11 +83,18 @@
                     </div>
                     <div class="card">
                         <div class="card-header py-2 d-flex justify-content-between">
-                            <div class="search-input-wrapper col-md-4">
-                                <label class="d-flex align-items-center gap-1 w-100">
-                                    Пошук:
-                                    <input type="search" class="form-control" placeholder="Назва товару">
-                                </label>
+                            <div class="d-flex flex-row gap-3 col-8">
+                                <div class="search-input-wrapper col-6">
+                                    <label class="d-flex align-items-center gap-1 w-100">
+                                        Пошук:
+                                        <input type="search" class="form-control" placeholder="Назва товару">
+                                    </label>
+                                </div>
+                                <div class="d-flex flex-row align-items-center col-5">
+                                    <div class="select-wrapper col-md-9">
+                                        <select class="form-select" id="filter-by-isIngredient"></select>
+                                    </div>
+                                </div>
                             </div>
                             <div>
                                 <a href="products/add" class="btn btn-primary"><i class="ti ti-plus me-1"></i>Додати
@@ -167,6 +174,7 @@
 
 <!-- Vendors JS -->
 <script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
+<script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
 
 <!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
@@ -189,6 +197,27 @@
         progressBar: true,
         preventDuplicates: true,
     };
+
+    var $filter_by_ingredient = $('#filter-by-isIngredient');
+    $filter_by_ingredient.select2({
+        placeholder: 'За статусом',
+        minimumResultsForSearch: -1,
+        allowClear: true,
+        maximumInputLength: 30,
+        data: [
+            {
+                id: false,
+                text: "Товари"
+
+            },
+            {
+                id: true,
+                text: "Інгредиєнти"
+            }
+        ]
+    });
+
+    $filter_by_ingredient.val(null).trigger('change');
 </script>
 <!--AJAX requests-->
 <script th:inline="javascript">
@@ -199,16 +228,25 @@
     let currentPage;
     let searchText;
     let timer;
+    let byIngredient;
     $("input[type='search']").keyup(function () {
         let keyPause = 400;
         searchText = this.value;
         clearTimeout(timer);
-        timer = setTimeout( function () {getProducts(0)}, keyPause);
+        timer = setTimeout(function () {
+            getProducts(0)
+        }, keyPause);
+    });
+
+    $filter_by_ingredient.on('change', function () {
+        byIngredient = this.value;
+        getProducts(0);
     });
 
     function getProducts(page) {
         var getUrl = 'products/getAllProducts?page=' + page;
         if (searchText) getUrl += '&search=' + searchText;
+        if (byIngredient) getUrl += '&isIngredient=' + byIngredient
 
         $.ajax({
             type: 'GET',

@@ -123,7 +123,7 @@ public class PromotionService {
 
     public Page<ProductShortResponse> getProducts(String search, int page, int pageSize) {
         log.info(String.format("getProducts() -> start, with page: %s, pageSize: %s", page, pageSize));
-        Page<ProductShortResponse> productsBySearch = productService.getProductsBySearch(page, pageSize, search);
+        Page<ProductShortResponse> productsBySearch = productService.getProductsBySearch(page, pageSize, search, null);
         log.info("getProducts() -> exit");
         return productsBySearch;
     }

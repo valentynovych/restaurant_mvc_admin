@@ -54,11 +54,10 @@ public class ProductController {
 
     @GetMapping("/getAllProducts")
     public @ResponseBody Page<ProductShortResponse> getPageProducts(@RequestParam int page,
-                                                                    @RequestParam(required = false) String search) {
-        if (search != null && !search.isEmpty()) {
-            return productService.getProductsBySearch(page, pageSize, search);
-        }
-        return productService.getProductPage(page, pageSize);
+                                                                    @RequestParam(required = false) String search,
+                                                                    @RequestParam(required = false) Boolean isIngredient) {
+
+        return productService.getProductsBySearch(page, pageSize, search, isIngredient);
     }
 
     @GetMapping("/getProduct/{productId}")

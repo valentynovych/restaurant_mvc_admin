@@ -11,7 +11,6 @@ import com.restaurant.restaurant_admin.model.product.ProductResponse;
 import com.restaurant.restaurant_admin.model.product.ProductShortResponse;
 import com.restaurant.restaurant_admin.repository.ProductRepo;
 import com.restaurant.restaurant_admin.repository.specification.ProductSpecification;
-import com.restaurant.restaurant_admin.repository.specification.SearchCriteria;
 import com.restaurant.restaurant_admin.utils.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -47,11 +46,11 @@ public class ProductService {
         return shortResponsePage;
     }
 
-    public Page<ProductShortResponse> getProductsBySearch(int page, int pageSize, String search) {
+    public Page<ProductShortResponse> getProductsBySearch(int page, int pageSize, String search, Boolean isIngredient) {
         log.info("method getProductsBySearch -> start");
-        Pageable pageable = PageRequest.of(page, pageSize);
-        ProductSpecification likeName = new ProductSpecification(
-                new SearchCriteria("name", ":", search));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.ASC, "isIngredient"));
+        ProductSpecification likeName = new ProductSpecification(search, isIngredient);
+
         log.info("method getProductsBySearch -> get products by pageable - page: " + page + " pageSize: " + pageSize);
         Page<Product> productPage = productRepo.findAll(likeName, pageable);
         List<ProductShortResponse> responseList =
@@ -85,14 +84,9 @@ public class ProductService {
     public Page<ProductShortResponse> getIngredients(int page, int pageSize, String search) {
         log.info("method getSubcategories -> start");
         Pageable pageable = PageRequest.of(page, pageSize);
-        ProductSpecification isIngredient = new ProductSpecification(
-                new SearchCriteria("isIngredient", "", true)
-        );
-        ProductSpecification likeName = new ProductSpecification(
-                new SearchCriteria("name", ":", search)
-        );
+        ProductSpecification isIngredient = new ProductSpecification(search, true);
         log.info("method getIngredients -> get products by pageable - page: " + page + " pageSize: " + pageSize);
-        Page<Product> productPage = productRepo.findAll(isIngredient.and(likeName), pageable);
+        Page<Product> productPage = productRepo.findAll(isIngredient, pageable);
         List<ProductShortResponse> responseList = ProductMapper.MAPPER.productListToShortResponseList(productPage.getContent());
         Page<ProductShortResponse> responsePage = new PageImpl<>(responseList, pageable, productPage.getTotalElements());
         log.info("method getIngredients -> exit, return products by pageable");
@@ -200,14 +194,9 @@ public class ProductService {
     public Page<ProductShortResponse> getProductsWithoutIngredients(int page, int pageSize, String search) {
         log.info("method getProductsWithoutIngredients -> start");
         Pageable pageable = PageRequest.of(page, pageSize);
-        ProductSpecification notIngredient = new ProductSpecification(
-                new SearchCriteria("isIngredient", "", false)
-        );
-        ProductSpecification likeName = new ProductSpecification(
-                new SearchCriteria("name", ":", search)
-        );
+        ProductSpecification notIngredient = new ProductSpecification(search, false);
         log.info("method getProductsWithoutIngredients -> get products by pageable - page: " + page + " pageSize: " + pageSize);
-        Page<Product> productPage = productRepo.findAll(notIngredient.and(likeName), pageable);
+        Page<Product> productPage = productRepo.findAll(notIngredient, pageable);
         List<ProductShortResponse> responseList =
                 ProductMapper.MAPPER.productListToShortResponseList(productPage.getContent());
         Page<ProductShortResponse> responsePage =
