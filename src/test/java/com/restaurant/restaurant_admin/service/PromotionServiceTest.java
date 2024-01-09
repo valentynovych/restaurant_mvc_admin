@@ -210,7 +210,7 @@ class PromotionServiceTest {
         List<ProductShortResponse> productShortResponses = List.of(
                 new ProductShortResponse(), new ProductShortResponse(), new ProductShortResponse(), new ProductShortResponse());
         Page<ProductShortResponse> page = new PageImpl<>(productShortResponses, pageable, productShortResponses.size());
-        when(productService.getProductsBySearch(pageable.getPageNumber(), pageable.getPageSize(), ""))
+        when(productService.getProductsBySearch(pageable.getPageNumber(), pageable.getPageSize(), "", null))
                 .thenReturn(page);
         Page<ProductShortResponse> products = promotionService.getProducts("", pageable.getPageNumber(), pageable.getPageSize());
         List<ProductShortResponse> content = products.getContent();

@@ -97,7 +97,7 @@ class ProductServiceTest {
         Page<Product> productPage = new PageImpl<>(products, pageable, products.size());
         when(productRepo.findAll(any(ProductSpecification.class), any(Pageable.class))).thenReturn(productPage);
         Page<ProductShortResponse> productPage1 =
-                productService.getProductsBySearch(pageable.getPageNumber(), pageable.getPageSize(), "");
+                productService.getProductsBySearch(pageable.getPageNumber(), pageable.getPageSize(), "", null);
         List<ProductShortResponse> content = productPage1.getContent();
         assertFalse(content.isEmpty());
         for (int i = 0; i < products.size(); i++) {
