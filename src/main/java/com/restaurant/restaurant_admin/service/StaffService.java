@@ -169,6 +169,10 @@ public class StaffService implements UserDetailsService {
         return new User(
                 staff.getUsername(),
                 staff.getPassword(),
+                staff.isEnabled(),
+                staff.isAccountNonExpired(),
+                staff.isCredentialsNonExpired(),
+                staff.isAccountNonLocked(),
                 staff.getAuthorities()
         );
     }

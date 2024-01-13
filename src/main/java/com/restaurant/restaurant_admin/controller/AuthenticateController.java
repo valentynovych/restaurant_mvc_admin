@@ -42,9 +42,6 @@ public class AuthenticateController {
             context.setAuthentication(authentication);
             HttpSession session = request.getSession(true);
             session.setAttribute("SPRING_SECURITY_CONTEXT", context);
-            System.out.println("==========================================================");
-            System.out.println("Login Success");
-            System.out.println("==========================================================");
         } catch (BadCredentialsException e) {
             System.err.println("==========================================================");
             System.err.println("Login Error");

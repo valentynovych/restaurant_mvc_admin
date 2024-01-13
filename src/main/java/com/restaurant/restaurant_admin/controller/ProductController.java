@@ -5,6 +5,7 @@ import com.restaurant.restaurant_admin.model.product.IngredientRequest;
 import com.restaurant.restaurant_admin.model.product.ProductRequest;
 import com.restaurant.restaurant_admin.model.product.ProductShortResponse;
 import com.restaurant.restaurant_admin.service.ProductService;
+import com.restaurant.restaurant_admin.utils.UploadFileUtil;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final UploadFileUtil fileUtil;
     private final int pageSize = 10;
 
     @GetMapping()
@@ -134,5 +136,11 @@ public class ProductController {
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @DeleteMapping("/delete-image/{photoName}")
+    public @ResponseBody ResponseEntity<?> deleteProduct(@PathVariable String photoName) {
+        fileUtil.deleteUploadFile(photoName);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

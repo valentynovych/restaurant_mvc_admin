@@ -608,6 +608,7 @@
         }).trigger("change", JSON.stringify(consistsOfIngredients));
 
         if (product.photo) $("#photo").attr("src", '../../../uploads/' + product.photo);
+        $("#photoName").attr("value", product.photo);
     }
 
     function fillIngredientInputs(product) {
@@ -725,6 +726,7 @@
         })
 
         if (product.photo) $("#photoI").attr("src", '../../../uploads/' + product.photo);
+        $("#photoNameI").attr("value", product.photo);
     }
 
     $('.send-product').on("click", function () {
@@ -896,6 +898,40 @@
         button.removeClass("disabled")
         button.unblock();
     }
+
+    $("label.delete-image-button").on("click", function () {
+
+        const imagePlaceholder = /*[[@{/assets/img/placeholder-image.png}]]*/ 'default';
+        const filenameP = $("#photoName").attr("value");
+        const filenameI = $("#photoNameI").attr("value");
+        const filename = filenameP ? filenameP : filenameI ? filenameI : false;
+
+        if (filename) {
+            $.ajax({
+                method: 'DELETE',
+                url: '../delete-image/' + filename,
+                success: function (response) {
+                    $("#photo").attr("src", imagePlaceholder);
+                    $("#photoName").removeAttr("value");
+                    $("#photoFile").val('');
+                    $("#photoI").attr("src", imagePlaceholder);
+                    $("#photoNameI").removeAttr("value");
+                    $("#photoFileI").val('');
+                    toastr.success("Фото видалене !");
+                },
+                error: function (response) {
+                    toastr.error("Помилка під час видалення фото");
+                }
+            })
+        } else if ($("#photoFile").val() || $("#photoFileI").val()) {
+            $("#photo").attr("src", imagePlaceholder);
+            $("#photoName").removeAttr("value");
+            $("#photoFile").val('');
+            $("#photoI").attr("src", imagePlaceholder);
+            $("#photoNameI").removeAttr("value");
+            $("#photoFileI").val('');
+        }
+    })
 
 </script>
 </body>
