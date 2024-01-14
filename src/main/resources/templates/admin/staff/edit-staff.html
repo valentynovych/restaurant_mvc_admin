@@ -231,20 +231,7 @@
         }
     };
 
-    var datapikr = document.querySelector("#dateOfBirth");
-    flatpickr.localize(flatpickr.l10ns.uk);
 
-    let date = new Date();
-    const minDate = new Date().setFullYear((date.getFullYear() - 70));
-    const maxDate = new Date().setFullYear((date.getFullYear() - 14));
-    const defaultDate = new Date().setFullYear((date.getFullYear() - 18));
-    flatpickr(datapikr, {
-        dateFormat: 'd-m-Y',
-        monthSelectorType: "static",
-        minDate: minDate,
-        maxDate: maxDate,
-        defaultDate: defaultDate
-    });
 
     $("#staffRole").select2({
         placeholder: 'Виберіть роль',
@@ -331,6 +318,19 @@
 
 <script th:inline="javascript">
 
+    var datapikr = document.querySelector("#dateOfBirth");
+    flatpickr.localize(flatpickr.l10ns.uk);
+
+    let date = new Date();
+    const minDate = new Date().setFullYear((date.getFullYear() - 70));
+    const maxDate = new Date().setFullYear((date.getFullYear() - 14));
+    const dateOfBirth = flatpickr(datapikr, {
+        dateFormat: 'd-m-Y',
+        monthSelectorType: "static",
+        minDate: minDate,
+        maxDate: maxDate,
+    });
+
     toastr.options = {
         maxOpened: 1,
         newestOnTop: true,
@@ -415,10 +415,9 @@
                     $("#lastName").attr("value", result.lastName);
                     $("#phone").attr("value", result.phone);
                     $("#email").attr("value", result.email);
-                    flatpickr("#dateOfBirth", {
-                        dateFormat: 'd-m-Y',
-                        defaultDate: new Date(result.dateOfBirth)
-                    });
+                    if (result.dateOfBirth) {
+                        dateOfBirth.setDate(new Date(result.dateOfBirth));
+                    }
 
                     $("#staffRole").val(result.staffRole).trigger('change');
 

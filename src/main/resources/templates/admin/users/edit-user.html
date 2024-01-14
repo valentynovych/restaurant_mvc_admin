@@ -191,23 +191,22 @@
         }
     };
 
+
+
+</script>
+<script th:inline="javascript">
     var datapikr = document.querySelector("#dateOfBirth");
     flatpickr.localize(flatpickr.l10ns.uk);
 
     let date = new Date();
     const minDate = new Date().setFullYear((date.getFullYear() - 70));
     const maxDate = new Date().setFullYear((date.getFullYear() - 14));
-    const defaultDate = new Date().setFullYear((date.getFullYear() - 18));
-    flatpickr(datapikr, {
+    const dateOfBirth = flatpickr(datapikr, {
         dateFormat: 'd-m-Y',
         monthSelectorType: "static",
         minDate: minDate,
         maxDate: maxDate,
-        //defaultDate: defaultDate
     });
-
-</script>
-<script th:inline="javascript">
 
     toastr.options = {
         maxOpened: 1,
@@ -237,10 +236,7 @@
         $('#lastName').val(details.lastName);
         $('#phone').val(details.phone);
         if (details.dateOfBirth) {
-            flatpickr("#dateOfBirth", {
-                dateFormat: 'd-m-Y',
-                defaultDate: new Date(details.dateOfBirth)
-            });
+            dateOfBirth.setDate(new Date(details.dateOfBirth));
         }
 
         $('#email').val(details.email);
