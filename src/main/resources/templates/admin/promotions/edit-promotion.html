@@ -310,6 +310,9 @@
         }
         afterLoad();
     }
+    $("#name").on("change", function () {
+        promotionObject.name = $(this).val();
+    })
 
     function afterLoad() {
         // console.log("afterLoad -> start")
@@ -715,13 +718,21 @@
                 promotionObject = response;
             },
             error: function (error) {
-                const errors = error.responseJSON;
-                for (let error of errors) {
-                    $(document).find("select[name='" + error.field + "'], " +
-                        "input[name='" + error.field + "'], " +
-                        "textarea[name='" + error.field + "']")
-                        .addClass("is-invalid").parent().append($('<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
-                    ))
+                console.log(error)
+
+                    if (error.status === 409) {
+                        $("input[name='name']").addClass("is-invalid").after($(
+                            '<p class="error-message text-danger m-0">Акція з такою назвою вже створена</p>'));
+                    } else if (error.status === 400) {
+                        const errors = error.responseJSON;
+                        for (let error of errors) {
+                        $(document).find("select[name='" + error.field + "'], " +
+                            "input[name='" + error.field + "'], " +
+                            "textarea[name='" + error.field + "']").addClass("is-invalid").parent().append($(
+                            '<p class="error-message invalid-feedback m-0">' + error.defaultMessage + '</p>'
+                        ));
+
+                    }
                 }
                 toastr.error('Упс... Виникла помилка !');
             }

@@ -27,6 +27,10 @@ public class AuthenticateController {
 
     @GetMapping("/login")
     public ModelAndView showLoginPage() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!authentication.getName().equals("anonymousUser")) {
+            return new ModelAndView("redirect:/admin/statistic");
+        }
         return new ModelAndView("admin/login");
     }
 

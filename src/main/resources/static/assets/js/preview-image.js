@@ -13,7 +13,7 @@ $(document).ready(function() {
                     $('.error-message').remove();
 
                 } else {
-                    $previewIcon.addClass("is-invalid")
+                    $previewIcon.addClass("is-invalid").parent()
                         .after($('<p class="error-message text-center text-danger m-0">' +
                             'Вибраний файл не є зображенням у форматі jpeg, jpg або png.</p>'
                         ))
