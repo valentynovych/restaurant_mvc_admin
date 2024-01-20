@@ -241,7 +241,7 @@
     let byDate;
     let byStatus;
     let timer;
-    $("input[type='search']").keyup(function () {
+    $("input[type='search']").on("input", function () {
         let keyPause = 400;
         searchText = this.value;
         clearTimeout(timer);

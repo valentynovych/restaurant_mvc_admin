@@ -106,7 +106,7 @@
                                 <a href="" class="product-link">
                                     <div class="product-item d-flex justify-content-center flex-column">
                                         <figure class="mb-1 rounded-2" style="border: 1px solid #4e5264; ">
-                                            <img src="" class="product-image" style="aspect-ratio: 1" alt="">
+                                            <img th:src="@{/assets/img/placeholder-image.png}" class="product-image" style="aspect-ratio: 1" alt="">
                                         </figure>
                                         <span class="text-center product-name">name</span>
                                     </div>
@@ -229,7 +229,7 @@
     let searchText;
     let timer;
     let byIngredient;
-    $("input[type='search']").keyup(function () {
+    $("input[type='search']").on("input", function () {
         let keyPause = 400;
         searchText = this.value;
         clearTimeout(timer);

@@ -70,11 +70,10 @@ public class MainCategoryService {
             return false;
         }
         MainCategory mainCategory = byId.get();
-        List<Product> allByForMainCategory =
-                productRepo.findAllByForMainCategoryIn(Set.of(mainCategory));
-        for (Product product : allByForMainCategory) {
-            product.getForMainCategory().remove(mainCategory);
-            productRepo.save(product);
+        List<Product> allByForMainCategory = productRepo.findAllByForMainCategoryIn(Set.of(mainCategory));
+        if (!allByForMainCategory.isEmpty()) {
+            log.info("MainCategory has child products, return false");
+            return false;
         }
         mainCategoryRepo.delete(mainCategory);
         log.info("MainCategory has been deleted, return true");

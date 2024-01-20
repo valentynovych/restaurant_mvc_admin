@@ -122,12 +122,12 @@
                                     <div class="mb-2">
                                         <label class="form-label" for="price">Ціна, грн</label>
                                         <input type="text" class="form-control" id="price" name="price"
-                                               placeholder="Ціна, грн">
+                                               placeholder="Ціна, грн" oninput="catMaxLength(this, 6)">
                                     </div>
                                     <div class="mb-2">
                                         <label class="form-label" for="weight">Вага, гр</label>
                                         <input type="text" class="form-control" id="weight" name="weight"
-                                               placeholder="Вага, гр.">
+                                               placeholder="Вага, гр." oninput="catMaxLength(this, 6)">
                                     </div>
                                     <div class="mb-2 d-flex gap-2">
                                         <div style="width: -webkit-fill-available;">
@@ -167,7 +167,7 @@
                                             <label class="text-center ">Фото товару:</label>
                                             <figure class="border-secondary"
                                                     style="border-width: 1px; border-style: solid; width: 300px; height: 240px">
-                                                <img src="" id="photo" width="300" height="240">
+                                                <img th:src="@{/assets/img/placeholder-image.png}" id="photo" width="300" height="240">
                                                 <input type="hidden" name="photoName" id="photoName">
                                                 <input type="file" accept=".png, .jpg, .jpeg" class="input-upload"
                                                        id="photoFile" name="photoFile">
@@ -247,12 +247,12 @@
                                     <div class="mb-2">
                                         <label class="form-label" for="priceI">Ціна, грн</label>
                                         <input type="text" class="form-control" id="priceI" name="price"
-                                               placeholder="Ціна, грн">
+                                               placeholder="Ціна, грн" oninput="catMaxLength(this, 6)">
                                     </div>
                                     <div class="mb-2">
                                         <label class="form-label" for="weightI">Вага, гр</label>
                                         <input type="text" class="form-control" id="weightI" name="weight"
-                                               placeholder="Вага, гр.">
+                                               placeholder="Вага, гр." oninput="catMaxLength(this, 6)">
                                     </div>
                                 </div>
                                 <div class="col-md-4 mt-4">
@@ -261,7 +261,7 @@
                                             <label class="text-center ">Фото товару:</label>
                                             <figure class="border-secondary"
                                                     style="border-width: 1px; border-style: solid; width: 300px; height: 240px">
-                                                <img src="" id="photoI" width="300" height="240">
+                                                <img th:src="@{/assets/img/placeholder-image.png}" id="photoI" width="300" height="240">
                                                 <input type="hidden" name="photoName" id="photoNameI">
                                                 <input type="file" accept=".png, .jpg, .jpeg" class="input-upload"
                                                        id="photoFileI" name="photoFile">
@@ -380,6 +380,15 @@
         progressBar: true,
         preventDuplicates: true,
     };
+
+
+    function catMaxLength(el, maxLength) {
+
+        var val = $(el).val();
+        if (val.length > maxLength) {
+            $(el).val(val.substring(0, maxLength));
+        }
+    }
 </script>
 
 <script th:inline="javascript">
@@ -537,7 +546,7 @@
             data: promotion,
             ajax: {
                 type: "GET",
-                url: '../getPromotion',
+                url: '../../promotions/getActivePromotions',
                 data: function (params) {
                     return {
                         search: params.term || '',

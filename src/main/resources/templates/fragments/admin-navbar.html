@@ -25,10 +25,10 @@
         <ul class="navbar-nav flex-row align-items-center ms-auto" style="user-select: none">
             <li class="nav-item me-5">
                 <div class="btn-group">
-                    <button class="btn btn-icon dropdown-toggle hide-arrow" type="button" id="dropdownMenuClickable" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    <span class=" dropdown-toggle hide-arrow" type="button" id="dropdownMenuClickable" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                         <i class="ti ti-bell ti-md"></i>
                         <span class="badge bg-danger rounded-pill badge-notifications" id="countOrdersNew"></span>
-                    </button>
+                    </span>
                     <ul class="dropdown-menu list-orders" aria-labelledby="dropdownMenuClickableInside">
                     </ul>
                 </div>
@@ -36,7 +36,7 @@
             <!-- User -->
             <li class="nav-item me-3">
                 <div class="avatar avatar-online">
-                    <img th:src="@{/assets/img/avatars/1.png}" class="h-auto rounded-circle" id="staffAvatar"/>
+                    <img th:src="@{/assets/img/avatars/1.png}" class="rounded-circle" id="staffAvatar" style="object-fit: contain"/>
                 </div>
                 </a>
             </li>

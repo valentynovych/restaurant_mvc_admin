@@ -88,7 +88,7 @@ public class CategoriesController {
         Boolean isRemoved = categoryService.deleteCategoryById(categoryId);
 
         if (!isRemoved) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }

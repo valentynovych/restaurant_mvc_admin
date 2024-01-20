@@ -105,7 +105,17 @@ class MainCategoryServiceTest {
         Product product = new Product();
         product.setMainCategory(mainCategory);
         when(categoryRepo.findById(mainCategory.getId())).thenReturn(Optional.of(mainCategory));
-        when(productRepo.findAllByForMainCategoryIn(Set.of(mainCategory))).thenReturn(List.of(product));
+        when(productRepo.findAllByForMainCategoryIn(Set.of(mainCategory))).thenReturn(List.of(product, product));
+        Boolean isDeleted = categoryService.deleteCategoryById(mainCategory.getId());
+        assertFalse(isDeleted);
+    }
+
+    @Test
+    void deleteCategoryById_ifCategoryIsPresentAndNotChildProducts() {
+        Product product = new Product();
+        product.setMainCategory(mainCategory);
+        when(categoryRepo.findById(mainCategory.getId())).thenReturn(Optional.of(mainCategory));
+        when(productRepo.findAllByForMainCategoryIn(Set.of(mainCategory))).thenReturn(new ArrayList<>());
         Boolean isDeleted = categoryService.deleteCategoryById(mainCategory.getId());
         verify(categoryRepo).delete(mainCategory);
         assertTrue(isDeleted);
