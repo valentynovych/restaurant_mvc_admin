@@ -17,5 +17,6 @@ import java.util.Set;
 public interface ProductRepo extends JpaRepository<Product, Long>,
         JpaSpecificationExecutor<Product> {
     List<Product> findAllByForMainCategoryIn(Collection<MainCategory> forMainCategory);
+    List<Product> findAllByMainCategory(MainCategory mainCategory);
 }
 

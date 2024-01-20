@@ -71,6 +71,7 @@ public class MainCategoryService {
         }
         MainCategory mainCategory = byId.get();
         List<Product> allByForMainCategory = productRepo.findAllByForMainCategoryIn(Set.of(mainCategory));
+        allByForMainCategory.addAll(productRepo.findAllByMainCategory(mainCategory));
         if (!allByForMainCategory.isEmpty()) {
             log.info("MainCategory has child products, return false");
             return false;

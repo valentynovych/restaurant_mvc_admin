@@ -104,8 +104,11 @@ class MainCategoryServiceTest {
     void deleteCategoryById_ifCategoryIsPresent() {
         Product product = new Product();
         product.setMainCategory(mainCategory);
+        List<Product> products = new ArrayList<>();
+        products.add(product);
+        products.add(product);
         when(categoryRepo.findById(mainCategory.getId())).thenReturn(Optional.of(mainCategory));
-        when(productRepo.findAllByForMainCategoryIn(Set.of(mainCategory))).thenReturn(List.of(product, product));
+        when(productRepo.findAllByForMainCategoryIn(Set.of(mainCategory))).thenReturn(products);
         Boolean isDeleted = categoryService.deleteCategoryById(mainCategory.getId());
         assertFalse(isDeleted);
     }
