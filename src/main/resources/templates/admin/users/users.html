@@ -113,7 +113,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer d-flex justify-content-between pb-0"></div>
+                        <div class="card-footer d-flex justify-content-between"></div>
                     </div>
 
                 </div>
@@ -193,7 +193,7 @@
     $(document).ready(function () {
         getUsers(0)
     });
-
+    let tableLength = 5;
     let currentPage;
     let searchText;
     let timer;
@@ -201,23 +201,17 @@
         let keyPause = 400;
         searchText = this.value;
         clearTimeout(timer);
-        timer = setTimeout( function () {getUsers(0)}, keyPause);
+        timer = setTimeout(function () {
+            getUsers(0)
+        }, keyPause);
     });
 
     function getUsers(page) {
-        currentPage = page;
-        if (searchText) {
-            getUsersPageBySearch(page, searchText);
-        } else {
-            getUsersPage(page);
-        }
-    }
-
-    function getUsersPage(page) {
-
+        var getUrl = 'users/getPageSearch?page=' + page + '&pageSize=' + tableLength;
+        if (searchText) getUrl += '&search' + searchText;
         $.ajax({
             type: 'GET',
-            url: 'users/getPage?page=' + page,
+            url: getUrl,
             dataType: 'JSON',
             success: function (result) {
                 clearTableLine();
@@ -230,25 +224,7 @@
 
     }
 
-    function getUsersPageBySearch(page, search) {
-
-        $.ajax({
-            type: 'GET',
-            url: 'users/getPageSearch?page=' + page + '&search=' + search,
-            dataType: 'json',
-            success: function (result) {
-                currentPage = page;
-                clearTableLine();
-                drawTable(result, page);
-            },
-            error: function () {
-                toastr.error('Упс.. Виникла помилка');
-            }
-        });
-    }
-
     function drawTable(result, page) {
-        console.log(result)
         for (const data of result.content) {
             const date = new Date(data.registrationDate);
             let dateString = date.toLocaleDateString("uk");
@@ -284,7 +260,21 @@
         }
 
 
-        if (result.totalPages > 1) {
+        if (result.totalPages) {
+            $('<div class="details-table col-4 d-flex flex-row gap-3 align-items-center"><label>Показати по: <select name="tables_length" class="form-select form-select-sm">\n' +
+                '                                <option value="2">2</option>\n' +
+                '                                <option value="5">5</option>\n' +
+                '                                <option value="10">10</option>\n' +
+                '                                <option value="20">20</option>\n' +
+                '                            </select></label></div>').appendTo(".card-footer");
+
+            var $select = $('select[name="tables_length"]');
+            $select.on("change", function () {
+                tableLength = this.value;
+                getUsers(0);
+            });
+            $select.val(tableLength);
+
             const size = result.size;
 
             const from = page > 0 ? (page * size) + 1 : 1;
@@ -292,26 +282,27 @@
             const total = result.totalElements;
 
             if (from === total) {
-                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                $('<div class="dataTables_info"">' +
                     'Показано ' + from + ' з ' + total + ' користувачів' +
-                    '</div>').appendTo(".card-footer");
+                    '</div>').appendTo(".details-table");
             } else {
-                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                $('<div class="dataTables_info">' +
                     'Показано ' + from + '-' + to + ' з ' + total + ' користувачів' +
-                    '</div>').appendTo(".card-footer")
+                    '</div>').appendTo(".details-table")
             }
+            if (result.totalPages > 1) {
+                showPagination(result.totalPages);
 
-            showPagination(result.totalPages);
-
-            switch (page) {
-                case (result.totalPages - 1):
-                    $(".page-item.last").addClass('disabled');
-                    $(".page-item.next").addClass('disabled');
-                    break;
-                case 0:
-                    $(".page-item.first").addClass('disabled');
-                    $(".page-item.prev").addClass('disabled');
-                    break;
+                switch (page) {
+                    case (result.totalPages - 1):
+                        $(".page-item.last").addClass('disabled');
+                        $(".page-item.next").addClass('disabled');
+                        break;
+                    case 0:
+                        $(".page-item.first").addClass('disabled');
+                        $(".page-item.prev").addClass('disabled');
+                        break;
+                }
             }
         }
 

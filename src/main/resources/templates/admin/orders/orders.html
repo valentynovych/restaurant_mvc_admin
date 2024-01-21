@@ -129,7 +129,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer d-flex justify-content-between pb-0"></div>
+                        <div class="card-footer d-flex justify-content-between"></div>
                     </div>
 
                 </div>
@@ -233,9 +233,9 @@
 <!--AJAX requests-->
 <script>
     $(document).ready(function () {
-        getOrders(0)
+        getOrdersByFilter(0)
     });
-
+    let tableLength = 5;
     let currentPage;
     let searchText;
     let byDate;
@@ -259,24 +259,10 @@
     })
 
     function getOrdersByFilter(page) {
-        var getUrl = 'orders/getOrdersByFilters?page=' + page;
+        var getUrl = 'orders/getOrdersByFilters?page=' + page + '&pageSize=' + tableLength;
         if (searchText) getUrl += '&search=' + searchText;
         if (byDate) getUrl += '&date=' + byDate;
         if (byStatus) getUrl += '&status=' + byStatus;
-
-        $.ajax({
-            type: 'GET',
-            url: getUrl,
-            dataType: 'JSON',
-            success: function (result) {
-                clearTableLine();
-                drawTable(result, page)
-            }
-        });
-    }
-
-    function getOrders(page) {
-        var getUrl = 'orders/getAllOrders?page=' + page;
 
         $.ajax({
             type: 'GET',
@@ -352,7 +338,21 @@
         }
 
 
-        if (result.totalPages > 1) {
+        if (result.totalPages) {
+            $('<div class="details-table col-4 d-flex flex-row gap-3 align-items-center"><label>Показати по: <select name="tables_length" class="form-select form-select-sm">\n' +
+                '                                <option value="2">2</option>\n' +
+                '                                <option value="5">5</option>\n' +
+                '                                <option value="10">10</option>\n' +
+                '                                <option value="20">20</option>\n' +
+                '                            </select></label></div>').appendTo(".card-footer");
+
+            var $select = $('select[name="tables_length"]');
+            $select.on("change", function () {
+                tableLength = this.value;
+                getOrdersByFilter(0);
+            });
+            $select.val(tableLength);
+
             const size = result.size;
 
             const from = page > 0 ? (page * size) + 1 : 1;
@@ -360,47 +360,48 @@
             const total = result.totalElements;
 
             if (from === total) {
-                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                $('<div class="dataTables_info"">' +
                     'Показано ' + from + ' з ' + total + ' замовлень' +
-                    '</div>').appendTo(".card-footer");
+                    '</div>').appendTo(".details-table");
             } else {
-                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                $('<div class="dataTables_info">' +
                     'Показано ' + from + '-' + to + ' з ' + total + ' замовлень' +
-                    '</div>').appendTo(".card-footer")
+                    '</div>').appendTo(".details-table")
             }
+            if (result.totalPages > 1) {
+                showPagination(result.totalPages);
 
-            showPagination(result.totalPages);
-
-            switch (page) {
-                case (result.totalPages - 1):
-                    $(".page-item.last").addClass('disabled');
-                    $(".page-item.next").addClass('disabled');
-                    break;
-                case 0:
-                    $(".page-item.first").addClass('disabled');
-                    $(".page-item.prev").addClass('disabled');
-                    break;
+                switch (page) {
+                    case (result.totalPages - 1):
+                        $(".page-item.last").addClass('disabled');
+                        $(".page-item.next").addClass('disabled');
+                        break;
+                    case 0:
+                        $(".page-item.first").addClass('disabled');
+                        $(".page-item.prev").addClass('disabled');
+                        break;
+                }
             }
         }
 
         function showPagination(countItems) {
             var paginationList = '<ul class="pagination pagination-sm">\n' +
                 '<li class="page-item first">\n' +
-                '   <a class="page-link waves-effect" onclick="getOrders(0)"><i class="ti ti-chevrons-left tf-icon fs-6"></i></a>\n' +
+                '   <a class="page-link waves-effect" onclick="getOrdersByFilter(0)"><i class="ti ti-chevrons-left tf-icon fs-6"></i></a>\n' +
                 '</li>\n' +
                 '<li class="page-item prev">\n' +
-                '   <a class="page-link waves-effect" onclick="getOrders(' + (page - 1) + ')"><i class="ti ti-chevron-left tf-icon fs-6"></i></a>\n' +
+                '   <a class="page-link waves-effect" onclick="getOrdersByFilter(' + (page - 1) + ')"><i class="ti ti-chevron-left tf-icon fs-6"></i></a>\n' +
                 '</li>\n';
             for (let item = 0; item < countItems; item++) {
                 paginationList += '<li class="page-item ' + (page === item ? 'active' : '') + '">\n' +
-                    '<a class="page-link waves-effect" onclick="getOrders(' + item + ')">' + (item + 1) + '</a>\n' +
+                    '<a class="page-link waves-effect" onclick="getOrdersByFilter(' + item + ')">' + (item + 1) + '</a>\n' +
                     '</li>';
             }
             paginationList += '<li class="page-item next">\n' +
-                '       <a class="page-link waves-effect" onclick="getOrders(' + (page + 1) + ')"><i class="ti ti-chevron-right tf-icon fs-6"></i></a>\n' +
+                '       <a class="page-link waves-effect" onclick="getOrdersByFilter(' + (page + 1) + ')"><i class="ti ti-chevron-right tf-icon fs-6"></i></a>\n' +
                 '   </li>\n' +
                 '      <li class="page-item last">\n' +
-                '       <a class="page-link waves-effect" onclick="getOrders(' + (countItems - 1) + ')"><i class="ti ti-chevrons-right tf-icon fs-6"></i></a>\n' +
+                '       <a class="page-link waves-effect" onclick="getOrdersByFilter(' + (countItems - 1) + ')"><i class="ti ti-chevrons-right tf-icon fs-6"></i></a>\n' +
                 '      </li>\n' +
                 '   </ul>\n'
 

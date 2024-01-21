@@ -123,7 +123,9 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="card-footer d-flex justify-content-between pb-0"></div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <div class="details-table"></div>
+                        </div>
                     </div>
 
                 </div>
@@ -241,7 +243,7 @@
         getCategories(0)
 
     });
-
+    let tableLength = 5;
     let currentPage;
     let searchText;
     let timer;
@@ -271,7 +273,7 @@
     }
 
     function getCategoriesPageBySearch(page) {
-        var getUrl = 'categories/getPageSearch?page=' + page;
+        var getUrl = 'categories/getPageSearch?page=' + page + '&pageSize=' + tableLength;
         if (searchText) getUrl += '&search=' + searchText;
         if (byDate) getUrl += '&date=' + byDate;
         if (byStatus) getUrl += '&status=' + byStatus;
@@ -329,7 +331,21 @@
                 '</td>\n' +
                 '</tr>').appendTo("tbody");
         }
-        if (result.totalPages > 1) {
+        if (result.totalPages) {
+            $('<div class="details-table col-4 d-flex flex-row gap-3 align-items-center"><label>Показати по: <select name="tables_length" class="form-select form-select-sm">\n' +
+                '                                <option value="2">2</option>\n' +
+                '                                <option value="5">5</option>\n' +
+                '                                <option value="10">10</option>\n' +
+                '                                <option value="20">20</option>\n' +
+                '                            </select></label></div>').appendTo(".card-footer");
+
+            var $select = $('select[name="tables_length"]');
+            $select.on("change", function () {
+                tableLength = this.value;
+                getCategories(0);
+            });
+            $select.val(tableLength);
+
             const size = result.size;
 
             const from = page > 0 ? (page * size) + 1 : 1;
@@ -337,13 +353,13 @@
             const total = result.totalElements;
 
             if (from === total) {
-                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                $('<div class="dataTables_info"">' +
                     'Показано ' + from + ' з ' + total + ' категорій' +
-                    '</div>').appendTo(".card-footer");
+                    '</div>').appendTo(".details-table");
             } else {
-                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
+                $('<div class="dataTables_info">' +
                     'Показано ' + from + '-' + to + ' з ' + total + ' категорій' +
-                    '</div>').appendTo(".card-footer")
+                    '</div>').appendTo(".details-table")
             }
 
             if (result.totalPages > 1) {

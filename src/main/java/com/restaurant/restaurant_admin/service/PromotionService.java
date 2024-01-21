@@ -53,6 +53,9 @@ public class PromotionService {
     }
 
     public Page<PromotionResponse> getAllPromotionsBySearch(int page, int pageSize, String search) {
+        if (search == null) {
+            return getAllPromotions(page, pageSize);
+        }
         log.info(String.format("getAllPromotionsBySearch() -> start, with page: %s, pageSize: %s, by search: %s",
                 page, pageSize, search));
         Pageable pageable = PageRequest.of(page, pageSize);

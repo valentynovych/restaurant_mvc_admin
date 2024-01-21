@@ -101,6 +101,7 @@ public class CategoriesController {
 
     @GetMapping("/getPageSearch")
     public @ResponseBody Page<MainCategoryDTO> getCategoriesOnPage(@RequestParam int page,
+                                                                   @RequestParam int pageSize,
                                                                    @RequestParam(required = false) String search,
                                                                    @RequestParam(required = false) Boolean status,
                                                                    @RequestParam(required = false) String date) {

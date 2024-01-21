@@ -58,7 +58,7 @@
     <script th:inline="javascript">
         const path = /*[[@{/admin/}]]*/ 'default';
         const logoutPath = /*[[@{/logout}]]*/ 'default';
-        const pathToOrder = path + 'orders/getOrdersByFilters?page=0&status=NEW';
+        const pathToOrder = path + 'orders/getOrdersByFilters?page=0&status=NEW&pageSize=10';
 
         $.ajax({
             type: 'GET',

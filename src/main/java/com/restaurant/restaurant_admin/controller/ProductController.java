@@ -56,6 +56,7 @@ public class ProductController {
 
     @GetMapping("/getAllProducts")
     public @ResponseBody Page<ProductShortResponse> getPageProducts(@RequestParam int page,
+                                                                    @RequestParam int pageSize,
                                                                     @RequestParam(required = false) String search,
                                                                     @RequestParam(required = false) Boolean isIngredient) {
 

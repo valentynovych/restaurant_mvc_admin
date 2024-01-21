@@ -43,7 +43,9 @@ public class UserController {
     }
 
     @GetMapping("/getPageSearch")
-    public @ResponseBody Page<UserShortResponse> getUsersPageBySearch(@RequestParam int page, @RequestParam String search) {
+    public @ResponseBody Page<UserShortResponse> getUsersPageBySearch(@RequestParam int page,
+                                                                      @RequestParam int pageSize,
+                                                                      @RequestParam(required = false) String search) {
         return userService.getUsersPageBySearch(page, pageSize, search);
     }
 

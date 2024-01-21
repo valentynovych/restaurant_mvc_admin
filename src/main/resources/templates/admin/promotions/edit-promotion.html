@@ -338,7 +338,9 @@
         });
 
         $promotionType.on('change', function () {
-            buildFormHeader(this.value)
+            var promotionType = this.value;
+            buildFormHeader(promotionType)
+            promotionObject.promotionType = promotionType;
         });
 
         $promotionCondition.select2({
@@ -363,7 +365,9 @@
         });
 
         $promotionCondition.on('change', function () {
-            buildFormBody(this.value)
+            var promotionCondition = this.value;
+            buildFormBody(promotionCondition)
+            promotionObject.promotionCondition = promotionCondition;
         })
 
         // console.log("afterLoad -> end")

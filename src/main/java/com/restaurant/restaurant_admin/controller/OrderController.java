@@ -47,17 +47,19 @@ public class OrderController {
     public @ResponseBody Page<OrderShortResponse> getAllOrders(@RequestParam int page) {
         return orderService.getAllOrders(page, pageSize);
     }
+
     @GetMapping("/getOrdersByFilters")
     public @ResponseBody Page<OrderShortResponse> getOrdersByFilters(@RequestParam int page,
-                                                               @RequestParam(required = false) String search,
-                                                               @RequestParam(required = false) String date,
-                                                               @RequestParam(required = false) OrderStatus status) {
+                                                                     @RequestParam int pageSize,
+                                                                     @RequestParam(required = false) String search,
+                                                                     @RequestParam(required = false) String date,
+                                                                     @RequestParam(required = false) OrderStatus status) {
         return orderService.getOrdersByFilters(page, pageSize, search, date, status);
     }
 
     @GetMapping("/getOrdersByUser")
     public @ResponseBody Page<OrderShortResponse> getOrdersByUser(@RequestParam int page,
-                                                               @RequestParam Long userId) {
+                                                                  @RequestParam Long userId) {
         return orderService.getOrdersByUser(page, pageSize, userId);
     }
 

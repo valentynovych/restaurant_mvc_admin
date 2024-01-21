@@ -40,6 +40,9 @@ public class UserService {
     }
 
     public Page<UserShortResponse> getUsersPageBySearch(int page, int pageSize, String search) {
+        if (search == null) {
+            return getUsersOnPage(page, pageSize);
+        }
         log.info(String.format("method getUsersPageBySearch -> start, get page: %s, by text: %s", page, search));
         Pageable pageable = PageRequest.of(page, pageSize);
         SearchCriteria likeEmail = new SearchCriteria("email", ":", search);

@@ -49,7 +49,9 @@ public class PromotionController {
     }
 
     @GetMapping("/getPromotionsBySearch")
-    public @ResponseBody ResponseEntity<?> getAllPromotionsSearch(@RequestParam int page, @RequestParam String search) {
+    public @ResponseBody ResponseEntity<?> getAllPromotionsSearch(@RequestParam int page,
+                                                                  @RequestParam int pageSize,
+                                                                  @RequestParam(required = false) String search) {
         return new ResponseEntity<>(promotionService.getAllPromotionsBySearch(page, pageSize, search), HttpStatus.OK);
     }
 

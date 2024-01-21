@@ -102,18 +102,19 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="row-cols-md-4 row-cols-lg-6 product-items d-flex gap-5 py-3 flex-wrap">
+                            <div class="product-items" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 4rem 3rem;">
                                 <a href="" class="product-link">
                                     <div class="product-item d-flex justify-content-center flex-column">
                                         <figure class="mb-1 rounded-2" style="border: 1px solid #4e5264; ">
-                                            <img th:src="@{/assets/img/placeholder-image.png}" class="product-image" style="aspect-ratio: 1" alt="">
+                                            <img th:src="@{/assets/img/placeholder-image.png}" class="product-image"
+                                                 style="aspect-ratio: 1" alt="">
                                         </figure>
                                         <span class="text-center product-name">name</span>
                                     </div>
                                 </a>
                             </div>
                         </div>
-                        <div class="card-footer d-flex justify-content-between pb-0"></div>
+                        <div class="card-footer d-flex justify-content-between"></div>
                     </div>
 
                 </div>
@@ -224,7 +225,7 @@
     $(document).ready(function () {
         getProducts(0)
     });
-
+    let tableLength = 5;
     let currentPage;
     let searchText;
     let timer;
@@ -244,7 +245,7 @@
     });
 
     function getProducts(page) {
-        var getUrl = 'products/getAllProducts?page=' + page;
+        var getUrl = 'products/getAllProducts?page=' + page + '&pageSize=' + tableLength;
         if (searchText) getUrl += '&search=' + searchText;
         if (byIngredient) getUrl += '&isIngredient=' + byIngredient
 
@@ -283,7 +284,21 @@
         }
 
 
-        if (result.totalPages > 1) {
+        if (result.totalPages) {
+            $('<div class="details-table col-4 d-flex flex-row gap-3 align-items-center"><label>Показати по: <select name="tables_length" class="form-select form-select-sm">\n' +
+                '                                <option value="2">2</option>\n' +
+                '                                <option value="5">5</option>\n' +
+                '                                <option value="10">10</option>\n' +
+                '                                <option value="20">20</option>\n' +
+                '                            </select></label></div>').appendTo(".card-footer");
+
+            var $select = $('select[name="tables_length"]');
+            $select.on("change", function () {
+                tableLength = this.value;
+                getProducts(0);
+            });
+            $select.val(tableLength);
+
             const size = result.size;
 
             const from = page > 0 ? (page * size) + 1 : 1;
@@ -291,26 +306,27 @@
             const total = result.totalElements;
 
             if (from === total) {
-                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
-                    'Показано ' + from + ' з ' + total + ' продуктів' +
-                    '</div>').appendTo(".card-footer");
+                $('<div class="dataTables_info"">' +
+                    'Показано ' + from + ' з ' + total + ' товарів' +
+                    '</div>').appendTo(".details-table");
             } else {
-                $('<div class="dataTables_info" id="DataTables_info" role="status" aria-live="polite">' +
-                    'Показано ' + from + '-' + to + ' з ' + total + ' продуктів' +
-                    '</div>').appendTo(".card-footer")
+                $('<div class="dataTables_info">' +
+                    'Показано ' + from + '-' + to + ' з ' + total + ' товарів' +
+                    '</div>').appendTo(".details-table")
             }
+            if (result.totalPages > 1) {
+                showPagination(result.totalPages);
 
-            showPagination(result.totalPages);
-
-            switch (page) {
-                case (result.totalPages - 1):
-                    $(".page-item.last").addClass('disabled');
-                    $(".page-item.next").addClass('disabled');
-                    break;
-                case 0:
-                    $(".page-item.first").addClass('disabled');
-                    $(".page-item.prev").addClass('disabled');
-                    break;
+                switch (page) {
+                    case (result.totalPages - 1):
+                        $(".page-item.last").addClass('disabled');
+                        $(".page-item.next").addClass('disabled');
+                        break;
+                    case 0:
+                        $(".page-item.first").addClass('disabled');
+                        $(".page-item.prev").addClass('disabled');
+                        break;
+                }
             }
         }
 
